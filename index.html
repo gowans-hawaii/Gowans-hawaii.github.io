@@ -311,7 +311,7 @@ main{padding:22px 20px 40px}
 /* Map */
 .mapwrap{position:relative;margin:20px -20px 0;padding:0 20px}
 #map{position:relative;height:270px;border-radius:16px;overflow:hidden;background:var(--ocean-soft);transition:height .35s var(--ease)}
-#mapSvg{display:block;width:100%;height:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#mapSvg{display:block;width:100%;height:100%;transform-origin:0 0;will-change:transform;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .m-sea{fill:var(--ocean-soft)}
 .m-land{fill:var(--surface);stroke:color-mix(in srgb,var(--ocean) 40%,transparent);stroke-linejoin:round}
 .m-casing{fill:none;stroke:var(--surface);stroke-linecap:round;stroke-linejoin:round}
@@ -855,7 +855,7 @@ body.has-tally main{padding-bottom:120px}
     $('#pn').innerHTML = pnHTML();
     mw.hidden = s.kind === 'sea';
     mw.classList.remove('big'); $('#mapSize').textContent = 'Bigger map';
-    mapZoom = autoZoom(s); mapSel = -1; card.hidden = true; zk = 1; zc = null;
+    mapZoom = autoZoom(s); mapSel = -1; card.hidden = true; zk = 1; zc = null; gz = null; clearTimeout(commitT); svg.style.transform = '';
     renderPane();
     if (s.kind !== 'sea') drawMap(s, true);
     live();
@@ -910,7 +910,7 @@ body.has-tally main{padding-bottom:120px}
     let c = zc || [bx + vw / 2, by + vh / 2];
     c = [Math.min(Math.max(c[0], bx + w / 2), bx + vw - w / 2), Math.min(Math.max(c[1], by + hh / 2), by + vh - hh / 2)];
     zc = zk > 1.001 ? c : null;
-    mv = {x: c[0] - w / 2, y: c[1] - hh / 2, w, h: hh, W, H, bw: vw, bh: vh};
+    mv = {x: c[0] - w / 2, y: c[1] - hh / 2, w, h: hh, W, H, bx, by, bw: vw, bh: vh};
     const u = w / W;
     svg.setAttribute('viewBox', `${mv.x.toFixed(2)} ${mv.y.toFixed(2)} ${w.toFixed(2)} ${hh.toFixed(2)}`);
     svg.style.touchAction = zk > 1.001 ? 'none' : 'pan-y';
@@ -1036,89 +1036,122 @@ body.has-tally main{padding-bottom:120px}
   });
   $('#mapZoom').addEventListener('click', () => { mapZoom = !mapZoom; zk = 1; zc = null; drawMap(S[cur], true); });
 
-  /* Pinch, drag, double-tap, wheel, and +/- zoom */
-  let raf = 0, suppressClick = 0;
-  const redraw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => drawMap(S[cur])); };
-  function toUnits(px, py){
-    const r = svg.getBoundingClientRect();
-    return [mv.x + (px - r.left) / r.width * mv.w, mv.y + (py - r.top) / r.height * mv.h];
+  /* Pinch, drag, double-tap, wheel, and +/- zoom.
+     While a finger is down, the drawing is moved with a GPU transform (smooth),
+     then redrawn crisply once when the gesture ends. */
+  let suppressClick = 0, gz = null, commitT = 0;
+  const clampK = k => Math.min(ZMAX, Math.max(1, k));
+  function viewFor(k, c){
+    const w = mv.bw / k, h = mv.bh / k;
+    c = [Math.min(Math.max(c[0], mv.bx + w / 2), mv.bx + mv.bw - w / 2), Math.min(Math.max(c[1], mv.by + h / 2), mv.by + mv.bh - h / 2)];
+    return {x: c[0] - w / 2, y: c[1] - h / 2, w, h, c, k};
   }
+  const effView = () => gz ? viewFor(gz.k, gz.c) : {x: mv.x, y: mv.y, w: mv.w, h: mv.h, k: zk};
+  function toUnits(v, px, py){
+    const r = mapEl.getBoundingClientRect();
+    return [v.x + (px - r.left) / r.width * v.w, v.y + (py - r.top) / r.height * v.h];
+  }
+  function preview(k, c, animate){
+    const v = viewFor(clampK(k), c), s = mv.w / v.w;
+    const tx = -s * (v.x - mv.x) / mv.w * mv.W, ty = -s * (v.y - mv.y) / mv.h * mv.H;
+    svg.style.transition = animate && !reduce ? 'transform .3s cubic-bezier(.2,.75,.2,1)' : 'none';
+    svg.style.transform = `translate3d(${tx}px,${ty}px,0) scale(${s})`;
+    gz = {k: v.k, c: v.c};
+  }
+  function commit(){
+    clearTimeout(commitT);
+    if (!gz) return;
+    zk = gz.k; zc = gz.k > 1.001 ? gz.c : null; gz = null;
+    drawMap(S[cur]);
+    svg.style.transition = 'none'; svg.style.transform = '';
+  }
+  const commitSoon = ms => { clearTimeout(commitT); commitT = setTimeout(commit, reduce ? 0 : ms); };
   function zoomAt(f, px, py){
     if (!mv) return;
-    const r = svg.getBoundingClientRect();
+    const v = effView(), r = mapEl.getBoundingClientRect();
     if (px == null){ px = r.left + r.width / 2; py = r.top + r.height / 2; }
-    const p = toUnits(px, py), nk = Math.min(ZMAX, Math.max(1, zk * f));
-    const c = [mv.x + mv.w / 2, mv.y + mv.h / 2];
-    zc = [p[0] + (c[0] - p[0]) * zk / nk, p[1] + (c[1] - p[1]) * zk / nk];
-    zk = nk; redraw();
+    const p = toUnits(v, px, py), nk = clampK(v.k * f);
+    const c = [v.x + v.w / 2, v.y + v.h / 2];
+    preview(nk, [p[0] + (c[0] - p[0]) * v.k / nk, p[1] + (c[1] - p[1]) * v.k / nk], true);
+    commitSoon(320);
   }
   $('#zIn').addEventListener('click', () => zoomAt(2));
   $('#zOut').addEventListener('click', () => zoomAt(.5));
 
   let pinch = null, pan = null, lastTap = 0;
   const dist = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-  function startPan(t){
-    pan = {x: t.clientX, y: t.clientY, c: [mv.x + mv.w / 2, mv.y + mv.h / 2], moved: false};
+  function startPan(x, y){
+    clearTimeout(commitT);
+    const v = effView();
+    pan = {x, y, c: [v.x + v.w / 2, v.y + v.h / 2], k: v.k, moved: false, vx: 0, vy: 0, t: performance.now(), lx: x, ly: y};
+  }
+  function movePan(x, y){
+    const dx = x - pan.x, dy = y - pan.y;
+    if (!pan.moved && Math.hypot(dx, dy) < 6) return false;
+    pan.moved = true; suppressClick = Date.now();
+    const now = performance.now(), dt = Math.max(1, now - pan.t);
+    const cap = v => Math.max(-1.5, Math.min(1.5, v));
+    pan.vx = cap(.7 * (x - pan.lx) / dt + .3 * pan.vx); pan.vy = cap(.7 * (y - pan.ly) / dt + .3 * pan.vy);
+    pan.t = now; pan.lx = x; pan.ly = y;
+    const r = mapEl.getBoundingClientRect(), w = mv.bw / pan.k, hh = mv.bh / pan.k;
+    preview(pan.k, [pan.c[0] - dx * w / r.width, pan.c[1] - dy * hh / r.height], false);
+    return true;
+  }
+  function endPan(){
+    if (pan && pan.moved && performance.now() - pan.t < 80 && Math.hypot(pan.vx, pan.vy) > .25 && gz){
+      const r = mapEl.getBoundingClientRect(), w = mv.bw / gz.k, hh = mv.bh / gz.k;
+      preview(gz.k, [gz.c[0] - pan.vx * 220 * w / r.width, gz.c[1] - pan.vy * 220 * hh / r.height], true);
+      commitSoon(320);
+    } else commit();
+    const moved = pan && pan.moved; pan = null; return moved;
   }
   svg.addEventListener('touchstart', e => {
     if (!mv) return;
     if (e.touches.length === 2){
-      e.preventDefault();
-      const [a, b] = e.touches, mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
-      pinch = {d: dist(a, b), k: zk, p: toUnits(mx, my)};
+      e.preventDefault(); clearTimeout(commitT);
+      const [a, b] = e.touches, v = effView();
+      const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+      pinch = {d: dist(a, b), k: v.k, p: toUnits(v, mx, my)};
       pan = null;
-    } else if (e.touches.length === 1 && zk > 1.001){
-      startPan(e.touches[0]);
+    } else if (e.touches.length === 1 && (zk > 1.001 || gz)){
+      startPan(e.touches[0].clientX, e.touches[0].clientY);
     }
   }, {passive: false});
   svg.addEventListener('touchmove', e => {
     if (pinch && e.touches.length === 2){
       e.preventDefault();
-      const [a, b] = e.touches, r = svg.getBoundingClientRect();
+      const [a, b] = e.touches, r = mapEl.getBoundingClientRect();
       const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
-      zk = Math.min(ZMAX, Math.max(1, pinch.k * dist(a, b) / pinch.d));
-      const w = mv.bw / zk, hh = mv.bh / zk;
-      zc = [pinch.p[0] - (mx - r.left - r.width / 2) * w / r.width, pinch.p[1] - (my - r.top - r.height / 2) * hh / r.height];
+      const nk = clampK(pinch.k * dist(a, b) / pinch.d), w = mv.bw / nk, hh = mv.bh / nk;
+      preview(nk, [pinch.p[0] - (mx - r.left - r.width / 2) * w / r.width, pinch.p[1] - (my - r.top - r.height / 2) * hh / r.height], false);
       suppressClick = Date.now();
-      redraw();
     } else if (pan && e.touches.length === 1){
-      const t = e.touches[0], dx = t.clientX - pan.x, dy = t.clientY - pan.y;
-      if (!pan.moved && Math.hypot(dx, dy) < 6) return;
-      e.preventDefault();
-      pan.moved = true; suppressClick = Date.now();
-      const r = svg.getBoundingClientRect();
-      zc = [pan.c[0] - dx * mv.w / r.width, pan.c[1] - dy * mv.h / r.height];
-      redraw();
+      if (movePan(e.touches[0].clientX, e.touches[0].clientY)) e.preventDefault();
     }
   }, {passive: false});
   svg.addEventListener('touchend', e => {
-    if (e.touches.length < 2) pinch = null;
-    if (e.touches.length === 1 && zk > 1.001) startPan(e.touches[0]);
-    else if (!e.touches.length){
-      const wasPan = pan && pan.moved; pan = null;
-      const t = e.changedTouches[0], now = Date.now();
-      if (!wasPan && now - suppressClick > 300 && now - lastTap < 280 && t){
-        e.preventDefault(); zoomAt(2, t.clientX, t.clientY); lastTap = 0; suppressClick = now;
-      } else lastTap = now;
+    if (pinch && e.touches.length < 2){
+      pinch = null;
+      if (e.touches.length === 1 && gz && gz.k > 1.001){ startPan(e.touches[0].clientX, e.touches[0].clientY); return; }
+      commit(); return;
     }
+    if (e.touches.length) return;
+    const wasPan = pan ? endPan() : false;
+    const t = e.changedTouches[0], now = Date.now();
+    if (!wasPan && now - suppressClick > 300 && now - lastTap < 280 && t){
+      e.preventDefault(); zoomAt(2, t.clientX, t.clientY); lastTap = 0; suppressClick = now;
+    } else lastTap = now;
   }, {passive: false});
+  svg.addEventListener('touchcancel', () => { pinch = null; if (pan) endPan(); else commit(); });
   svg.addEventListener('gesturestart', e => e.preventDefault());
-  svg.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.25 : .8, e.clientX, e.clientY); }, {passive: false});
-  let mdrag = null;
+  svg.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, e.clientX, e.clientY); }, {passive: false});
+  let mdrag = false;
   svg.addEventListener('pointerdown', e => {
-    if (e.pointerType !== 'mouse' || zk <= 1.001 || !mv) return;
-    mdrag = {x: e.clientX, y: e.clientY, c: [mv.x + mv.w / 2, mv.y + mv.h / 2], moved: false};
+    if (e.pointerType !== 'mouse' || !mv || zk <= 1.001) return;
+    mdrag = true; startPan(e.clientX, e.clientY);
   });
-  window.addEventListener('pointermove', e => {
-    if (!mdrag) return;
-    const dx = e.clientX - mdrag.x, dy = e.clientY - mdrag.y;
-    if (!mdrag.moved && Math.hypot(dx, dy) < 4) return;
-    mdrag.moved = true; suppressClick = Date.now();
-    const r = svg.getBoundingClientRect();
-    zc = [mdrag.c[0] - dx * mv.w / r.width, mdrag.c[1] - dy * mv.h / r.height];
-    redraw();
-  });
-  window.addEventListener('pointerup', () => { mdrag = null; });
+  window.addEventListener('pointermove', e => { if (mdrag && pan) movePan(e.clientX, e.clientY); });
+  window.addEventListener('pointerup', () => { if (mdrag){ mdrag = false; if (pan) endPan(); } });
   svg.addEventListener('dblclick', e => zoomAt(2, e.clientX, e.clientY));
   let rzT = 0;
   if (window.ResizeObserver) new ResizeObserver(() => { cancelAnimationFrame(rzT); rzT = requestAnimationFrame(() => cur >= 0 && S[cur].pier && drawMap(S[cur])); }).observe(mapEl);
