@@ -210,11 +210,26 @@ window.TRIP = {
       ["Oct 25", "Carnival online check-in opens."],
       ["Nov 7", "Fly in and stay near Long Beach."]
     ],
-    pack: [
-      "Hiking shoes", "Swimsuit and cover-up", "Change of clothes for surfing", "Light rain jacket",
-      "Hat and sunglasses", "Mineral (reef-safe) sunscreen", "Water bottle", "Small daypack",
-      "Power bank and cable", "Warm layer for the volcano", "Passport book", "Ship card and ID"
-    ],
+    packNote: "One carry-on each plus a daypack. Do laundry on two sea days (Nov 12 and Nov 19) so 7 days of clothes covers all 15.",
+    packing: {
+      bailey: [
+        ["Clothes", ["Garments, 7 sets", "Tops or tees, 5", "Shorts, 2", "Light pants, 1", "Swimsuit, 2", "Elegant night outfit (collared shirt and slacks)", "Warm layer for the volcano", "Packable rain jacket", "Sleepwear, 1", "Socks, 5 pairs", "Hat", "Sunglasses"]],
+        ["Shoes", ["Hiking shoes or trail runners (wear on the plane)", "Sandals or slides"]],
+        ["Camera", ["Camera body", "One all-around zoom lens", "Batteries, 3 charged", "Battery charger", "Memory cards, 2–3", "Card reader for your phone", "Lens cloth for salt spray", "Rain cover or zip bag", "Strap or sling bag"]],
+        ["Personal", ["Passport book", "Driver’s license", "Phone and charger", "Toothbrush", "Razor", "Deodorant", "Medications, plus a few extra days", "Glasses or contacts, if you use them"]]
+      ],
+      luke: [
+        ["Clothes", ["Garments, 7 sets", "Tops or tees, 5", "Shorts, 2", "Light pants, 1", "Swimsuit, 2", "Elegant night outfit (collared shirt and slacks)", "Warm layer for the volcano", "Packable rain jacket", "Sleepwear, 1", "Socks, 5 pairs", "Hat", "Sunglasses"]],
+        ["Shoes", ["Hiking shoes or trail runners (wear on the plane)", "Sandals or slides"]],
+        ["Personal", ["Passport book", "Driver’s license", "Phone and charger", "Toothbrush", "Razor", "Deodorant", "Medications, plus a few extra days", "Glasses or contacts, if you use them"]]
+      ],
+      shared: [
+        ["Documents and money", ["Carnival boarding pass in the HUB app", "Credit card for rentals and onboard", "Some cash for tips", "Health insurance cards", "Plan PDF saved to Files"]],
+        ["Toiletries", ["Mineral (reef-safe) sunscreen", "SPF lip balm", "Toothpaste", "Aloe for sunburn", "Motion sickness medicine for sea days", "Small first aid kit with blister pads"]],
+        ["Gear", ["Daypack", "Dry bag", "Water bottles, 2", "Cruise-safe power strip (no surge protector)", "Power bank and cables", "Magnetic hooks for the cabin walls", "Lanyards for ship cards", "Laundry bag", "A few laundry pods", "Zip bags"]]
+      ]
+    },
+    leave: "Leave at home: irons and steamers (Carnival doesn’t allow them), surge protector power strips, beach towels (the ship lends them), extra shoes.",
     know: [
       "All-aboard follows the ship’s clock. Check if it’s set to local time.",
       "Skydiving can be delayed by weather. Keep the rest of that day loose.",
@@ -554,6 +569,16 @@ body.has-tally main{padding-bottom:120px}
   .pr-leg td{color:#555;font-size:9pt;padding-top:0;padding-bottom:0}
   #printOut ul{margin:2pt 0 0;padding-left:14pt}
 }
+
+
+.pack-tabs{margin:0 0 12px}
+.pack-tabs button[data-done="yes"]::after{content:" ✓"}
+.pack-prog{display:grid;gap:6px;margin:0 0 4px}
+.pack-prog span{font-weight:700;font-size:14.5px}
+.pack-prog i{display:block;height:6px;border-radius:3px;background:var(--line);overflow:hidden;position:relative}
+.pack-prog i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--p,0%);background:var(--ocean);border-radius:3px;transition:width .35s var(--ease)}
+#packList h4{font-size:14px;color:var(--muted);font-weight:600;margin:16px 0 8px}
+.leave{margin-top:14px}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -1321,6 +1346,32 @@ body.has-tally main{padding-bottom:120px}
     if (Math.abs(dx) > 70 && Math.abs(dy) < 50) select(cur + (dx < 0 ? 1 : -1));
   }, {passive: true});
 
+  /* Packing lists, one per person plus shared */
+  const PACK_TABS = [['bailey', 'Bailey'], ['luke', 'Luke'], ['shared', 'Both of us']];
+  let packTab = 'bailey';
+  const packKeys = who => T.checklist.packing[who].flatMap(([, items]) => items.map(x => who + ':' + x));
+  function packProgress(){
+    const el = $('#packProg'); if (!el) return;
+    const keys = packKeys(packTab), done = keys.filter(k => packed.has(k)).length;
+    el.querySelector('span').textContent = done === keys.length ? 'All packed' : `${done} of ${keys.length} packed`;
+    el.querySelector('i').style.setProperty('--p', (done / keys.length * 100) + '%');
+    PACK_TABS.forEach(([k]) => {
+      const b = document.querySelector(`[data-ptab="${k}"]`), ks = packKeys(k);
+      if (b) b.dataset.done = ks.every(x => packed.has(x)) ? 'yes' : '';
+    });
+  }
+  function renderPack(){
+    const box = $('#packList'); if (!box) return;
+    const groups = T.checklist.packing[packTab];
+    box.innerHTML = `<div class="pack-prog" id="packProg"><span></span><i></i></div>` +
+      groups.map(([g, items]) => `<h4>${esc(g)}</h4><div class="pack">${items.map(x => {
+        const key = packTab + ':' + x;
+        return `<label><input type="checkbox" data-pack="${esc(key)}"${packed.has(key) ? ' checked' : ''}><span>${esc(x)}</span></label>`;
+      }).join('')}</div>`).join('') +
+      (packTab === 'shared' ? `<p class="box-p leave">${esc(T.checklist.leave)}</p>` : '');
+    packProgress();
+  }
+
   /* Checklist sheet */
   function buildSheet(){
     const L2 = T.checklist;
@@ -1333,8 +1384,10 @@ body.has-tally main{padding-bottom:120px}
       <button class="pdf-btn" id="pdfBtn">Save our plans as a PDF</button>
       <h3>Key dates</h3>
       <ul class="box dates">${L2.dates.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join('')}</ul>
-      <h3>Pack for shore days</h3>
-      <div class="pack">${L2.pack.map(x => `<label><input type="checkbox" data-pack="${esc(x)}"${packed.has(x) ? ' checked' : ''}><span>${esc(x)}</span></label>`).join('')}</div>
+      <h3>Packing</h3>
+      <p class="box-p">${esc(L2.packNote)}</p>
+      <div class="ptabs pack-tabs" role="tablist">${PACK_TABS.map(([k, l]) => `<button data-ptab="${k}" class="${k === packTab ? 'on' : ''}">${l}</button>`).join('')}</div>
+      <div id="packList"></div>
       <h3>Good to know</h3>
       <ul class="box">${L2.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
   }
@@ -1458,6 +1511,7 @@ body.has-tally main{padding-bottom:120px}
       drawMap(S[cur]);
     }
     document.querySelectorAll('[data-pack]').forEach(b => b.checked = packed.has(b.dataset.pack));
+    packProgress();
     if (!sheet.hidden) tripTotals(true);
   }
   async function pull(){
@@ -1504,11 +1558,18 @@ body.has-tally main{padding-bottom:120px}
   $('#sheetBody').addEventListener('change', e => {
     const b = e.target.closest('[data-pack]'); if (!b) return;
     b.checked ? packed.add(b.dataset.pack) : packed.delete(b.dataset.pack);
+    packProgress();
     queue('pack', '|' + [...packed].join('|'));
+  });
+  $('#sheetBody').addEventListener('click', e => {
+    const t = e.target.closest('[data-ptab]'); if (!t || t.dataset.ptab === packTab) return;
+    packTab = t.dataset.ptab;
+    document.querySelectorAll('[data-ptab]').forEach(b => b.classList.toggle('on', b.dataset.ptab === packTab));
+    renderPack();
   });
 
   /* Start */
-  hero(); buildStrip(); buildSheet(); startSync();
+  hero(); buildStrip(); buildSheet(); renderPack(); startSync();
   window.addEventListener('online', () => { if (syncOn && Object.keys(pending).length) flush(); });
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   let start = S.findIndex(s => s.id === location.hash.slice(1));
