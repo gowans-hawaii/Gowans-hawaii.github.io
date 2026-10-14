@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D5862">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hawaiʻi">
+<title>Bailey + Luke in Hawaiʻi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+<script>
+/* =====================================================================
+   TRIP DATA. Everything on the page comes from here.
+   c = category: eat, see (Explore), out (Outdoors), chill
+   ll = [latitude, longitude] for the map pin (approximate)
+   pick: true shows "Top pick". tag shows a small label.
+   ===================================================================== */
+window.TRIP = {
+  sail: "2026-11-08T12:00:00-08:00",
+  home: "2026-11-22T12:00:00-08:00",
+  categories: {
+    eat:   { label: "Eat" },
+    see:   { label: "Explore" },
+    out:   { label: "Outdoors" },
+    chill: { label: "Chill" }
+  },
+  stops: [
+    {
+      id: "long-beach", kind: "port", node: "Long Beach", place: "Long Beach",
+      date: "2026-11-08", tz: "-08:00",
+      line: "Sail day. Get here the night before.",
+      getting: "Carnival’s terminal is next to the Queen Mary, not San Pedro.",
+      heads: ["Arrive Nov 7 so a flight delay can’t cost you the ship."],
+      pier: { n: "Long Beach Cruise Terminal", ll: [33.7525, -118.1890] },
+      options: [
+        { n: "Shoreline Village", c: "chill", note: "Easy waterfront stroll the night before.", addr: "401 Shoreline Village Dr, Long Beach, CA", ll: [33.7609, -118.1905], pick: true },
+        { n: "Retro Row", c: "see", note: "Vintage shops and cafés along 4th Street.", addr: "4th St & Cherry Ave, Long Beach, CA", ll: [33.7724, -118.1610] }
+      ]
+    },
+    {
+      id: "sea-out", kind: "sea", node: "At sea", place: "Four sea days",
+      date: "2026-11-09", end: "2026-11-12",
+      line: "Unpack, explore the ship, and slow down.",
+      ideas: [
+        "Download offline maps for Maui, Oʻahu, Kauaʻi, and Hilo",
+        "Download the Carnival HUB app and find all-aboard times",
+        "Book one specialty dinner, not four",
+        "Nov 12: recheck closures, weather, and rental pickups"
+      ]
+    },
+    {
+      id: "maui", kind: "port", node: "Maui", place: "Maui",
+      date: "2026-11-13", tz: "-10:00", ashore: "10:00", backBy: "19:45", depart: "21:30",
+      line: "Valley, old town, and the north shore.",
+      getting: "Rent a car at Kahului Airport (OGG).",
+      heads: [
+        "Book ʻĪao Valley entry now. $20 per car, 30-day window.",
+        "Skip the Road to Hāna on this day."
+      ],
+      pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
+      options: [
+        { n: "Sam Sato’s", c: "eat", note: "Dry mein and manju. Fri 7 am–2 pm, so eat here first.", addr: "1750 Wili Pa Loop, Wailuku, HI", ll: [20.8890, -156.4935], pick: true },
+        { n: "Tin Roof", c: "eat", note: "Mochiko chicken, takeout. Open until 8 pm.", addr: "360 Papa Pl, Kahului, HI", ll: [20.8869, -156.4585] },
+        { n: "Tasty Crust", c: "eat", note: "Old-school diner. Swap for Sam Sato’s, not both.", addr: "1770 Mill St, Wailuku, HI", ll: [20.8899, -156.4940] },
+        { n: "A Saigon Café", c: "eat", note: "Sit-down Vietnamese, open until 8:30 pm.", addr: "1792 Main St, Wailuku, HI", ll: [20.8880, -156.4922] },
+        { n: "Pāʻia Fish Market", c: "eat", note: "Fish plate or burger. Popular, so go early.", addr: "100 Baldwin Ave, Paia, HI", ll: [20.9131, -156.3808] },
+        { n: "Market Street, Wailuku", c: "see", note: "Murals and independent shops. Easy wander.", addr: "Market St, Wailuku, HI", ll: [20.8873, -156.5040], pick: true },
+        { n: "Pāʻia town", c: "see", note: "Galleries and small shops on the north shore.", addr: "Baldwin Ave & Hana Hwy, Paia, HI", ll: [20.9126, -156.3810], pick: true },
+        { n: "ʻĪao Valley", c: "out", note: "0.6 mile paved walk with steps. Read the signs.", addr: "Iao Valley State Monument, Wailuku, HI", ll: [20.8810, -156.5450], pick: true, tag: "Book ahead" },
+        { n: "Haleakalā summit", c: "out", note: "Replaces the whole day. 2 hrs each way, bring layers.", addr: "Haleakala Visitor Center, Kula, HI", ll: [20.7148, -156.2502], tag: "Swap option" },
+        { n: "Hoʻokipa Lookout", c: "chill", note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
+        { n: "Baldwin Beach Park", c: "chill", note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
+      ],
+      plans: [{
+        name: "Our day",
+        steps: [
+          ["10:00", "Off the ship, pick up the car"],
+          ["11:30", "Lunch at Sam Sato’s"],
+          ["12:30", "Wander Market Street"],
+          ["1:30", "ʻĪao Valley (reserved entry)"],
+          ["3:15", "Pāʻia galleries and shops"],
+          ["4:30", "Hoʻokipa: surfers and turtles"],
+          ["5:45", "Early dinner, Pāʻia Fish Market"],
+          ["6:30", "Gas up, return car, aboard by 8"]
+        ],
+        walk: "About 2–3 miles of walking."
+      }]
+    },
+    {
+      id: "oahu", kind: "port", node: "Oʻahu", place: "Oʻahu",
+      date: "2026-11-14", tz: "-10:00", ashore: "09:00", backBy: "20:00", depart: "22:00",
+      line: "History, local food, and a Waikīkī sunset.",
+      getting: "No car. Use rideshares between neighborhoods.",
+      heads: [
+        "Book ʻIolani Palace online. No walk-ups.",
+        "Farmers market ends at noon. Go there first."
+      ],
+      pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
+      options: [
+        { n: "Kakaʻako Farmers Market", c: "eat", note: "Saturday 8 am–noon. Talk to the growers.", addr: "1050 Ala Moana Blvd, Honolulu, HI", ll: [21.2950, -157.8560], pick: true },
+        { n: "Highway Inn", c: "eat", note: "Lau lau, kālua pork, poi, haupia. A Hawaiian plate.", addr: "680 Ala Moana Blvd, Honolulu, HI", ll: [21.2996, -157.8625], pick: true },
+        { n: "Sing Cheong Yuan", c: "eat", note: "Chinatown bakery. Manapua or a small pastry.", addr: "1027 Maunakea St, Honolulu, HI", ll: [21.3123, -157.8635], pick: true },
+        { n: "Leonard’s Bakery", c: "eat", note: "Hot original malasada. Skip if the line is long.", addr: "933 Kapahulu Ave, Honolulu, HI", ll: [21.2848, -157.8134] },
+        { n: "ʻIolani Palace", c: "see", note: "Audio tour, $28 each. Royal Hawaiʻi’s story.", addr: "364 S King St, Honolulu, HI", ll: [21.3068, -157.8588], pick: true, tag: "Book ahead" },
+        { n: "SALT at Kakaʻako", c: "see", note: "Murals and local shops, steps from the market.", addr: "691 Auahi St, Honolulu, HI", ll: [21.2970, -157.8590] },
+        { n: "Pearl Harbor", c: "see", note: "Replaces the morning. $1 USS Arizona ticket, no bags.", addr: "1 Arizona Memorial Pl, Honolulu, HI", ll: [21.3678, -157.9387], tag: "Swap option" },
+        { n: "Diamond Head", c: "out", note: "1.6 miles, 560 ft climb. Reserve an afternoon slot.", addr: "Diamond Head State Monument, Honolulu, HI", ll: [21.2627, -157.8048], tag: "Swap option" },
+        { n: "Waikīkī Beach", c: "chill", note: "Shoreline walk. Sunset around 5:50 pm.", addr: "Waikiki Beach, Honolulu, HI", ll: [21.2766, -157.8278], pick: true },
+        { n: "Kaimana Beach", c: "chill", note: "The quieter end of Waikīkī, by the aquarium.", addr: "Kaimana Beach, Honolulu, HI", ll: [21.2655, -157.8215] }
+      ],
+      plans: [{
+        name: "Our day",
+        steps: [
+          ["9:00", "Off the ship, find the rideshare pickup"],
+          ["10:00", "Kakaʻako Farmers Market"],
+          ["11:00", "SALT murals, lunch at Highway Inn"],
+          ["1:00", "ʻIolani Palace audio tour"],
+          ["2:15", "Walk to Chinatown, Sing Cheong Yuan"],
+          ["3:15", "Ride to Waikīkī, Leonard’s if no line"],
+          ["4:00", "Beach walk and sunset"],
+          ["7:00", "Ride back, aboard by 8:30"]
+        ],
+        walk: "About 3–4 miles of walking. Add a ride to cut it to 2."
+      }]
+    },
+    {
+      id: "kauai", kind: "port", node: "Kauaʻi", place: "Kauaʻi",
+      date: "2026-11-15", tz: "-10:00", ashore: "07:45", backBy: "14:45", depart: "16:00",
+      line: "A short day in Kōloa and on the south coast.",
+      getting: "Rent at Līhuʻe Airport (LIH). Confirm Sunday return.",
+      heads: [
+        "Waimea Canyon and Kōkeʻe were closed as of Oct 13.",
+        "Kōloa Fish Market is closed Sundays."
+      ],
+      pier: { n: "Nawiliwili Harbor (ship)", ll: [21.9550, -159.3560] },
+      options: [
+        { n: "Sueoka Snack Shop", c: "eat", note: "Plate lunch counter. Sunday until 2 pm.", addr: "5392 Koloa Rd, Koloa, HI", ll: [21.9066, -159.4681], pick: true, tag: "Confirm hours" },
+        { n: "Kauaʻi Juice Co.", c: "eat", note: "Juice and snacks, 8 am–5:30 pm daily.", addr: "Kauai Juice Co, Koloa Rd, Koloa, HI", ll: [21.9064, -159.4708] },
+        { n: "Anake’s Juice Bar", c: "eat", note: "Açaí tucked inside a grocery store.", addr: "Kukuiula Store, Poipu Rd, Koloa, HI", ll: [21.8869, -159.4730], tag: "Confirm hours" },
+        { n: "Old Kōloa Town", c: "see", note: "Sugar-era buildings and heritage plaques.", addr: "Old Koloa Town, Koloa, HI", ll: [21.9070, -159.4697], pick: true },
+        { n: "Tree Tunnel", c: "see", note: "Eucalyptus canopy on the drive in. Don’t stop on shoulders.", addr: "Maluhia Rd, Koloa, HI", ll: [21.9230, -159.4660] },
+        { n: "Māhāʻulepū Heritage Trail", c: "out", note: "Walk 20 minutes out, then back. Only if dry.", addr: "Mahaulepu Heritage Trail, Koloa, HI", ll: [21.8740, -159.4410], pick: true },
+        { n: "Shipwreck Beach", c: "chill", note: "Beautiful to look at. Not for swimming.", addr: "Shipwreck Beach, Koloa, HI", ll: [21.8745, -159.4440], tag: "View only" },
+        { n: "Poʻipū Beach Park", c: "chill", note: "Popular beach. Check advisories first.", addr: "Poipu Beach Park, Koloa, HI", ll: [21.8739, -159.4545] },
+        { n: "Kalapakī Beach", c: "chill", note: "Right by the ship. Easy backup if it rains.", addr: "Kalapaki Beach, Lihue, HI", ll: [21.9580, -159.3545], tag: "Backup" }
+      ],
+      plans: [{
+        name: "Our day",
+        steps: [
+          ["7:45", "Off the ship, pick up the car"],
+          ["9:15", "Drive the Tree Tunnel to Kōloa"],
+          ["10:00", "Old Kōloa Town and plaques"],
+          ["11:20", "Māhāʻulepū coastal walk"],
+          ["12:15", "Lunch at Sueoka"],
+          ["1:00", "Poʻipū shore, if open"],
+          ["1:35", "Drive back, return car, aboard by 3"]
+        ],
+        walk: "About 1.5–2.5 miles of walking."
+      }]
+    },
+    {
+      id: "hilo", kind: "port", node: "Hilo", place: "Hilo",
+      date: "2026-11-16", tz: "-10:00", ashore: "09:00", backBy: "15:45", depart: "17:00",
+      line: "One focused volcano day, or a slow town day.",
+      getting: "Rent at Hilo Airport (ITO), not Kona.",
+      heads: [
+        "Park entry is $30 per car, card only.",
+        "Leave the park by 1:30. That’s the hard stop."
+      ],
+      pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
+      options: [
+        { n: "Suisan Fish Market", c: "eat", note: "Shoyu ahi poke by the bay. Closes 3 pm, sells out.", addr: "93 Lihiwai St, Hilo, HI", ll: [19.7270, -155.0700], pick: true },
+        { n: "Cafe 100", c: "eat", note: "Classic loco moco. Call ahead, hours vary.", addr: "969 Kilauea Ave, Hilo, HI", ll: [19.7146, -155.0805], tag: "Confirm hours" },
+        { n: "Kīlauea caldera overlooks", c: "out", note: "Rim walk. Ask rangers what’s open today.", addr: "Kilauea Visitor Center, Hawaii Volcanoes National Park, HI", ll: [19.4295, -155.2570], pick: true },
+        { n: "Nāhuku lava tube", c: "out", note: "Short loop through a lava tube. Damp and dim.", addr: "Nahuku Thurston Lava Tube, Hawaii Volcanoes National Park, HI", ll: [19.4136, -155.2390], pick: true },
+        { n: "Kīlauea Iki Overlook", c: "out", note: "Look down into a 1959 crater. Skip the full hike.", addr: "Kilauea Iki Overlook, Hawaii Volcanoes National Park, HI", ll: [19.4164, -155.2443] },
+        { n: "Rainbow Falls", c: "see", note: "Short walk to the overlook. Town day stop.", addr: "Rainbow Falls, Hilo, HI", ll: [19.7192, -155.1080] },
+        { n: "Hilo Farmers Market", c: "see", note: "Smaller Monday market downtown.", addr: "Hilo Farmers Market, Hilo, HI", ll: [19.7241, -155.0872] },
+        { n: "Liliʻuokalani Gardens", c: "chill", note: "Japanese garden on Hilo Bay. Slow and quiet.", addr: "Liliuokalani Gardens, Hilo, HI", ll: [19.7255, -155.0670] },
+        { n: "Mokuola", c: "chill", note: "Tiny island across a footbridge. Sit and watch the bay.", addr: "Mokuola Coconut Island, Hilo, HI", ll: [19.7283, -155.0657] }
+      ],
+      plans: [
+        {
+          name: "Volcano day",
+          steps: [
+            ["9:00", "Off the ship, pick up the car"],
+            ["10:15", "Drive to Volcanoes National Park"],
+            ["11:15", "Caldera overlook and rim walk"],
+            ["12:15", "Nāhuku lava tube"],
+            ["1:30", "Leave the park"],
+            ["2:30", "Poke at Suisan, before 3"],
+            ["3:00", "Return car, aboard by 4"]
+          ],
+          walk: "About 1–2 miles of walking. Bring a warm layer."
+        },
+        {
+          name: "Town day",
+          steps: [
+            ["9:45", "Rainbow Falls"],
+            ["10:45", "Downtown and the farmers market"],
+            ["12:00", "Poke at Suisan"],
+            ["1:00", "Liliʻuokalani Gardens and Mokuola"],
+            ["2:30", "Browse downtown"],
+            ["3:45", "Back aboard"]
+          ],
+          walk: "About 2–3 miles. Taxis or keep the car."
+        }
+      ]
+    },
+    {
+      id: "sea-home", kind: "sea", node: "At sea", place: "Four sea days",
+      date: "2026-11-17", end: "2026-11-20",
+      line: "Rest after four ports in a row.",
+      ideas: [
+        "Sort photos while the days are fresh",
+        "Pick a few shows, not all of them",
+        "A long balcony or spa afternoon",
+        "Choose your one Ensenada meal"
+      ]
+    },
+    {
+      id: "ensenada", kind: "port", node: "Ensenada", place: "Ensenada",
+      date: "2026-11-21", tz: "-08:00", ashore: "15:00", backBy: "19:00", depart: "20:00",
+      line: "One great seafood meal and a waterfront walk.",
+      getting: "Walk or take the port shuttle into town.",
+      heads: ["Bring your passport book. Confirm ship vs. local time."],
+      pier: { n: "Ensenada cruise terminal (ship)", ll: [31.8510, -116.6260] },
+      options: [
+        { n: "Sabina", c: "eat", note: "Seafood tostadas. Ask what’s freshest. Eat early.", addr: "Av. Adolfo López Mateos 917, Ensenada, B.C., Mexico", ll: [31.8619, -116.6232], pick: true },
+        { n: "La Guerrerense", c: "eat", note: "The famous seafood cart across the street, if open.", addr: "La Guerrerense, Ensenada, B.C., Mexico", ll: [31.8622, -116.6240] },
+        { n: "Avenida López Mateos", c: "see", note: "The main browsing street.", addr: "Av. López Mateos, Ensenada, B.C., Mexico", ll: [31.8635, -116.6255] },
+        { n: "Malecón", c: "chill", note: "Waterfront stroll as the light fades.", addr: "Malecón, Ensenada, B.C., Mexico", ll: [31.8573, -116.6242], pick: true }
+      ],
+      plans: [{
+        name: "Our evening",
+        steps: [
+          ["3:00", "Off the ship"],
+          ["3:45", "Walk or shuttle into town"],
+          ["4:15", "Seafood at Sabina or La Guerrerense"],
+          ["5:15", "López Mateos and the waterfront"],
+          ["6:00", "Head back, aboard by 7"]
+        ],
+        walk: "About 1–3 miles of walking."
+      }]
+    },
+    {
+      id: "home", kind: "port", node: "Home", place: "Long Beach",
+      date: "2026-11-22", tz: "-08:00",
+      line: "Back in Long Beach. Fly home in the afternoon.",
+      heads: ["LAX traffic eats time. Don’t book a morning flight."],
+      pier: { n: "Long Beach Cruise Terminal", ll: [33.7525, -118.1890] },
+      options: []
+    }
+  ],
+  checklist: {
+    dates: [
+      ["Oct 14", "Book ʻĪao Valley for Nov 13. Hold cancellable cars at OGG, LIH, ITO."],
+      ["Oct 15", "Diamond Head window opens, only if you swap it in."],
+      ["Oct 25", "Carnival online check-in opens."],
+      ["Before sailing", "Book the ʻIolani Palace audio tour."],
+      ["Nov 7", "Fly in and stay near Long Beach."],
+      ["Nov 13, 3 pm", "Pearl Harbor backup ticket release, if swapping."]
+    ],
+    pack: [
+      "Grippy walking shoes", "Swimsuit and cover-up", "Light rain jacket", "Hat and sunglasses",
+      "Mineral (reef-safe) sunscreen", "Water bottle", "Small daypack", "Power bank and cable",
+      "Warm layer for the volcano", "Passport book", "Ship card and ID", "Some cash"
+    ],
+    know: [
+      "All-aboard follows the ship’s clock. Check if it’s set to local time.",
+      "Before paying for a car, confirm pier pickup and staffed return hours.",
+      "Ask a lifeguard before swimming. November surf can be big.",
+      "Give turtles 10 feet and monk seals 50 feet.",
+      "Running late? Cut the beach, shop, or snack stop first."
+    ],
+    budget: "About $770–1,150 for both of you across the four island days. Cap it at $300 a day."
+  }
+};
+</script>
+
+<style>
+:root{
+  --bg:#ECF2F0; --surface:#FFFFFF; --ink:#12302B; --muted:#587069; --line:#D3DFDB;
+  --hero:#0D5862; --hero-ink:#F4FAF8; --ocean:#0D6672; --ocean-soft:#D4EAEA;
+  --c-eat:#C42F49; --c-see:#0D6672; --c-out:#3B7838; --c-chill:#A97A06; --c-all:#12302B;
+  --warn-bg:#FBF0DA; --warn-ink:#6F4800;
+  --serif:"Young Serif", Georgia, serif;
+  --sans:"Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ease:cubic-bezier(.2,.75,.2,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0B1918; --surface:#122725; --ink:#E3EEEB; --muted:#93ABA5; --line:#244340;
+    --hero:#0A3C42; --hero-ink:#E8F5F2; --ocean:#52B7C0; --ocean-soft:#16393B;
+    --c-eat:#F06C82; --c-see:#52B7C0; --c-out:#82C177; --c-chill:#E5BD4A; --c-all:#E3EEEB;
+    --warn-bg:#2C2312; --warn-ink:#F0CC85;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 var(--sans);-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ocean);outline-offset:2px;border-radius:6px}
+.wrap{max-width:560px;margin:0 auto}
+
+/* Hero */
+.hero{background:var(--hero);color:var(--hero-ink);padding:calc(env(safe-area-inset-top) + 18px) 20px 22px}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.who{font-weight:600;font-size:15px;opacity:.85}
+.list-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.14);font-weight:600;font-size:14px;min-height:38px}
+.list-btn svg{width:16px;height:16px}
+.hero h1{font:400 44px/1 var(--serif);margin:22px 0 8px;letter-spacing:-.01em}
+.count{font-size:17px;margin:0;opacity:.92}
+.count b{font-weight:700}
+
+/* Voyage strip */
+.strip{position:sticky;top:0;z-index:500;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;padding-top:env(safe-area-inset-top)}
+.strip::-webkit-scrollbar{display:none}
+.track{position:relative;display:flex;gap:4px;padding:10px 20px 10px;width:max-content;margin:0 auto}
+.line,.wake{position:absolute;top:44px;height:2px;border-radius:2px}
+.line{background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 10px);transform-origin:left;transform:scaleX(0)}
+.wake{background:var(--ocean);width:0;transition:width .7s var(--ease)}
+.ship{position:absolute;top:33px;left:0;width:30px;height:20px;margin-left:-15px;color:var(--ocean);transition:transform .7s var(--ease);opacity:0;pointer-events:none;z-index:2}
+.ship svg{width:100%;height:100%;display:block}
+.node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:70px;padding:0 4px 2px;opacity:0;transform:translateY(6px)}
+.n-date{font-size:12px;line-height:16px;color:var(--muted);white-space:nowrap}
+.n-dotwrap{height:28px;display:grid;place-items:center}
+.n-dot{width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--muted);transition:transform .3s var(--ease),opacity .2s}
+.node.sea .n-dot{width:8px;height:8px;border-width:2px;border-style:dotted}
+.n-name{font-size:14px;font-weight:600;white-space:nowrap;color:var(--muted);transition:color .2s}
+.node.sea .n-name{font-weight:500}
+.node.on .n-name{color:var(--ink)}
+.node.on .n-dot{opacity:0;transform:scale(.4)}
+.node.today .n-date{color:var(--ocean);font-weight:700}
+.track.ready .line{transform:scaleX(1);transition:transform .9s var(--ease)}
+.track.ready .node{opacity:1;transform:none;transition:opacity .4s var(--ease) var(--d),transform .4s var(--ease) var(--d)}
+.track.ready .ship{opacity:1;transition:transform .7s var(--ease),opacity .3s .5s}
+.track.intro .ship{transition:transform 1.1s var(--ease) .55s,opacity .3s .5s}
+.track.intro .wake{transition:width 1.1s var(--ease) .55s}
+
+/* Day */
+main{padding:22px 20px 40px}
+.d-date{margin:0;color:var(--muted);font-size:15px}
+.d-place{font:400 40px/1.05 var(--serif);margin:4px 0 6px;letter-spacing:-.01em}
+.d-line{margin:0;font-size:17px}
+.times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0 0;padding:0}
+.times div{background:var(--surface);border-radius:12px;padding:10px 12px}
+.times dt{font-size:12.5px;color:var(--muted)}
+.times dd{margin:2px 0 0;font-weight:700;font-size:17px;white-space:nowrap}
+.times .back{background:var(--ocean);color:var(--hero-ink)}
+@media (prefers-color-scheme: dark){.times .back{color:#06201F}}
+.times .back dt{color:inherit;opacity:.85}
+.live{margin:10px 0 0;padding:10px 12px;border-radius:12px;background:var(--ocean-soft);color:var(--ocean);font-weight:700}
+.getting{display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:15px;color:var(--muted)}
+.getting svg{flex:none;width:18px;height:18px;margin-top:1px}
+.heads{list-style:none;margin:12px 0 0;padding:12px 14px;border-radius:12px;background:var(--warn-bg);color:var(--warn-ink);font-size:14.5px;display:grid;gap:6px}
+.heads li{display:flex;gap:8px}
+.heads li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:currentColor;margin-top:8px}
+
+/* Map */
+.mapwrap{position:relative;margin:20px -20px 0;padding:0 20px}
+#map{height:230px;border-radius:16px;overflow:hidden;background:var(--ocean-soft);transition:height .35s var(--ease);z-index:1}
+.mapwrap.big #map{height:62vh}
+.map-size{position:absolute;left:30px;bottom:10px;z-index:2;background:var(--surface);color:var(--ink);font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:999px;box-shadow:0 1px 4px rgba(0,0,0,.18);min-height:34px}
+.pin-wrap{background:none;border:0}
+.pin{display:block;width:22px;height:22px;border-radius:50%;background:var(--c);border:3px solid var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.3);animation:drop .45s var(--ease) backwards;animation-delay:calc(var(--k) * 40ms);transition:transform .25s var(--ease)}
+.pin.is-on{transform:scale(1.35);box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 30%,transparent),0 1px 4px rgba(0,0,0,.3)}
+.pier{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.pier svg{width:16px;height:16px}
+@keyframes drop{from{opacity:0;transform:translateY(-14px) scale(.6)}}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--surface);color:var(--ink);box-shadow:0 3px 14px rgba(0,0,0,.25)}
+.leaflet-popup-content{margin:12px 14px;font:15px/1.4 var(--sans)}
+.pop b{display:block;font-size:16px}
+.pop span{display:block;color:var(--muted);font-size:13.5px;margin:2px 0 8px}
+.pop .o-links{margin:0}
+.leaflet-container a.leaflet-popup-close-button{color:var(--muted)}
+.leaflet-control-attribution{font-size:10px;background:color-mix(in srgb,var(--surface) 80%,transparent)!important;color:var(--muted)}
+.leaflet-control-attribution a{color:var(--muted)}
+.leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line)}
+
+/* Segmented control */
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;margin:22px 0 0;padding:4px;border-radius:12px;background:var(--line)}
+.seg button{position:relative;z-index:1;padding:9px 0;font-weight:600;font-size:15px;color:var(--muted);transition:color .2s;min-height:40px}
+.seg button.on{color:var(--ink)}
+.seg-pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:9px;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.12);transition:transform .3s var(--ease)}
+.seg.plan .seg-pill{transform:translateX(100%)}
+
+/* Filter chips */
+.chips{display:flex;gap:8px;overflow-x:auto;margin:16px -20px 0;padding:2px 20px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);font-weight:600;font-size:14.5px;min-height:40px;transition:background .2s,border-color .2s,color .2s}
+.chip::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip[data-f="all"]::before{display:none}
+.chip small{font-size:12.5px;color:var(--muted);font-weight:500}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip.on small{color:inherit;opacity:.7}
+
+/* Options */
+.opts{list-style:none;margin:14px 0 0;padding:0;background:var(--surface);border-radius:16px;overflow:hidden}
+.opt{border-top:1px solid var(--line);animation:rise .35s var(--ease) backwards;animation-delay:calc(var(--k) * 35ms);transition:background .25s}
+.opt:first-child{border-top:0}
+.opt.on{background:color-mix(in srgb,var(--c) 9%,var(--surface))}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+.opt-main{display:flex;gap:12px;width:100%;text-align:left;padding:14px 16px 6px}
+.o-dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--c);margin-top:7px}
+.o-text{display:block;min-width:0}
+.o-name{font-weight:700;font-size:16.5px;margin-right:6px}
+.tag{display:inline-block;vertical-align:2px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-right:4px}
+.tag.pick{border-color:transparent;background:var(--c);color:var(--surface)}
+.o-note{display:block;color:var(--muted);font-size:14.5px;margin-top:3px}
+.o-links{display:flex;gap:8px;padding:4px 16px 14px 38px}
+.o-links a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--bg);min-height:34px}
+.o-links svg{width:14px;height:14px}
+.empty{padding:18px 16px;color:var(--muted);margin:0}
+
+/* Plan */
+.ptabs{display:flex;gap:8px;margin:16px 0 0}
+.ptabs button{padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);font-weight:600;font-size:14.5px;min-height:38px}
+.ptabs button.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.plan{list-style:none;margin:16px 0 0;padding:6px 0;background:var(--surface);border-radius:16px;position:relative}
+.plan li{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:11px 16px;position:relative;animation:rise .35s var(--ease) backwards;animation-delay:calc(var(--k) * 45ms)}
+.plan li::before{content:"";position:absolute;left:92px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--ocean)}
+.plan li::after{content:"";position:absolute;left:95px;top:28px;bottom:-12px;width:2px;background:var(--ocean-soft)}
+.plan li:last-child::after{display:none}
+.plan time{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.plan span{padding-left:22px}
+.walk{margin:12px 2px 0;color:var(--muted);font-size:14.5px}
+
+/* Sea */
+.ideas{list-style:none;margin:20px 0 0;padding:6px 0;background:var(--surface);border-radius:16px}
+.ideas li{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--line);animation:rise .35s var(--ease) backwards;animation-delay:calc(var(--k) * 45ms)}
+.ideas li:first-child{border-top:0}
+.ideas svg{flex:none;width:20px;height:20px;color:var(--ocean);margin-top:1px}
+
+/* Prev / next */
+.pn{display:flex;justify-content:space-between;gap:10px;margin-top:28px}
+.pn button{display:flex;flex-direction:column;padding:12px 16px;border-radius:14px;background:var(--surface);min-width:44%;text-align:left}
+.pn button.next{text-align:right;margin-left:auto}
+.pn small{color:var(--muted);font-size:13px}
+.pn b{font-size:16px}
+.hint{text-align:center;color:var(--muted);font-size:13px;margin:16px 0 0}
+
+/* Checklist sheet */
+.sheet{position:fixed;inset:0;z-index:2000}
+.scrim{position:absolute;inset:0;background:rgba(5,20,18,.45);opacity:0;transition:opacity .3s}
+.panel{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;padding:10px 20px calc(28px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .38s var(--ease);max-width:560px;margin:0 auto}
+.sheet.open .scrim{opacity:1}
+.sheet.open .panel{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.panel-head{display:flex;justify-content:space-between;align-items:center}
+.panel h2{font:400 30px/1.1 var(--serif);margin:0}
+.close{padding:8px 14px;border-radius:999px;background:var(--surface);font-weight:600;min-height:38px}
+.panel h3{font-size:17px;margin:24px 0 10px}
+.box{background:var(--surface);border-radius:16px;margin:0;padding:4px 0;list-style:none}
+.box li{padding:11px 16px;border-top:1px solid var(--line)}
+.box li:first-child{border-top:0}
+.dates li{display:grid;grid-template-columns:100px 1fr;gap:12px}
+.dates b{font-size:14.5px}
+.pack{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pack label{display:flex;gap:10px;align-items:center;background:var(--surface);border-radius:12px;padding:10px 12px;font-size:14.5px;cursor:pointer;min-height:44px}
+.pack input{appearance:none;flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);margin:0;display:grid;place-items:center;transition:background .2s,border-color .2s}
+.pack input:checked{background:var(--ocean);border-color:var(--ocean)}
+.pack input:checked::after{content:"";width:5px;height:10px;border:solid var(--surface);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.pack input:checked + span{color:var(--muted);text-decoration:line-through}
+.budget{background:var(--surface);border-radius:16px;padding:14px 16px;margin:0}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="who">Bailey + Luke</span>
+      <button class="list-btn" id="openList" aria-haspopup="dialog">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5l1.5 1.5 3-3M2.5 11l1.5 1.5 3-3M9.5 5h4M9.5 11.5h4"/></svg>
+        Checklist
+      </button>
+    </div>
+    <h1>Hawaiʻi</h1>
+    <p class="count" id="count">Carnival Radiance, Nov 8–22</p>
+  </div>
+</header>
+
+<nav class="strip" id="strip" aria-label="Trip stops">
+  <div class="track" id="track" role="tablist">
+    <div class="line" id="line"></div>
+    <div class="wake" id="wake"></div>
+    <div class="ship" id="ship" aria-hidden="true">
+      <svg viewBox="0 0 30 20" fill="currentColor"><path d="M2 12h26l-4 6H6z"/><path d="M8 7h13v4H8z" opacity=".75"/><path d="M15 3h3v4h-3z" opacity=".55"/></svg>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="main">
+  <section id="dayHead" aria-live="polite"></section>
+  <div class="mapwrap" id="mapWrap">
+    <div id="map" role="region" aria-label="Map of this stop"></div>
+    <button class="map-size" id="mapSize">Bigger map</button>
+  </div>
+  <section id="dayBody"></section>
+  <nav class="pn" id="pn" aria-label="Previous and next stop"></nav>
+  <p class="hint">Swipe left or right to change days.</p>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="scrim" data-close></div>
+  <section class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grab"></div>
+    <div class="panel-head">
+      <h2 id="sheetTitle">Before you go</h2>
+      <button class="close" data-close>Done</button>
+    </div>
+    <div id="sheetBody"></div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  const T = window.TRIP, S = T.stops, C = T.categories;
+  const $ = s => document.querySelector(s);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let cur = -1, filter = 'all', view = 'options', planIdx = 0;
+  let map = null, tiles = null, markers = [], pierMk = null;
+
+  const ICON = {
+    pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 14.5s4.5-4.2 4.5-7.7a4.5 4.5 0 10-9 0c0 3.5 4.5 7.7 4.5 7.7z"/><circle cx="8" cy="6.8" r="1.6"/></svg>',
+    car: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13.5v-3l1.6-4.2A1.5 1.5 0 016.5 5.3h7a1.5 1.5 0 011.4 1l1.6 4.2v3z"/><path d="M3.5 13.5v2h2.5v-2M14 13.5v2h2.5v-2"/><circle cx="6.5" cy="11" r=".6" fill="currentColor"/><circle cx="13.5" cy="11" r=".6" fill="currentColor"/></svg>',
+    anchor: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="3.2" r="1.5"/><path d="M8 4.7V14M5 7h6M2.5 9.5c0 2.6 2.5 4.5 5.5 4.5s5.5-1.9 5.5-4.5"/></svg>',
+    wave: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 8c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1M2 13c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/></svg>'
+  };
+
+  const D = s => new Date(s + 'T12:00:00');
+  const fmt = (s, o) => D(s).toLocaleDateString('en-US', o);
+  const pad = n => String(n).padStart(2, '0');
+  function todayStr(){ const n = new Date(); return n.getFullYear() + '-' + pad(n.getMonth()+1) + '-' + pad(n.getDate()); }
+  function todayIdx(){ const t = todayStr(); return S.findIndex(s => s.date === t || (s.end && t >= s.date && t <= s.end)); }
+  function t12(hm){ let [h, m] = hm.split(':').map(Number); const ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return (m ? h + ':' + pad(m) : h) + ' ' + ap; }
+  function shortDate(s){ return s.end ? fmt(s.date, {month:'short', day:'numeric'}) + '–' + D(s.end).getDate() : fmt(s.date, {month:'short', day:'numeric'}); }
+  const gUrl = o => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(o.n + ', ' + o.addr);
+  const aUrl = o => 'https://maps.apple.com/?q=' + encodeURIComponent(o.n) + '&address=' + encodeURIComponent(o.addr) + '&ll=' + o.ll.join(',');
+  const links = o => `<div class="o-links"><a href="${gUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></div>`;
+
+  /* Hero countdown */
+  function hero(){
+    const start = new Date(T.sail), end = new Date(T.home), now = new Date();
+    let t;
+    if (now < start){ const d = Math.floor((start - now) / 864e5); t = d < 1 ? 'We sail <b>tomorrow</b> from Long Beach' : `We sail in <b>${d} days</b> from Long Beach`; }
+    else if (now <= end){ t = `<b>Day ${Math.floor((now - start) / 864e5) + 1} of 15</b> on the Radiance`; }
+    else t = 'Mahalo for a good trip';
+    $('#count').innerHTML = t;
+  }
+
+  /* Voyage strip */
+  const track = $('#track'), strip = $('#strip');
+  function buildStrip(){
+    const ti = todayIdx();
+    S.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.className = 'node ' + s.kind + (i === ti ? ' today' : '');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', 'false');
+      b.style.setProperty('--d', (250 + i * 55) + 'ms');
+      b.innerHTML = `<span class="n-date">${i === ti ? 'Today' : esc(shortDate(s))}</span><span class="n-dotwrap"><span class="n-dot"></span></span><span class="n-name">${esc(s.node)}</span>`;
+      b.addEventListener('click', () => select(i));
+      track.appendChild(b);
+    });
+  }
+  const nodes = () => [...track.querySelectorAll('.node')];
+  const centers = () => nodes().map(n => n.offsetLeft + n.offsetWidth / 2);
+  function placeLine(idx){
+    const c = centers(); if (!c.length) return;
+    $('#line').style.left = c[0] + 'px';
+    $('#line').style.width = (c[c.length-1] - c[0]) + 'px';
+    $('#wake').style.left = c[0] + 'px';
+    $('#wake').style.width = (c[idx] - c[0]) + 'px';
+    $('#ship').style.transform = `translateX(${c[idx]}px)`;
+  }
+
+  function select(i){
+    if (i === cur || i < 0 || i >= S.length) return;
+    const dir = cur < 0 ? 0 : (i > cur ? 1 : -1);
+    cur = i; filter = 'all'; planIdx = 0; view = 'options';
+    nodes().forEach((n, k) => { n.classList.toggle('on', k === i); n.setAttribute('aria-selected', k === i); });
+    placeLine(i);
+    const c = centers()[i];
+    strip.scrollTo({ left: c - strip.clientWidth / 2, behavior: (reduce || !dir) ? 'auto' : 'smooth' });
+    history.replaceState(null, '', '#' + S[i].id);
+    renderDay(dir);
+  }
+
+  /* Day rendering */
+  function headHTML(s){
+    const date = s.end
+      ? fmt(s.date, {weekday:'short', month:'short', day:'numeric'}) + ' to ' + fmt(s.end, {weekday:'short', month:'short', day:'numeric'})
+      : fmt(s.date, {weekday:'long', month:'long', day:'numeric'});
+    const times = s.ashore ? `<dl class="times">
+      <div><dt>Ashore</dt><dd>${t12(s.ashore)}</dd></div>
+      <div class="back"><dt>Aboard by</dt><dd>${t12(s.backBy)}</dd></div>
+      <div><dt>Ship leaves</dt><dd>${t12(s.depart)}</dd></div></dl>` : '';
+    const heads = (s.heads || []).map(h => `<li>${esc(h)}</li>`).join('');
+    return `<p class="d-date">${date}</p>
+      <h2 class="d-place">${esc(s.place)}</h2>
+      <p class="d-line">${esc(s.line)}</p>
+      ${times}
+      <p class="live" id="live" hidden></p>
+      ${s.getting ? `<p class="getting">${ICON.car}<span>${esc(s.getting)}</span></p>` : ''}
+      ${heads ? `<ul class="heads">${heads}</ul>` : ''}`;
+  }
+
+  function bodyHTML(s){
+    if (s.kind === 'sea') return `<ul class="ideas">${s.ideas.map((x, k) => `<li style="--k:${k}">${ICON.wave}<span>${esc(x)}</span></li>`).join('')}</ul>`;
+    const hasPlan = s.plans && s.plans.length;
+    const seg = hasPlan ? `<div class="seg" id="seg" role="tablist"><span class="seg-pill"></span><button data-v="options" class="on" role="tab">Options</button><button data-v="plan" role="tab">Suggested plan</button></div>` : '';
+    return seg + '<div id="pane"></div>';
+  }
+
+  function optsHTML(s){
+    if (!s.options.length) return '';
+    const counts = {};
+    s.options.forEach(o => counts[o.c] = (counts[o.c] || 0) + 1);
+    const cats = Object.keys(C).filter(k => counts[k]);
+    const chipData = [['all', 'All', s.options.length], ...cats.map(k => [k, C[k].label, counts[k]])];
+    const chips = cats.length > 1 ? `<div class="chips" role="group" aria-label="Filter by type">${chipData.map(([k, l, n]) =>
+      `<button class="chip${filter === k ? ' on' : ''}" data-f="${k}" style="--c:var(--c-${k})" aria-pressed="${filter === k}">${l}<small>${n}</small></button>`).join('')}</div>` : '';
+    let k = 0;
+    const rows = s.options.map((o, i) => {
+      if (filter !== 'all' && filter !== o.c) return '';
+      return `<li class="opt" data-i="${i}" style="--c:var(--c-${o.c});--k:${k++}">
+        <button class="opt-main" data-show="${i}" aria-label="Show ${esc(o.n)} on the map">
+          <span class="o-dot"></span>
+          <span class="o-text"><span class="o-name">${esc(o.n)}</span>${o.pick ? '<span class="tag pick">Top pick</span>' : ''}${o.tag ? `<span class="tag">${esc(o.tag)}</span>` : ''}<span class="o-note">${esc(o.note)}</span></span>
+        </button>${links(o)}</li>`;
+    }).join('');
+    return chips + `<ul class="opts">${rows}</ul>`;
+  }
+
+  function planHTML(s){
+    const tabs = s.plans.length > 1 ? `<div class="ptabs">${s.plans.map((p, i) => `<button data-p="${i}" class="${i === planIdx ? 'on' : ''}">${esc(p.name)}</button>`).join('')}</div>` : '';
+    const p = s.plans[planIdx];
+    return tabs + `<ol class="plan">${p.steps.map(([t, x], k) => `<li style="--k:${k}"><time>${esc(t)}</time><span>${esc(x)}</span></li>`).join('')}</ol>` + (p.walk ? `<p class="walk">${esc(p.walk)}</p>` : '');
+  }
+
+  function renderPane(){
+    const s = S[cur], pane = $('#pane'); if (!pane) return;
+    pane.innerHTML = view === 'plan' ? planHTML(s) : optsHTML(s);
+  }
+
+  function pnHTML(){
+    const p = S[cur-1], n = S[cur+1];
+    return (p ? `<button data-go="${cur-1}"><small>Back</small><b>${esc(p.node)}</b></button>` : '') +
+           (n ? `<button class="next" data-go="${cur+1}"><small>Next</small><b>${esc(n.node)}</b></button>` : '');
+  }
+
+  function renderDay(dir){
+    const s = S[cur], head = $('#dayHead'), body = $('#dayBody'), mw = $('#mapWrap');
+    head.innerHTML = headHTML(s);
+    body.innerHTML = bodyHTML(s);
+    $('#pn').innerHTML = pnHTML();
+    mw.hidden = s.kind === 'sea';
+    mw.classList.remove('big'); $('#mapSize').textContent = 'Bigger map';
+    renderPane();
+    if (s.kind !== 'sea') drawMap(s);
+    live();
+    if (!reduce && dir){
+      [head, mw, body].forEach((e, k) => e.animate(
+        [{opacity: 0, transform: `translateX(${dir * 28}px)`}, {opacity: 1, transform: 'none'}],
+        {duration: 340, delay: k * 45, easing: 'cubic-bezier(.2,.75,.2,1)', fill: 'backwards'}));
+    }
+    if (dir) window.scrollTo({top: Math.min(window.scrollY, $('.hero').offsetHeight), behavior: 'auto'});
+  }
+
+  /* Map */
+  function setTiles(){
+    if (!map) return;
+    if (tiles) map.removeLayer(tiles);
+    const style = darkMQ.matches ? 'dark_all' : 'rastertiles/voyager';
+    tiles = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png`, {
+      subdomains: 'abcd', maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+  }
+  function drawMap(s){
+    if (!window.L){ $('#mapWrap').hidden = true; return; }
+    if (!map){
+      map = L.map('map', {zoomControl: false, scrollWheelZoom: false});
+      L.control.zoom({position: 'topright'}).addTo(map);
+      setTiles();
+      darkMQ.addEventListener && darkMQ.addEventListener('change', setTiles);
+    }
+    markers.forEach(m => map.removeLayer(m)); markers = [];
+    if (pierMk){ map.removeLayer(pierMk); pierMk = null; }
+    s.options.forEach((o, i) => {
+      const icon = L.divIcon({className: 'pin-wrap', html: `<span class="pin" style="--c:var(--c-${o.c});--k:${i}"></span>`, iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -10]});
+      const m = L.marker(o.ll, {icon, title: o.n, riseOnHover: true})
+        .bindPopup(`<div class="pop"><b>${esc(o.n)}</b><span>${esc(o.note)}</span>${links(o)}</div>`, {closeButton: false, maxWidth: 260});
+      m.on('click', () => highlight(i));
+      m._i = i; markers.push(m);
+    });
+    if (s.pier){
+      pierMk = L.marker(s.pier.ll, {icon: L.divIcon({className: 'pin-wrap', html: `<span class="pier">${ICON.anchor}</span>`, iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -12]}), zIndexOffset: -200})
+        .bindPopup(`<div class="pop"><b>${esc(s.pier.n)}</b><span>Approximate berth. Confirm on arrival.</span></div>`, {closeButton: false}).addTo(map);
+    }
+    applyFilter(true);
+  }
+  function applyFilter(fit){
+    if (!map) return;
+    const s = S[cur], pts = [];
+    markers.forEach(m => {
+      const o = s.options[m._i], show = filter === 'all' || filter === o.c;
+      if (show){ m.addTo(map); pts.push(o.ll); } else map.removeLayer(m);
+    });
+    if (s.pier) pts.push(s.pier.ll);
+    if (fit && pts.length){
+      map.invalidateSize();
+      if (pts.length === 1) map.setView(pts[0], 13, {animate: false});
+      else map.fitBounds(pts, {padding: [30, 30], maxZoom: 14, animate: false});
+    }
+  }
+  function highlight(i){
+    document.querySelectorAll('.opt').forEach(r => r.classList.toggle('on', +r.dataset.i === i));
+    markers.forEach(m => { const e = m.getElement(); e && e.querySelector('.pin').classList.toggle('is-on', m._i === i); });
+  }
+  function showOnMap(i){
+    if (!map) return;
+    const o = S[cur].options[i], m = markers[i];
+    const top = $('#mapWrap').getBoundingClientRect().top + window.scrollY - strip.offsetHeight - 12;
+    window.scrollTo({top, behavior: reduce ? 'auto' : 'smooth'});
+    map.flyTo(o.ll, Math.max(map.getZoom(), 14), {duration: reduce ? 0 : .8});
+    highlight(i);
+    setTimeout(() => m.openPopup(), reduce ? 0 : 650);
+  }
+
+  /* Live "aboard by" countdown on the day itself */
+  function live(){
+    const s = S[cur], p = $('#live');
+    if (!p) return;
+    if (!s.backBy || todayStr() !== s.date){ p.hidden = true; return; }
+    const mins = Math.round((new Date(`${s.date}T${s.backBy}:00${s.tz}`) - new Date()) / 6e4);
+    p.hidden = false;
+    p.textContent = mins > 0 ? `Head back to the ship in ${Math.floor(mins / 60)}h ${mins % 60}m` : 'Past your aboard-by time. Head to the ship now.';
+  }
+  setInterval(live, 30000);
+
+  /* Events */
+  $('#dayBody').addEventListener('click', e => {
+    const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-p]'), sh = e.target.closest('[data-show]');
+    if (v && v.dataset.v !== view){
+      view = v.dataset.v;
+      const seg = $('#seg'); seg.classList.toggle('plan', view === 'plan');
+      seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
+      renderPane();
+    } else if (f && f.dataset.f !== filter){
+      filter = f.dataset.f; renderPane(); applyFilter(true);
+      const chip = document.querySelector(`.chip[data-f="${filter}"]`);
+      chip && chip.scrollIntoView({inline: 'center', block: 'nearest', behavior: reduce ? 'auto' : 'smooth'});
+    } else if (p){
+      planIdx = +p.dataset.p; renderPane();
+    } else if (sh){
+      showOnMap(+sh.dataset.show);
+    }
+  });
+  $('#pn').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) select(+b.dataset.go); });
+  $('#mapSize').addEventListener('click', () => {
+    const mw = $('#mapWrap'), big = mw.classList.toggle('big');
+    $('#mapSize').textContent = big ? 'Smaller map' : 'Bigger map';
+    setTimeout(() => applyFilter(true), reduce ? 0 : 360);
+  });
+
+  /* Swipe between days */
+  let sx = 0, sy = 0, ok = false;
+  const main = $('#main');
+  main.addEventListener('touchstart', e => {
+    ok = !e.target.closest('#mapWrap, .chips, .ptabs');
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, {passive: true});
+  main.addEventListener('touchend', e => {
+    if (!ok) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 70 && Math.abs(dy) < 50) select(cur + (dx < 0 ? 1 : -1));
+  }, {passive: true});
+
+  /* Checklist sheet */
+  function buildSheet(){
+    const L2 = T.checklist;
+    $('#sheetBody').innerHTML = `
+      <h3>Key dates</h3>
+      <ul class="box dates">${L2.dates.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join('')}</ul>
+      <h3>Pack for shore days</h3>
+      <div class="pack">${L2.pack.map(x => `<label><input type="checkbox"><span>${esc(x)}</span></label>`).join('')}</div>
+      <h3>Good to know</h3>
+      <ul class="box">${L2.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+      <h3>Budget</h3>
+      <p class="budget">${esc(L2.budget)}</p>`;
+  }
+  const sheet = $('#sheet');
+  let lastFocus = null;
+  function openSheet(){
+    lastFocus = document.activeElement;
+    sheet.hidden = false; document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open')));
+    sheet.querySelector('.close').focus();
+  }
+  function closeSheet(){
+    sheet.classList.remove('open'); document.body.style.overflow = '';
+    setTimeout(() => { sheet.hidden = true; lastFocus && lastFocus.focus(); }, reduce ? 0 : 380);
+  }
+  $('#openList').addEventListener('click', openSheet);
+  sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSheet(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !sheet.hidden) closeSheet();
+    if (sheet.hidden && (e.key === 'ArrowRight' || e.key === 'ArrowLeft') && !e.target.closest('input, #map'))
+      select(cur + (e.key === 'ArrowRight' ? 1 : -1));
+  });
+
+  /* Start */
+  hero(); buildStrip(); buildSheet();
+  let start = S.findIndex(s => s.id === location.hash.slice(1));
+  if (start < 0) start = todayIdx();
+  if (start < 0) start = S.findIndex(s => s.id === 'maui');
+  placeLine(0);
+  track.getBoundingClientRect();
+  track.classList.add('intro', 'ready');
+  select(start);
+  setTimeout(() => track.classList.remove('intro'), 1800);
+  const relayout = () => { if (cur >= 0) placeLine(cur); };
+  window.addEventListener('resize', relayout);
+  document.fonts && document.fonts.ready.then(relayout);
+})();
+</script>
+</body>
+</html>
