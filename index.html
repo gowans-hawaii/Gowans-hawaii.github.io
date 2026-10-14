@@ -339,6 +339,11 @@ main{padding:22px 20px 40px}
 .mc-row a,.mc-row button{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--bg);text-decoration:none;min-height:34px;display:inline-flex;align-items:center}
 .mc-add.on{background:var(--c);color:var(--surface)}
 .mc-x{position:absolute;top:6px;right:6px;width:36px;height:36px;font-size:24px;line-height:1;color:var(--muted)}
+
+.m-zoom{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.m-zoom button{width:40px;height:40px;background:var(--surface);color:var(--ink);font-size:22px;font-weight:600;line-height:1}
+.m-zoom button + button{border-top:1px solid var(--line)}
+.m-zoom button:disabled{color:var(--line)}
 .map-cap{margin:8px 2px 0;font-size:13px;color:var(--muted)}
 .mapwrap.big #map{height:62vh}
 .map-size{position:absolute;left:30px;bottom:10px;z-index:2;background:var(--surface);color:var(--ink);font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:999px;box-shadow:0 1px 4px rgba(0,0,0,.18);min-height:34px}
@@ -357,7 +362,7 @@ main{padding:22px 20px 40px}
 .seg button{position:relative;z-index:1;padding:9px 0;font-weight:600;font-size:15px;color:var(--muted);transition:color .2s;min-height:40px}
 .seg button.on{color:var(--ink)}
 .seg-pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:9px;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.12);transition:transform .3s var(--ease)}
-.seg.plan .seg-pill{transform:translateX(100%)}
+.seg.right .seg-pill{transform:translateX(100%)}
 
 /* Filter chips */
 .chips{display:flex;gap:8px;overflow-x:auto;margin:16px -20px 0;padding:2px 20px;scrollbar-width:none}
@@ -557,6 +562,7 @@ body.has-tally main{padding-bottom:120px}
       <svg id="mapSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"></svg>
       <div class="m-scale" id="mScale"></div>
       <div class="map-tools"><button id="mapZoom">Zoom to plan</button><button id="mapSize">Bigger map</button></div>
+      <div class="m-zoom"><button id="zIn" aria-label="Zoom in">+</button><button id="zOut" aria-label="Zoom out">−</button></div>
       <div class="map-card" id="mapCard" hidden></div>
     </div>
     <p class="map-cap" id="mapCap"></p>
@@ -738,7 +744,7 @@ body.has-tally main{padding-bottom:120px}
   function select(i){
     if (i === cur || i < 0 || i >= S.length) return;
     const dir = cur < 0 ? 0 : (i > cur ? 1 : -1);
-    cur = i; filter = 'all'; view = 'options';
+    cur = i; filter = 'all'; view = S[i].leg ? 'plan' : 'options';
     nodes().forEach((n, k) => { n.classList.toggle('on', k === i); n.setAttribute('aria-selected', k === i); });
     placeLine(i);
     const c = centers()[i];
@@ -773,7 +779,7 @@ body.has-tally main{padding-bottom:120px}
 
   function bodyHTML(s){
     if (s.kind === 'sea') return `<ul class="ideas">${s.ideas.map((x, k) => `<li style="--k:${k}">${ICON.wave}<span>${esc(x)}</span></li>`).join('')}</ul>`;
-    const seg = s.leg ? `<div class="seg" id="seg" role="tablist"><span class="seg-pill"></span><button data-v="options" class="on" role="tab">Options</button><button data-v="plan" role="tab">Our plan</button></div>` : '';
+    const seg = s.leg ? `<div class="seg" id="seg" role="tablist"><span class="seg-pill"></span><button data-v="plan" class="on" role="tab">Our plan</button><button data-v="options" role="tab">Options</button></div>` : '';
     return seg + '<div id="pane"></div>';
   }
 
@@ -849,7 +855,7 @@ body.has-tally main{padding-bottom:120px}
     $('#pn').innerHTML = pnHTML();
     mw.hidden = s.kind === 'sea';
     mw.classList.remove('big'); $('#mapSize').textContent = 'Bigger map';
-    mapZoom = autoZoom(s); mapSel = -1; card.hidden = true;
+    mapZoom = autoZoom(s); mapSel = -1; card.hidden = true; zk = 1; zc = null;
     renderPane();
     if (s.kind !== 'sea') drawMap(s, true);
     live();
@@ -867,6 +873,8 @@ body.has-tally main{padding-bottom:120px}
   const GEO = window.GEO || {};
   const mapEl = $('#map'), svg = $('#mapSvg'), card = $('#mapCard');
   let mapZoom = false, mapSel = -1, lastRouteKey = '';
+  let zk = 1, zc = null, mv = null;
+  const ZMAX = 16;
   const routeCache = {};
   function routeStops(s){
     return (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => (a.o.order || 0) - (b.o.order || 0));
@@ -897,8 +905,16 @@ body.has-tally main{padding-bottom:120px}
     let vw = X(f[2]), vh = Y(f[1]), ox = 0, oy = 0;
     if (vw / vh > W / H){ const nh = vw * H / W; oy = (nh - vh) / 2; vh = nh; }
     else { const nw = vh * W / H; ox = (nw - vw) / 2; vw = nw; }
-    const u = vw / W;
-    svg.setAttribute('viewBox', `${(-ox).toFixed(1)} ${(-oy).toFixed(1)} ${vw.toFixed(1)} ${vh.toFixed(1)}`);
+    /* pinch / drag zoom on top of the base view */
+    const bx = -ox, by = -oy, w = vw / zk, hh = vh / zk;
+    let c = zc || [bx + vw / 2, by + vh / 2];
+    c = [Math.min(Math.max(c[0], bx + w / 2), bx + vw - w / 2), Math.min(Math.max(c[1], by + hh / 2), by + vh - hh / 2)];
+    zc = zk > 1.001 ? c : null;
+    mv = {x: c[0] - w / 2, y: c[1] - hh / 2, w, h: hh, W, H, bw: vw, bh: vh};
+    const u = w / W;
+    svg.setAttribute('viewBox', `${mv.x.toFixed(2)} ${mv.y.toFixed(2)} ${w.toFixed(2)} ${hh.toFixed(2)}`);
+    svg.style.touchAction = zk > 1.001 ? 'none' : 'pan-y';
+    $('#zOut').disabled = zk <= 1.001; $('#zIn').disabled = zk >= ZMAX - .01;
     const P = ll => X(ll[1]).toFixed(1) + ',' + Y(ll[0]).toFixed(1);
     const g = GEO[s.geo];
     const land = g ? g.rings.map(r => 'M' + r.map(q => X(q[0]).toFixed(1) + ',' + Y(q[1]).toFixed(1)).join('L') + 'Z').join('') : '';
@@ -945,8 +961,8 @@ body.has-tally main{padding-bottom:120px}
     /* caption */
     const car = s.leg && s.leg.mode === 'car';
     $('#mapCap').textContent = !s.options.length ? 'The anchor marks the ship.'
-      : !stops.length ? 'Check options to draw your route from the ship.'
-      : `Numbers are your stops in order, starting at the ship. ${Array.isArray(road) ? 'The line follows the roads.' : car && road === undefined ? 'Loading the road route…' : 'Lines connect stops in order.'}`;
+      : !stops.length ? 'Pinch or use + and − to zoom. Check options to draw your route from the ship.'
+      : `Pinch or use + and − to zoom. Numbers are your stops in order, starting at the ship. ${Array.isArray(road) ? 'The line follows the roads.' : car && road === undefined ? 'Loading the road route…' : 'Lines connect stops in order.'}`;
 
     if (key !== lastRouteKey || routeIn){ lastRouteKey = key; animateRoute(); }
     if (stops.length && car && road === undefined) roadRoute(s, pts, key);
@@ -1007,6 +1023,7 @@ body.has-tally main{padding-bottom:120px}
     if (!card.hidden && mapSel === i) showCard(i);
   }
   svg.addEventListener('click', e => {
+    if (Date.now() - suppressClick < 350) return;
     const d = e.target.closest('[data-dot]');
     if (!d){ if (!card.hidden) closeCard(); return; }
     if (d.dataset.dot === 'pier'){ mapSel = -1; highlight(-1); drawMap(S[cur]); showCard('pier'); }
@@ -1017,7 +1034,92 @@ body.has-tally main{padding-bottom:120px}
     if (b.dataset.mc === 'close') closeCard();
     else if (mapSel >= 0) toggleCheck(mapSel);
   });
-  $('#mapZoom').addEventListener('click', () => { mapZoom = !mapZoom; drawMap(S[cur], true); });
+  $('#mapZoom').addEventListener('click', () => { mapZoom = !mapZoom; zk = 1; zc = null; drawMap(S[cur], true); });
+
+  /* Pinch, drag, double-tap, wheel, and +/- zoom */
+  let raf = 0, suppressClick = 0;
+  const redraw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => drawMap(S[cur])); };
+  function toUnits(px, py){
+    const r = svg.getBoundingClientRect();
+    return [mv.x + (px - r.left) / r.width * mv.w, mv.y + (py - r.top) / r.height * mv.h];
+  }
+  function zoomAt(f, px, py){
+    if (!mv) return;
+    const r = svg.getBoundingClientRect();
+    if (px == null){ px = r.left + r.width / 2; py = r.top + r.height / 2; }
+    const p = toUnits(px, py), nk = Math.min(ZMAX, Math.max(1, zk * f));
+    const c = [mv.x + mv.w / 2, mv.y + mv.h / 2];
+    zc = [p[0] + (c[0] - p[0]) * zk / nk, p[1] + (c[1] - p[1]) * zk / nk];
+    zk = nk; redraw();
+  }
+  $('#zIn').addEventListener('click', () => zoomAt(2));
+  $('#zOut').addEventListener('click', () => zoomAt(.5));
+
+  let pinch = null, pan = null, lastTap = 0;
+  const dist = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  function startPan(t){
+    pan = {x: t.clientX, y: t.clientY, c: [mv.x + mv.w / 2, mv.y + mv.h / 2], moved: false};
+  }
+  svg.addEventListener('touchstart', e => {
+    if (!mv) return;
+    if (e.touches.length === 2){
+      e.preventDefault();
+      const [a, b] = e.touches, mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+      pinch = {d: dist(a, b), k: zk, p: toUnits(mx, my)};
+      pan = null;
+    } else if (e.touches.length === 1 && zk > 1.001){
+      startPan(e.touches[0]);
+    }
+  }, {passive: false});
+  svg.addEventListener('touchmove', e => {
+    if (pinch && e.touches.length === 2){
+      e.preventDefault();
+      const [a, b] = e.touches, r = svg.getBoundingClientRect();
+      const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+      zk = Math.min(ZMAX, Math.max(1, pinch.k * dist(a, b) / pinch.d));
+      const w = mv.bw / zk, hh = mv.bh / zk;
+      zc = [pinch.p[0] - (mx - r.left - r.width / 2) * w / r.width, pinch.p[1] - (my - r.top - r.height / 2) * hh / r.height];
+      suppressClick = Date.now();
+      redraw();
+    } else if (pan && e.touches.length === 1){
+      const t = e.touches[0], dx = t.clientX - pan.x, dy = t.clientY - pan.y;
+      if (!pan.moved && Math.hypot(dx, dy) < 6) return;
+      e.preventDefault();
+      pan.moved = true; suppressClick = Date.now();
+      const r = svg.getBoundingClientRect();
+      zc = [pan.c[0] - dx * mv.w / r.width, pan.c[1] - dy * mv.h / r.height];
+      redraw();
+    }
+  }, {passive: false});
+  svg.addEventListener('touchend', e => {
+    if (e.touches.length < 2) pinch = null;
+    if (e.touches.length === 1 && zk > 1.001) startPan(e.touches[0]);
+    else if (!e.touches.length){
+      const wasPan = pan && pan.moved; pan = null;
+      const t = e.changedTouches[0], now = Date.now();
+      if (!wasPan && now - suppressClick > 300 && now - lastTap < 280 && t){
+        e.preventDefault(); zoomAt(2, t.clientX, t.clientY); lastTap = 0; suppressClick = now;
+      } else lastTap = now;
+    }
+  }, {passive: false});
+  svg.addEventListener('gesturestart', e => e.preventDefault());
+  svg.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.25 : .8, e.clientX, e.clientY); }, {passive: false});
+  let mdrag = null;
+  svg.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse' || zk <= 1.001 || !mv) return;
+    mdrag = {x: e.clientX, y: e.clientY, c: [mv.x + mv.w / 2, mv.y + mv.h / 2], moved: false};
+  });
+  window.addEventListener('pointermove', e => {
+    if (!mdrag) return;
+    const dx = e.clientX - mdrag.x, dy = e.clientY - mdrag.y;
+    if (!mdrag.moved && Math.hypot(dx, dy) < 4) return;
+    mdrag.moved = true; suppressClick = Date.now();
+    const r = svg.getBoundingClientRect();
+    zc = [mdrag.c[0] - dx * mv.w / r.width, mdrag.c[1] - dy * mv.h / r.height];
+    redraw();
+  });
+  window.addEventListener('pointerup', () => { mdrag = null; });
+  svg.addEventListener('dblclick', e => zoomAt(2, e.clientX, e.clientY));
   let rzT = 0;
   if (window.ResizeObserver) new ResizeObserver(() => { cancelAnimationFrame(rzT); rzT = requestAnimationFrame(() => cur >= 0 && S[cur].pier && drawMap(S[cur])); }).observe(mapEl);
 
@@ -1097,7 +1199,7 @@ body.has-tally main{padding-bottom:120px}
     const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-preset]'), sh = e.target.closest('[data-show]');
     if (v && v.dataset.v !== view){
       view = v.dataset.v;
-      const seg = $('#seg'); seg.classList.toggle('plan', view === 'plan');
+      const seg = $('#seg'); seg.classList.toggle('right', view === 'options');
       seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
       renderPane();
     } else if (f && f.dataset.f !== filter){
