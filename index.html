@@ -534,6 +534,27 @@ body.has-tally main{padding-bottom:120px}
 @keyframes blink{50%{opacity:.3}}
 .quiet *{animation:none!important}
 
+
+.box-p{margin:0 0 10px;color:var(--muted);font-size:14.5px}
+.pdf-btn{width:100%;min-height:48px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:700;font-size:15.5px}
+#printOut{display:none}
+@media print{
+  body{background:#fff!important;padding:0}
+  body > *:not(#printOut){display:none!important}
+  #printOut{display:block!important;color:#000;font:10.5pt/1.4 var(--sans)}
+  #printOut h1{font:400 22pt/1.1 var(--serif);margin:0 0 4pt}
+  #printOut h2{font:400 15pt/1.1 var(--serif);margin:0 0 3pt}
+  #printOut p{margin:0 0 6pt}
+  .pr-day{break-inside:avoid;border-top:1px solid #999;padding-top:9pt;margin-top:12pt}
+  #printOut table{border-collapse:collapse;width:100%;margin:4pt 0 6pt}
+  #printOut td{vertical-align:top;padding:2pt 6pt 2pt 0}
+  #printOut td:first-child{width:62pt;font-weight:700;white-space:nowrap}
+  #printOut small{color:#444}
+  #printOut em{font-style:normal;color:#8a4b00}
+  .pr-leg td{color:#555;font-size:9pt;padding-top:0;padding-bottom:0}
+  #printOut ul{margin:2pt 0 0;padding-left:14pt}
+}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -595,6 +616,8 @@ body.has-tally main{padding-bottom:120px}
   </div>
   <button class="tally-mini" id="tallyMini" aria-label="Show the cost bar" tabindex="-1"><b id="tMini">$0</b><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l5-5 5 5"/></svg></button>
 </div>
+
+<div id="printOut" aria-hidden="true"></div>
 
 <div class="sheet" id="sheet" hidden>
   <div class="scrim" data-close></div>
@@ -1305,6 +1328,9 @@ body.has-tally main{padding-bottom:120px}
       <h3>Trip totals</h3>
       <div class="totals" id="totals"></div>
       <p class="tot-note">Based on what’s checked on each day. Downtime counts port days only.</p>
+      <h3>No service?</h3>
+      <p class="box-p">This page keeps working offline once you’ve opened it with service. For an extra backup, save every day’s plan as a PDF.</p>
+      <button class="pdf-btn" id="pdfBtn">Save our plans as a PDF</button>
       <h3>Key dates</h3>
       <ul class="box dates">${L2.dates.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join('')}</ul>
       <h3>Pack for shore days</h3>
@@ -1326,6 +1352,28 @@ body.has-tally main{padding-bottom:120px}
     setTimeout(() => { sheet.hidden = true; lastFocus && lastFocus.focus(); }, reduce ? 0 : 380);
   }
   $('#openList').addEventListener('click', openSheet);
+
+  /* Printable backup of every plan */
+  function printHTML(){
+    const days = S.filter(s => s.leg && s.pier).map(s => {
+      const P = buildPlan(s), c = dayTotals(s), date = fmt(s.date, {weekday: 'long', month: 'long', day: 'numeric'});
+      const rows = P.steps.map(x => {
+        if (x.kind === 'leg'){ const l = x.l; return `<tr class="pr-leg"><td></td><td>${l.type === 'drive' ? 'Drive' : l.type === 'ride' ? 'Taxi or rideshare' : 'Walk'} ${hrs(l.min)}${l.mi >= .2 ? ', ' + miles(l.mi) : ''}</td></tr>`; }
+        if (x.kind === 'stop') return `<tr><td>${clock(x.at)}</td><td><b>${esc(x.o.n)}</b> (${hrs(x.o.dur)})<br><small>${esc(x.o.addr)}</small>${x.warn ? `<br><em>${esc(x.warn)}</em>` : ''}</td></tr>`;
+        return `<tr><td>${clock(x.at)}</td><td><b>${x.text}</b></td></tr>`;
+      }).join('');
+      return `<section class="pr-day"><h2>${esc(s.place)}</h2><p>${date}. Ashore ${t12(s.ashore)}, aboard by ${t12(s.backBy)}, ship leaves ${t12(s.depart)}.</p>
+        ${P.count ? `<table>${rows}</table><p>Back aboard around ${clock(P.end)}. About ${total(c.lo, c.hi)} for two. ${s.getting ? esc(s.getting) : ''}</p>` : '<p>Nothing checked for this day yet.</p>'}
+        ${(s.heads || []).length ? `<ul>${s.heads.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</section>`;
+    }).join('');
+    return `<h1>Bailey + Luke in Hawaiʻi</h1><p>Carnival Radiance, November 8–22. Saved ${new Date().toLocaleDateString('en-US', {month: 'long', day: 'numeric'})}. Times are estimates.</p>${days}
+      <section class="pr-day"><h2>Good to know</h2><ul>${T.checklist.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul></section>`;
+  }
+  $('#sheetBody').addEventListener('click', e => {
+    if (!e.target.closest('#pdfBtn')) return;
+    $('#printOut').innerHTML = printHTML();
+    setTimeout(() => window.print(), 50);
+  });
   sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSheet(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !sheet.hidden) closeSheet();
@@ -1348,13 +1396,39 @@ body.has-tally main{padding-bottom:120px}
     const el = $('#sync'); if (!syncOn) return;
     el.hidden = false; el.dataset.st = st;
     el.textContent = st === 'ok' ? 'Synced' : st === 'saving' ? 'Saving' : 'Offline';
-    el.title = st === 'error' ? 'Changes will save when you’re back online' : '';
+    el.title = st === 'error' ? 'Saved on this phone. Syncs when you’re back online.' : '';
+  }
+  /* Keep a copy of everything on this phone so it works with no service */
+  const STATE_KEY = './__trip-state';
+  async function saveLocal(){
+    try {
+      if (!window.caches) return;
+      const days = {};
+      S.forEach(s => { if (s.options && s.options.length) days[s.id] = namesFor(s); });
+      const c = await caches.open('hawaii-trip-state');
+      await c.put(STATE_KEY, new Response(JSON.stringify({days, pack: '|' + [...packed].join('|'), pending}), {headers: {'Content-Type': 'application/json'}}));
+    } catch (e){}
+  }
+  async function loadLocal(){
+    try {
+      if (!window.caches) return null;
+      const r = await (await caches.open('hawaii-trip-state')).match(STATE_KEY);
+      return r ? r.json() : null;
+    } catch (e){ return null; }
+  }
+  function applyPending(p){
+    Object.keys(p || {}).forEach(k => {
+      if (k === 'pack'){ packed.clear(); p[k].split('|').filter(Boolean).forEach(x => packed.add(x)); }
+      else if (k.startsWith('days/')){ const s = S.find(x => x.id === k.slice(5)); if (s && s.options) fromNames(s, p[k]); }
+    });
   }
   function queue(path, value){
-    if (!syncOn) return;
-    pending[path] = value;
-    clearTimeout(flushT); flushT = setTimeout(flush, 350);
-    setStatus('saving');
+    if (syncOn){
+      pending[path] = value;
+      clearTimeout(flushT); flushT = setTimeout(flush, 350);
+      setStatus('saving');
+    }
+    saveLocal();
   }
   async function flush(){
     const body = pending; pending = {};
@@ -1362,9 +1436,11 @@ body.has-tally main{padding-bottom:120px}
     try {
       const r = await fetch(tripUrl(), {method: 'PATCH', body: JSON.stringify(body)});
       if (!r.ok) throw new Error(r.status);
-      setStatus('ok');
+      setStatus(Object.keys(pending).length ? 'saving' : 'ok');
+      saveLocal();
     } catch (e){
       pending = Object.assign(body, pending);
+      saveLocal();
       setStatus('error');
       clearTimeout(retryT); retryT = setTimeout(flush, 5000);
     }
@@ -1390,11 +1466,22 @@ body.has-tally main{padding-bottom:120px}
     return r.json();
   }
   async function startSync(){
+    const local = await loadLocal();
+    if (local){
+      applyRemote(local);
+      if (syncOn) pending = Object.assign({}, local.pending || {});
+      refreshUI();
+    }
     if (!syncOn) return;
     setStatus('saving');
     try {
       const d = await pull();
-      if (d && d.days){ applyRemote(d); refreshUI(); }
+      if (d && d.days){
+        applyRemote(d);
+        applyPending(pending);
+        refreshUI(); saveLocal();
+        if (Object.keys(pending).length) flush();
+      }
       else {
         const init = {days: {}, pack: '|' + [...packed].join('|')};
         S.forEach(s => { if (s.options && s.options.length) init.days[s.id] = namesFor(s); });
@@ -1407,7 +1494,7 @@ body.has-tally main{padding-bottom:120px}
     const es = new EventSource(tripUrl());
     const onChange = async () => {
       if (Object.keys(pending).length) return;
-      try { applyRemote(await pull()); refreshUI(); setStatus('ok'); } catch (e){}
+      try { applyRemote(await pull()); refreshUI(); saveLocal(); setStatus('ok'); } catch (e){}
     };
     es.addEventListener('put', onChange);
     es.addEventListener('patch', onChange);
@@ -1422,6 +1509,8 @@ body.has-tally main{padding-bottom:120px}
 
   /* Start */
   hero(); buildStrip(); buildSheet(); startSync();
+  window.addEventListener('online', () => { if (syncOn && Object.keys(pending).length) flush(); });
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   let start = S.findIndex(s => s.id === location.hash.slice(1));
   if (start < 0) start = todayIdx();
   if (start < 0) start = S.findIndex(s => s.id === 'maui');
