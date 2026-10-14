@@ -19,6 +19,16 @@
    ll = [latitude, longitude] for the map pin (approximate)
    pick: true shows "Top pick". tag shows a small label.
    ===================================================================== */
+/* =====================================================================
+   SHARED CHECK MARKS
+   Paste your Firebase Realtime Database URL between the quotes below so
+   check marks sync between both phones. Leave it empty to turn sharing off.
+   ===================================================================== */
+window.SYNC = {
+  url: "https://hawaii-trip-6e0d5-default-rtdb.firebaseio.com",
+  trip: "bailey-luke-hawaii-k7q2"
+};
+
 window.TRIP = {
   sail: "2026-11-08T12:00:00-08:00",
   home: "2026-11-22T12:00:00-08:00",
@@ -475,6 +485,14 @@ body.has-tally main{padding-bottom:120px}
 .tot small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
 .tot-note{color:var(--muted);font-size:13px;margin:8px 2px 0}
 
+
+.sync{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:2px 9px 2px 7px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:600;vertical-align:1px}
+.sync::before{content:"";width:7px;height:7px;border-radius:50%;background:#7FE0B0}
+.sync[data-st="saving"]::before{background:#F2CD86;animation:blink 1s infinite}
+.sync[data-st="error"]::before{background:#F08A8A}
+@keyframes blink{50%{opacity:.3}}
+.quiet *{animation:none!important}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -486,7 +504,7 @@ body.has-tally main{padding-bottom:120px}
 <header class="hero">
   <div class="wrap">
     <div class="hero-top">
-      <span class="who">Bailey + Luke</span>
+      <span class="who">Bailey + Luke <span class="sync" id="sync" hidden></span></span>
       <button class="list-btn" id="openList" aria-haspopup="dialog">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5l1.5 1.5 3-3M2.5 11l1.5 1.5 3-3M9.5 5h4M9.5 11.5h4"/></svg>
         Checklist
@@ -550,6 +568,7 @@ body.has-tally main{padding-bottom:120px}
   let cur = -1, filter = 'all', view = 'options';
   let map = null, tiles = null, markers = [], pierMk = null;
 
+  const packed = new Set();
   /* Checked activities start with the top picks */
   const picked = {};
   function usePreset(s, k){
@@ -906,7 +925,7 @@ body.has-tally main{padding-bottom:120px}
     const open = tally.classList.toggle('open');
     $('#tallyBar').setAttribute('aria-expanded', open);
   });
-  function tripTotals(){
+  function tripTotals(quiet){
     let lo = 0, hi = 0; const tt = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
     S.forEach(s => {
       if (s.kind === 'sea') return;
@@ -923,7 +942,7 @@ body.has-tally main{padding-bottom:120px}
     ];
     const box = $('#totals');
     box.innerHTML = tiles.map(([l, f, sub, cls], k) => `<div class="tot ${cls || ''}" style="--k:${k}"><span>${l}</span><b data-t="${k}">${f(1)}</b><small>${sub}</small></div>`).join('');
-    if (reduce) return;
+    if (reduce || quiet){ box.querySelectorAll('.tot').forEach(t => t.style.animation = 'none'); return; }
     const t0 = performance.now();
     const step = now => {
       const p = Math.min(1, (now - t0) / 700), e = 1 - Math.pow(1 - p, 3);
@@ -954,6 +973,7 @@ body.has-tally main{padding-bottom:120px}
       ck.setAttribute('aria-pressed', on);
       ck.closest('.opt').classList.toggle('picked', on);
       updateTally(true);
+      queue('days/' + S[cur].id, namesFor(S[cur]));
       return;
     }
     const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-preset]'), sh = e.target.closest('[data-show]');
@@ -968,6 +988,7 @@ body.has-tally main{padding-bottom:120px}
       chip && chip.scrollIntoView({inline: 'center', block: 'nearest', behavior: reduce ? 'auto' : 'smooth'});
     } else if (p){
       usePreset(S[cur], +p.dataset.preset); renderPane(); updateTally(true);
+      queue('days/' + S[cur].id, namesFor(S[cur]));
       drawMap(S[cur]);
     } else if (sh){
       showOnMap(+sh.dataset.show);
@@ -1003,7 +1024,7 @@ body.has-tally main{padding-bottom:120px}
       <h3>Key dates</h3>
       <ul class="box dates">${L2.dates.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join('')}</ul>
       <h3>Pack for shore days</h3>
-      <div class="pack">${L2.pack.map(x => `<label><input type="checkbox"><span>${esc(x)}</span></label>`).join('')}</div>
+      <div class="pack">${L2.pack.map(x => `<label><input type="checkbox" data-pack="${esc(x)}"${packed.has(x) ? ' checked' : ''}><span>${esc(x)}</span></label>`).join('')}</div>
       <h3>Good to know</h3>
       <ul class="box">${L2.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
   }
@@ -1028,8 +1049,94 @@ body.has-tally main{padding-bottom:120px}
       select(cur + (e.key === 'ArrowRight' ? 1 : -1));
   });
 
+  /* Shared check marks (Firebase Realtime Database, REST + live stream) */
+  const SY = window.SYNC || {};
+  const base = (SY.url || '').trim().replace(/\/+$/, '');
+  const syncOn = /^https:\/\//.test(base);
+  const tripUrl = () => `${base}/trips/${encodeURIComponent(SY.trip || 'trip')}.json`;
+  let pending = {}, flushT = 0, retryT = 0;
+  function namesFor(s){ return '|' + [...picked[s.id]].map(i => s.options[i].n).join('|'); }
+  function fromNames(s, str){
+    const names = str.split('|').filter(Boolean);
+    picked[s.id] = new Set(s.options.map((o, i) => names.includes(o.n) ? i : -1).filter(i => i >= 0));
+  }
+  function setStatus(st){
+    const el = $('#sync'); if (!syncOn) return;
+    el.hidden = false; el.dataset.st = st;
+    el.textContent = st === 'ok' ? 'Synced' : st === 'saving' ? 'Saving' : 'Offline';
+    el.title = st === 'error' ? 'Changes will save when you’re back online' : '';
+  }
+  function queue(path, value){
+    if (!syncOn) return;
+    pending[path] = value;
+    clearTimeout(flushT); flushT = setTimeout(flush, 350);
+    setStatus('saving');
+  }
+  async function flush(){
+    const body = pending; pending = {};
+    if (!Object.keys(body).length) return;
+    try {
+      const r = await fetch(tripUrl(), {method: 'PATCH', body: JSON.stringify(body)});
+      if (!r.ok) throw new Error(r.status);
+      setStatus('ok');
+    } catch (e){
+      pending = Object.assign(body, pending);
+      setStatus('error');
+      clearTimeout(retryT); retryT = setTimeout(flush, 5000);
+    }
+  }
+  function applyRemote(d){
+    if (!d) return;
+    if (d.days) S.forEach(s => { if (typeof d.days[s.id] === 'string' && s.options) fromNames(s, d.days[s.id]); });
+    if (typeof d.pack === 'string'){ packed.clear(); d.pack.split('|').filter(Boolean).forEach(x => packed.add(x)); }
+  }
+  function refreshUI(){
+    if (cur >= 0 && S[cur].kind !== 'sea'){
+      const pane = $('#pane');
+      if (pane){ pane.classList.add('quiet'); renderPane(); setTimeout(() => pane.classList.remove('quiet'), 50); }
+      updateTally(false);
+    }
+    document.querySelectorAll('[data-pack]').forEach(b => b.checked = packed.has(b.dataset.pack));
+    if (!sheet.hidden) tripTotals(true);
+  }
+  async function pull(){
+    const r = await fetch(tripUrl());
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }
+  async function startSync(){
+    if (!syncOn) return;
+    setStatus('saving');
+    try {
+      const d = await pull();
+      if (d && d.days){ applyRemote(d); refreshUI(); }
+      else {
+        const init = {days: {}, pack: '|' + [...packed].join('|')};
+        S.forEach(s => { if (s.options && s.options.length) init.days[s.id] = namesFor(s); });
+        const r = await fetch(tripUrl(), {method: 'PUT', body: JSON.stringify(init)});
+        if (!r.ok) throw new Error(r.status);
+      }
+      setStatus('ok');
+    } catch (e){ setStatus('error'); }
+    if (!window.EventSource) return;
+    const es = new EventSource(tripUrl());
+    const onChange = async () => {
+      if (Object.keys(pending).length) return;
+      try { applyRemote(await pull()); refreshUI(); setStatus('ok'); } catch (e){}
+    };
+    es.addEventListener('put', onChange);
+    es.addEventListener('patch', onChange);
+    es.addEventListener('open', () => setStatus('ok'));
+    es.addEventListener('error', () => setStatus('error'));
+  }
+  $('#sheetBody').addEventListener('change', e => {
+    const b = e.target.closest('[data-pack]'); if (!b) return;
+    b.checked ? packed.add(b.dataset.pack) : packed.delete(b.dataset.pack);
+    queue('pack', '|' + [...packed].join('|'));
+  });
+
   /* Start */
-  hero(); buildStrip(); buildSheet();
+  hero(); buildStrip(); buildSheet(); startSync();
   let start = S.findIndex(s => s.id === location.hash.slice(1));
   if (start < 0) start = todayIdx();
   if (start < 0) start = S.findIndex(s => s.id === 'maui');
