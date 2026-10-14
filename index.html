@@ -460,7 +460,18 @@ main{padding:22px 20px 40px}
 .o-meta svg{width:15px;height:15px;color:var(--muted)}
 .getting b{color:var(--ink);font-weight:700;white-space:nowrap}
 .tally{position:fixed;left:0;right:0;bottom:0;z-index:900;padding:0 12px calc(12px + env(safe-area-inset-bottom));pointer-events:none}
-.tally-bar,.tally-panel{pointer-events:auto;max-width:536px;margin:0 auto}
+.tally-dock{position:relative;max-width:536px;margin:0 auto;transition:transform .38s var(--ease),opacity .3s}
+.tally-bar,.tally-panel,.tally-tuck,.tally-mini{pointer-events:auto}
+.tally-tuck{position:absolute;right:22px;top:-26px;width:52px;height:28px;border-radius:14px 14px 0 0;background:var(--ink);color:var(--bg);display:grid;place-items:center;z-index:1}
+.tally.open .tally-tuck{top:auto;bottom:62px;opacity:0;pointer-events:none}
+.tally-tuck svg{width:18px;height:18px}
+.tally-mini{position:absolute;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;min-height:44px;padding:8px 12px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .25s,transform .35s var(--ease)}
+.tally-mini b{font-size:15px;font-variant-numeric:tabular-nums}
+.tally-mini svg{width:18px;height:18px}
+.tally.tucked .tally-dock{transform:translateY(calc(100% + 40px));opacity:0;pointer-events:none}
+.tally.tucked .tally-dock *{pointer-events:none}
+.tally.tucked .tally-mini{opacity:1;transform:none;pointer-events:auto}
+body.has-tally.tally-tucked main{padding-bottom:80px}
 .tally-bar{display:flex;align-items:center;gap:12px;width:100%;background:var(--ink);color:var(--bg);border-radius:18px;padding:12px 16px;box-shadow:0 6px 24px rgba(0,0,0,.22);text-align:left;min-height:62px}
 .t-label{flex:1;font-weight:600;font-size:15px;line-height:1.25}
 .t-label small{display:block;font-weight:500;font-size:12.5px;opacity:.7}
@@ -573,12 +584,16 @@ body.has-tally main{padding-bottom:120px}
 </main>
 
 <div class="tally" id="tally" hidden>
+  <div class="tally-dock" id="tallyDock">
+  <button class="tally-tuck" id="tallyTuck" aria-label="Hide the cost bar"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg></button>
   <div class="tally-panel" id="tallyPanel"></div>
   <button class="tally-bar" id="tallyBar" aria-expanded="false" aria-controls="tallyPanel">
     <span class="t-label" id="tLabel">Our day</span>
     <span class="t-nums"><b id="tMoney">$0</b><small id="tWalk"></small></span>
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l5-5 5 5"/></svg>
   </button>
+  </div>
+  <button class="tally-mini" id="tallyMini" aria-label="Show the cost bar" tabindex="-1"><b id="tMini">$0</b><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l5-5 5 5"/></svg></button>
 </div>
 
 <div class="sheet" id="sheet" hidden>
@@ -1172,6 +1187,7 @@ body.has-tally main{padding-bottom:120px}
   }
   function countTo(lo, hi, bump){
     const el = $('#tMoney'); cancelAnimationFrame(tween);
+    $('#tMini').textContent = total(lo, hi);
     if (reduce || !bump){ shown = {lo, hi}; el.textContent = total(lo, hi); return; }
     const from = {...shown}, t0 = performance.now();
     const step = now => {
@@ -1183,6 +1199,21 @@ body.has-tally main{padding-bottom:120px}
     tween = requestAnimationFrame(step);
     el.animate([{transform: 'scale(1)'}, {transform: 'scale(1.1)'}, {transform: 'scale(1)'}], {duration: 380, easing: 'ease-out'});
   }
+  function tuck(on){
+    tally.classList.toggle('tucked', on);
+    document.body.classList.toggle('tally-tucked', on);
+    tally.classList.remove('open'); $('#tallyBar').setAttribute('aria-expanded', 'false');
+    $('#tallyMini').tabIndex = on ? 0 : -1;
+    (on ? $('#tallyMini') : $('#tallyBar')).focus({preventScroll: true});
+  }
+  $('#tallyTuck').addEventListener('click', () => tuck(true));
+  $('#tallyMini').addEventListener('click', () => tuck(false));
+  /* swipe the bar down to hide it, swipe the small pill up to bring it back */
+  let ty0 = null;
+  $('#tallyDock').addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; }, {passive: true});
+  $('#tallyDock').addEventListener('touchend', e => { if (ty0 != null && e.changedTouches[0].clientY - ty0 > 40 && !tally.classList.contains('open')) tuck(true); ty0 = null; }, {passive: true});
+  $('#tallyMini').addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; }, {passive: true});
+  $('#tallyMini').addEventListener('touchend', e => { if (ty0 != null && ty0 - e.changedTouches[0].clientY > 30) tuck(false); ty0 = null; }, {passive: true});
   $('#tallyBar').addEventListener('click', () => {
     const open = tally.classList.toggle('open');
     $('#tallyBar').setAttribute('aria-expanded', open);
