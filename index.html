@@ -36,9 +36,10 @@ window.TRIP = {
       getting: "Carnival’s terminal is next to the Queen Mary, not San Pedro.",
       heads: ["Arrive Nov 7 so a flight delay can’t cost you the ship."],
       pier: { n: "Long Beach Cruise Terminal", ll: [33.7525, -118.1890] },
+      transport: [{ n: "Airport to the terminal", lo: 40, hi: 90 }],
       options: [
-        { n: "Shoreline Village", c: "chill", note: "Easy waterfront stroll the night before.", addr: "401 Shoreline Village Dr, Long Beach, CA", ll: [33.7609, -118.1905], pick: true },
-        { n: "Retro Row", c: "see", note: "Vintage shops and cafés along 4th Street.", addr: "4th St & Cherry Ave, Long Beach, CA", ll: [33.7724, -118.1610] }
+        { n: "Shoreline Village", c: "chill", dur: 60, price: [0, 40], mi: 1.0, note: "Easy waterfront stroll the night before.", addr: "401 Shoreline Village Dr, Long Beach, CA", ll: [33.7609, -118.1905], pick: true },
+        { n: "Retro Row", c: "see", dur: 90, price: [0, 50], mi: 0.8, note: "Vintage shops and cafés along 4th Street.", addr: "4th St & Cherry Ave, Long Beach, CA", ll: [33.7724, -118.1610] }
       ]
     },
     {
@@ -62,154 +63,93 @@ window.TRIP = {
         "Skip the Road to Hāna on this day."
       ],
       pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
+      transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }],
       options: [
-        { n: "Sam Sato’s", c: "eat", note: "Dry mein and manju. Fri 7 am–2 pm, so eat here first.", addr: "1750 Wili Pa Loop, Wailuku, HI", ll: [20.8890, -156.4935], pick: true },
-        { n: "Tin Roof", c: "eat", note: "Mochiko chicken, takeout. Open until 8 pm.", addr: "360 Papa Pl, Kahului, HI", ll: [20.8869, -156.4585] },
-        { n: "Tasty Crust", c: "eat", note: "Old-school diner. Swap for Sam Sato’s, not both.", addr: "1770 Mill St, Wailuku, HI", ll: [20.8899, -156.4940] },
-        { n: "A Saigon Café", c: "eat", note: "Sit-down Vietnamese, open until 8:30 pm.", addr: "1792 Main St, Wailuku, HI", ll: [20.8880, -156.4922] },
-        { n: "Pāʻia Fish Market", c: "eat", note: "Fish plate or burger. Popular, so go early.", addr: "100 Baldwin Ave, Paia, HI", ll: [20.9131, -156.3808] },
-        { n: "Market Street, Wailuku", c: "see", note: "Murals and independent shops. Easy wander.", addr: "Market St, Wailuku, HI", ll: [20.8873, -156.5040], pick: true },
-        { n: "Pāʻia town", c: "see", note: "Galleries and small shops on the north shore.", addr: "Baldwin Ave & Hana Hwy, Paia, HI", ll: [20.9126, -156.3810], pick: true },
-        { n: "ʻĪao Valley", c: "out", note: "0.6 mile paved walk with steps. Read the signs.", addr: "Iao Valley State Monument, Wailuku, HI", ll: [20.8810, -156.5450], pick: true, tag: "Book ahead" },
-        { n: "Haleakalā summit", c: "out", note: "Replaces the whole day. 2 hrs each way, bring layers.", addr: "Haleakala Visitor Center, Kula, HI", ll: [20.7148, -156.2502], tag: "Swap option" },
-        { n: "Hoʻokipa Lookout", c: "chill", note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
-        { n: "Baldwin Beach Park", c: "chill", note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
+        { n: "Sam Sato’s", c: "eat", order: 1, dur: 45, by: "13:30", price: [30, 45], mi: 0.1, note: "Dry mein and manju. Fri 7 am–2 pm, so eat here first.", addr: "1750 Wili Pa Loop, Wailuku, HI", ll: [20.8890, -156.4935], pick: true },
+        { n: "Tin Roof", c: "eat", order: 9, dur: 30, by: "19:30", price: [30, 45], mi: 0.1, note: "Mochiko chicken, takeout. Open until 8 pm.", addr: "360 Papa Pl, Kahului, HI", ll: [20.8869, -156.4585] },
+        { n: "Tasty Crust", c: "eat", order: 1.1, dur: 45, price: [30, 45], mi: 0.1, note: "Old-school diner. Swap for Sam Sato’s, not both.", addr: "1770 Mill St, Wailuku, HI", ll: [20.8899, -156.4940] },
+        { n: "A Saigon Café", c: "eat", order: 9.2, dur: 60, by: "19:45", price: [50, 80], mi: 0.1, note: "Sit-down Vietnamese, open until 8:30 pm.", addr: "1792 Main St, Wailuku, HI", ll: [20.8880, -156.4922] },
+        { n: "Pāʻia Fish Market", c: "eat", order: 8.5, dur: 45, price: [50, 80], mi: 0.1, note: "Fish plate or burger. Popular, so go early.", addr: "100 Baldwin Ave, Paia, HI", ll: [20.9131, -156.3808] },
+        { n: "Market Street, Wailuku", c: "see", order: 2, dur: 45, price: [0, 40], mi: 0.7, note: "Murals and independent shops. Easy wander.", addr: "Market St, Wailuku, HI", ll: [20.8873, -156.5040], pick: true },
+        { n: "Pāʻia town", c: "see", order: 6, dur: 60, price: [0, 50], mi: 0.7, note: "Galleries and small shops on the north shore.", addr: "Baldwin Ave & Hana Hwy, Paia, HI", ll: [20.9126, -156.3810], pick: true },
+        { n: "ʻĪao Valley", c: "out", order: 3, dur: 60, price: [20, 25], mi: 0.6, note: "0.6 mile paved walk with steps. Read the signs.", addr: "Iao Valley State Monument, Wailuku, HI", ll: [20.8810, -156.5450], pick: true, tag: "Book ahead" },
+        { n: "Haleakalā summit", c: "out", order: 5, dur: 90, extra: 50, hike: true, price: [30, 30], mi: 1.0, note: "Replaces the whole day. 2 hrs each way, bring layers.", addr: "Haleakala Visitor Center, Kula, HI", ll: [20.7148, -156.2502], tag: "Swap option" },
+        { n: "Hoʻokipa Lookout", c: "chill", order: 8, dur: 45, price: [0, 0], mi: 0.2, note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
+        { n: "Baldwin Beach Park", c: "chill", order: 7, dur: 60, price: [0, 0], mi: 1.0, note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
       ],
-      plans: [{
-        name: "Our day",
-        steps: [
-          ["10:00", "Off the ship, pick up the car"],
-          ["11:30", "Lunch at Sam Sato’s"],
-          ["12:30", "Wander Market Street"],
-          ["1:30", "ʻĪao Valley (reserved entry)"],
-          ["3:15", "Pāʻia galleries and shops"],
-          ["4:30", "Hoʻokipa: surfers and turtles"],
-          ["5:45", "Early dinner, Pāʻia Fish Market"],
-          ["6:30", "Gas up, return car, aboard by 8"]
-        ],
-        walk: "About 2–3 miles of walking."
-      }]
+      leg: { mode: "car", speed: 40, start: 75, end: 40 },
+      presets: [{ name: "Suggested day", use: ["Sam Sato’s", "Market Street, Wailuku", "ʻĪao Valley", "Pāʻia town", "Hoʻokipa Lookout", "Pāʻia Fish Market"] }]
     },
     {
       id: "oahu", kind: "port", node: "Oʻahu", place: "Oʻahu",
       date: "2026-11-14", tz: "-10:00", ashore: "09:00", backBy: "20:00", depart: "22:00",
-      line: "History, local food, and a Waikīkī sunset.",
-      getting: "No car. Use rideshares between neighborhoods.",
+      line: "Skydive over the North Shore, then a slow Haleʻiwa afternoon.",
+      getting: "Rent a car. The drop zone is about 75–90 minutes from the ship.",
       heads: [
-        "Book ʻIolani Palace online. No walk-ups.",
-        "Farmers market ends at noon. Go there first."
+        "Book a noon check-in. Expect 2–4+ hours there, waiting included.",
+        "Ask about the weather refund policy before you pay."
       ],
       pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
+      transport: [{ n: "Rental car, gas, and parking", lo: 120, hi: 190 }],
       options: [
-        { n: "Kakaʻako Farmers Market", c: "eat", note: "Saturday 8 am–noon. Talk to the growers.", addr: "1050 Ala Moana Blvd, Honolulu, HI", ll: [21.2950, -157.8560], pick: true },
-        { n: "Highway Inn", c: "eat", note: "Lau lau, kālua pork, poi, haupia. A Hawaiian plate.", addr: "680 Ala Moana Blvd, Honolulu, HI", ll: [21.2996, -157.8625], pick: true },
-        { n: "Sing Cheong Yuan", c: "eat", note: "Chinatown bakery. Manapua or a small pastry.", addr: "1027 Maunakea St, Honolulu, HI", ll: [21.3123, -157.8635], pick: true },
-        { n: "Leonard’s Bakery", c: "eat", note: "Hot original malasada. Skip if the line is long.", addr: "933 Kapahulu Ave, Honolulu, HI", ll: [21.2848, -157.8134] },
-        { n: "ʻIolani Palace", c: "see", note: "Audio tour, $28 each. Royal Hawaiʻi’s story.", addr: "364 S King St, Honolulu, HI", ll: [21.3068, -157.8588], pick: true, tag: "Book ahead" },
-        { n: "SALT at Kakaʻako", c: "see", note: "Murals and local shops, steps from the market.", addr: "691 Auahi St, Honolulu, HI", ll: [21.2970, -157.8590] },
-        { n: "Pearl Harbor", c: "see", note: "Replaces the morning. $1 USS Arizona ticket, no bags.", addr: "1 Arizona Memorial Pl, Honolulu, HI", ll: [21.3678, -157.9387], tag: "Swap option" },
-        { n: "Diamond Head", c: "out", note: "1.6 miles, 560 ft climb. Reserve an afternoon slot.", addr: "Diamond Head State Monument, Honolulu, HI", ll: [21.2627, -157.8048], tag: "Swap option" },
-        { n: "Waikīkī Beach", c: "chill", note: "Shoreline walk. Sunset around 5:50 pm.", addr: "Waikiki Beach, Honolulu, HI", ll: [21.2766, -157.8278], pick: true },
-        { n: "Kaimana Beach", c: "chill", note: "The quieter end of Waikīkī, by the aquarium.", addr: "Kaimana Beach, Honolulu, HI", ll: [21.2655, -157.8215] }
+        { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:00", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
+        { n: "Haleʻiwa town", c: "see", order: 4, dur: 45, price: [0, 60], mi: 0.8, note: "Old surf town. Galleries, shops, late lunch.", addr: "Haleiwa, HI", ll: [21.5930, -158.1035], pick: true },
+        { n: "Matsumoto Shave Ice", c: "eat", order: 4.1, dur: 20, price: [12, 20], mi: 0.1, note: "The famous one. The line moves fast.", addr: "66-111 Kamehameha Hwy, Haleiwa, HI", ll: [21.5918, -158.1029] },
+        { n: "Giovanni’s Shrimp Truck", c: "eat", order: 4.2, dur: 35, price: [35, 50], mi: 0.1, note: "Garlic shrimp plate from the Haleʻiwa truck lot.", addr: "Giovanni's Shrimp Truck, Haleiwa, HI", ll: [21.5874, -158.1060] },
+        { n: "Waialua Farmers Market", c: "eat", order: 1, dur: 45, by: "11:30", price: [20, 40], mi: 0.3, note: "Saturday morning market at the old sugar mill.", addr: "67-106 Kealohanui St, Waialua, HI", ll: [21.5765, -158.1240], tag: "Confirm hours" },
+        { n: "Laniākea Beach", c: "chill", order: 3, dur: 30, price: [0, 0], mi: 0.3, note: "Turtles often rest on the sand. Stay 10 feet back.", addr: "Laniakea Beach, Haleiwa, HI", ll: [21.6188, -158.0855] },
+        { n: "Highway Inn", c: "eat", order: 6, dur: 60, price: [50, 75], mi: 0.1, note: "Lau lau, kālua pork, poi. If weather cancels the jump.", addr: "680 Ala Moana Blvd, Honolulu, HI", ll: [21.2996, -157.8625], tag: "Plan B" },
+        { n: "Leonard’s Bakery", c: "eat", order: 7, dur: 20, price: [10, 20], mi: 0.1, note: "Hot original malasada. Skip if the line is long.", addr: "933 Kapahulu Ave, Honolulu, HI", ll: [21.2848, -157.8134], tag: "Plan B" },
+        { n: "Waikīkī Beach", c: "chill", order: 8, dur: 120, price: [0, 0], mi: 1.5, note: "Shoreline walk and sunset around 5:50 pm.", addr: "Waikiki Beach, Honolulu, HI", ll: [21.2766, -157.8278], tag: "Plan B" }
       ],
-      plans: [{
-        name: "Our day",
-        steps: [
-          ["9:00", "Off the ship, find the rideshare pickup"],
-          ["10:00", "Kakaʻako Farmers Market"],
-          ["11:00", "SALT murals, lunch at Highway Inn"],
-          ["1:00", "ʻIolani Palace audio tour"],
-          ["2:15", "Walk to Chinatown, Sing Cheong Yuan"],
-          ["3:15", "Ride to Waikīkī, Leonard’s if no line"],
-          ["4:00", "Beach walk and sunset"],
-          ["7:00", "Ride back, aboard by 8:30"]
-        ],
-        walk: "About 3–4 miles of walking. Add a ride to cut it to 2."
-      }]
+      leg: { mode: "car", speed: 45, start: 75, end: 40 },
+      presets: [{ name: "Skydive day", use: ["Skydive Hawaii", "Haleʻiwa town", "Giovanni’s Shrimp Truck"] }, { name: "If it’s cancelled", use: ["Highway Inn", "Leonard’s Bakery", "Waikīkī Beach"] }]
     },
     {
       id: "kauai", kind: "port", node: "Kauaʻi", place: "Kauaʻi",
       date: "2026-11-15", tz: "-10:00", ashore: "07:45", backBy: "14:45", depart: "16:00",
-      line: "A short day in Kōloa and on the south coast.",
-      getting: "Rent at Līhuʻe Airport (LIH). Confirm Sunday return.",
+      line: "A beginner surf lesson right by the ship.",
+      getting: "No car needed. Kalapakī is about a 20–35 minute walk from the ship.",
       heads: [
-        "Waimea Canyon and Kōkeʻe were closed as of Oct 13.",
-        "Kōloa Fish Market is closed Sundays."
+        "Book the 10 am lesson. You both need to be able to swim.",
+        "Skip the 2 pm lesson. It ends too close to sailing."
       ],
       pier: { n: "Nawiliwili Harbor (ship)", ll: [21.9550, -159.3560] },
+      transport: [{ n: "Walk to Kalapakī and back, or a taxi", lo: 0, hi: 30 }],
       options: [
-        { n: "Sueoka Snack Shop", c: "eat", note: "Plate lunch counter. Sunday until 2 pm.", addr: "5392 Koloa Rd, Koloa, HI", ll: [21.9066, -159.4681], pick: true, tag: "Confirm hours" },
-        { n: "Kauaʻi Juice Co.", c: "eat", note: "Juice and snacks, 8 am–5:30 pm daily.", addr: "Kauai Juice Co, Koloa Rd, Koloa, HI", ll: [21.9064, -159.4708] },
-        { n: "Anake’s Juice Bar", c: "eat", note: "Açaí tucked inside a grocery store.", addr: "Kukuiula Store, Poipu Rd, Koloa, HI", ll: [21.8869, -159.4730], tag: "Confirm hours" },
-        { n: "Old Kōloa Town", c: "see", note: "Sugar-era buildings and heritage plaques.", addr: "Old Koloa Town, Koloa, HI", ll: [21.9070, -159.4697], pick: true },
-        { n: "Tree Tunnel", c: "see", note: "Eucalyptus canopy on the drive in. Don’t stop on shoulders.", addr: "Maluhia Rd, Koloa, HI", ll: [21.9230, -159.4660] },
-        { n: "Māhāʻulepū Heritage Trail", c: "out", note: "Walk 20 minutes out, then back. Only if dry.", addr: "Mahaulepu Heritage Trail, Koloa, HI", ll: [21.8740, -159.4410], pick: true },
-        { n: "Shipwreck Beach", c: "chill", note: "Beautiful to look at. Not for swimming.", addr: "Shipwreck Beach, Koloa, HI", ll: [21.8745, -159.4440], tag: "View only" },
-        { n: "Poʻipū Beach Park", c: "chill", note: "Popular beach. Check advisories first.", addr: "Poipu Beach Park, Koloa, HI", ll: [21.8739, -159.4545] },
-        { n: "Kalapakī Beach", c: "chill", note: "Right by the ship. Easy backup if it rains.", addr: "Kalapaki Beach, Lihue, HI", ll: [21.9580, -159.3545], tag: "Backup" }
+        { n: "Kauaʻi Beach Boys surf lesson", c: "out", order: 2, dur: 120, at: "09:45", price: [198, 300], mi: 0, note: "1.5 hours, gear included. Group $99 each, private $300 for two.", addr: "3610 Rice St, Lihue, HI", ll: [21.9585, -159.3535], pick: true, tag: "Book ahead" },
+        { n: "Kalapakī Beach", c: "chill", order: 3, dur: 60, price: [0, 0], mi: 0.3, note: "Rest and swim after the lesson.", addr: "Kalapaki Beach, Lihue, HI", ll: [21.9580, -159.3545], pick: true },
+        { n: "Hamura Saimin", c: "eat", order: 5, dur: 45, price: [25, 40], mi: 0.1, note: "Local noodle counter. Get the lilikoi chiffon pie. Short ride.", addr: "2956 Kress St, Lihue, HI", ll: [21.9724, -159.3660], tag: "Confirm hours" },
+        { n: "Duke’s Kauaʻi", c: "eat", order: 2.5, dur: 60, price: [50, 80], mi: 0.1, note: "On the beach. Easy lunch at the Barefoot Bar.", addr: "3610 Rice St, Lihue, HI", ll: [21.9590, -159.3528] },
+        { n: "Kalapaki Beach Hut", c: "eat", order: 2.6, dur: 45, price: [30, 50], mi: 0.1, note: "Casual burgers and fish, steps from the sand.", addr: "3474 Rice St, Lihue, HI", ll: [21.9563, -159.3567], tag: "Confirm hours" },
+        { n: "Ninini Point", c: "out", order: 6, dur: 60, hike: true, price: [0, 0], mi: 2.0, note: "Short walk out to a lighthouse point.", addr: "Ninini Point Lighthouse, Lihue, HI", ll: [21.9606, -159.3404], tag: "Confirm access" }
       ],
-      plans: [{
-        name: "Our day",
-        steps: [
-          ["7:45", "Off the ship, pick up the car"],
-          ["9:15", "Drive the Tree Tunnel to Kōloa"],
-          ["10:00", "Old Kōloa Town and plaques"],
-          ["11:20", "Māhāʻulepū coastal walk"],
-          ["12:15", "Lunch at Sueoka"],
-          ["1:00", "Poʻipū shore, if open"],
-          ["1:35", "Drive back, return car, aboard by 3"]
-        ],
-        walk: "About 1.5–2.5 miles of walking."
-      }]
+      leg: { mode: "walk", start: 45, end: 15, pierMi: 1.2 },
+      presets: [{ name: "Surf day", use: ["Kauaʻi Beach Boys surf lesson", "Duke’s Kauaʻi", "Kalapakī Beach"] }]
     },
     {
       id: "hilo", kind: "port", node: "Hilo", place: "Hilo",
       date: "2026-11-16", tz: "-10:00", ashore: "09:00", backBy: "15:45", depart: "17:00",
-      line: "One focused volcano day, or a slow town day.",
+      line: "Hike across a volcanic crater, then poke by the bay.",
       getting: "Rent at Hilo Airport (ITO), not Kona.",
       heads: [
         "Park entry is $30 per car, card only.",
-        "Leave the park by 1:30. That’s the hard stop."
+        "Kīlauea Iki parking is very limited. If it’s full, switch plans."
       ],
       pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
+      transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }, { n: "National park entry", lo: 30, hi: 30 }],
       options: [
-        { n: "Suisan Fish Market", c: "eat", note: "Shoyu ahi poke by the bay. Closes 3 pm, sells out.", addr: "93 Lihiwai St, Hilo, HI", ll: [19.7270, -155.0700], pick: true },
-        { n: "Cafe 100", c: "eat", note: "Classic loco moco. Call ahead, hours vary.", addr: "969 Kilauea Ave, Hilo, HI", ll: [19.7146, -155.0805], tag: "Confirm hours" },
-        { n: "Kīlauea caldera overlooks", c: "out", note: "Rim walk. Ask rangers what’s open today.", addr: "Kilauea Visitor Center, Hawaii Volcanoes National Park, HI", ll: [19.4295, -155.2570], pick: true },
-        { n: "Nāhuku lava tube", c: "out", note: "Short loop through a lava tube. Damp and dim.", addr: "Nahuku Thurston Lava Tube, Hawaii Volcanoes National Park, HI", ll: [19.4136, -155.2390], pick: true },
-        { n: "Kīlauea Iki Overlook", c: "out", note: "Look down into a 1959 crater. Skip the full hike.", addr: "Kilauea Iki Overlook, Hawaii Volcanoes National Park, HI", ll: [19.4164, -155.2443] },
-        { n: "Rainbow Falls", c: "see", note: "Short walk to the overlook. Town day stop.", addr: "Rainbow Falls, Hilo, HI", ll: [19.7192, -155.1080] },
-        { n: "Hilo Farmers Market", c: "see", note: "Smaller Monday market downtown.", addr: "Hilo Farmers Market, Hilo, HI", ll: [19.7241, -155.0872] },
-        { n: "Liliʻuokalani Gardens", c: "chill", note: "Japanese garden on Hilo Bay. Slow and quiet.", addr: "Liliuokalani Gardens, Hilo, HI", ll: [19.7255, -155.0670] },
-        { n: "Mokuola", c: "chill", note: "Tiny island across a footbridge. Sit and watch the bay.", addr: "Mokuola Coconut Island, Hilo, HI", ll: [19.7283, -155.0657] }
+        { n: "Kīlauea Iki Trail", c: "out", order: 5, dur: 140, hike: true, price: [0, 0], mi: 3.3, note: "3.3-mile loop across a solid lava lake. 2–3 hrs, 400 ft down and up.", addr: "Kilauea Iki Overlook, Hawaii Volcanoes National Park, HI", ll: [19.4164, -155.2443], pick: true },
+        { n: "Devastation Trail", c: "out", order: 7, dur: 45, price: [0, 0], mi: 1.0, note: "1-mile paved walk through the 1959 eruption zone.", addr: "Devastation Trail, Hawaii Volcanoes National Park, HI", ll: [19.4040, -155.2550] },
+        { n: "Nāhuku lava tube", c: "out", order: 6, dur: 40, price: [0, 0], mi: 0.5, note: "Short loop through a lava tube. Damp and dim.", addr: "Nahuku Thurston Lava Tube, Hawaii Volcanoes National Park, HI", ll: [19.4136, -155.2390] },
+        { n: "Kīlauea caldera overlooks", c: "out", order: 4, dur: 40, price: [0, 0], mi: 0.8, note: "Rim views. Ask rangers what’s open today.", addr: "Kilauea Visitor Center, Hawaii Volcanoes National Park, HI", ll: [19.4295, -155.2570] },
+        { n: "Suisan Fish Market", c: "eat", order: 2, dur: 15, by: "14:45", price: [30, 45], mi: 0.1, note: "Shoyu ahi poke by the bay. Closes 3 pm, sells out.", addr: "93 Lihiwai St, Hilo, HI", ll: [19.7270, -155.0700], pick: true },
+        { n: "Hilo Farmers Market", c: "eat", order: 1, dur: 30, price: [15, 30], mi: 0.3, note: "Smaller Monday market. Fruit, snacks, local makers.", addr: "Hilo Farmers Market, Hilo, HI", ll: [19.7241, -155.0872], pick: true },
+        { n: "Cafe 100", c: "eat", order: 9, dur: 40, price: [25, 35], mi: 0.1, note: "Classic loco moco. Call ahead, hours vary.", addr: "969 Kilauea Ave, Hilo, HI", ll: [19.7146, -155.0805], tag: "Confirm hours" },
+        { n: "Liliʻuokalani Gardens", c: "chill", order: 10, dur: 40, price: [0, 0], mi: 0.5, note: "Japanese garden on Hilo Bay, next to Suisan.", addr: "Liliuokalani Gardens, Hilo, HI", ll: [19.7255, -155.0670] }
       ],
-      plans: [
-        {
-          name: "Volcano day",
-          steps: [
-            ["9:00", "Off the ship, pick up the car"],
-            ["10:15", "Drive to Volcanoes National Park"],
-            ["11:15", "Caldera overlook and rim walk"],
-            ["12:15", "Nāhuku lava tube"],
-            ["1:30", "Leave the park"],
-            ["2:30", "Poke at Suisan, before 3"],
-            ["3:00", "Return car, aboard by 4"]
-          ],
-          walk: "About 1–2 miles of walking. Bring a warm layer."
-        },
-        {
-          name: "Town day",
-          steps: [
-            ["9:45", "Rainbow Falls"],
-            ["10:45", "Downtown and the farmers market"],
-            ["12:00", "Poke at Suisan"],
-            ["1:00", "Liliʻuokalani Gardens and Mokuola"],
-            ["2:30", "Browse downtown"],
-            ["3:45", "Back aboard"]
-          ],
-          walk: "About 2–3 miles. Taxis or keep the car."
-        }
-      ]
+      leg: { mode: "car", speed: 55, start: 75, end: 40 },
+      presets: [{ name: "Crater hike", use: ["Suisan Fish Market", "Kīlauea Iki Trail"] }, { name: "Hike + market", use: ["Hilo Farmers Market", "Suisan Fish Market", "Kīlauea caldera overlooks", "Devastation Trail"] }]
     },
     {
       id: "sea-home", kind: "sea", node: "At sea", place: "Four sea days",
@@ -229,23 +169,15 @@ window.TRIP = {
       getting: "Walk or take the port shuttle into town.",
       heads: ["Bring your passport book. Confirm ship vs. local time."],
       pier: { n: "Ensenada cruise terminal (ship)", ll: [31.8510, -116.6260] },
+      transport: [{ n: "Walk or shuttle into town and back", lo: 0, hi: 20 }],
       options: [
-        { n: "Sabina", c: "eat", note: "Seafood tostadas. Ask what’s freshest. Eat early.", addr: "Av. Adolfo López Mateos 917, Ensenada, B.C., Mexico", ll: [31.8619, -116.6232], pick: true },
-        { n: "La Guerrerense", c: "eat", note: "The famous seafood cart across the street, if open.", addr: "La Guerrerense, Ensenada, B.C., Mexico", ll: [31.8622, -116.6240] },
-        { n: "Avenida López Mateos", c: "see", note: "The main browsing street.", addr: "Av. López Mateos, Ensenada, B.C., Mexico", ll: [31.8635, -116.6255] },
-        { n: "Malecón", c: "chill", note: "Waterfront stroll as the light fades.", addr: "Malecón, Ensenada, B.C., Mexico", ll: [31.8573, -116.6242], pick: true }
+        { n: "Sabina", c: "eat", order: 1, dur: 50, price: [40, 70], mi: 0.1, note: "Seafood tostadas. Ask what’s freshest. Eat early.", addr: "Av. Adolfo López Mateos 917, Ensenada, B.C., Mexico", ll: [31.8619, -116.6232], pick: true },
+        { n: "La Guerrerense", c: "eat", order: 2, dur: 30, price: [20, 35], mi: 0.1, note: "The famous seafood cart across the street, if open.", addr: "La Guerrerense, Ensenada, B.C., Mexico", ll: [31.8622, -116.6240] },
+        { n: "Avenida López Mateos", c: "see", order: 3, dur: 30, price: [0, 40], mi: 0.6, note: "The main browsing street.", addr: "Av. López Mateos, Ensenada, B.C., Mexico", ll: [31.8635, -116.6255] },
+        { n: "Malecón", c: "chill", order: 4, dur: 30, price: [0, 0], mi: 1.0, note: "Waterfront stroll as the light fades.", addr: "Malecón, Ensenada, B.C., Mexico", ll: [31.8573, -116.6242], pick: true }
       ],
-      plans: [{
-        name: "Our evening",
-        steps: [
-          ["3:00", "Off the ship"],
-          ["3:45", "Walk or shuttle into town"],
-          ["4:15", "Seafood at Sabina or La Guerrerense"],
-          ["5:15", "López Mateos and the waterfront"],
-          ["6:00", "Head back, aboard by 7"]
-        ],
-        walk: "About 1–3 miles of walking."
-      }]
+      leg: { mode: "walk", start: 30, end: 15, pierMi: 1.2 },
+      presets: [{ name: "Suggested evening", use: ["Sabina", "Avenida López Mateos", "Malecón"] }]
     },
     {
       id: "home", kind: "port", node: "Home", place: "Long Beach",
@@ -253,31 +185,31 @@ window.TRIP = {
       line: "Back in Long Beach. Fly home in the afternoon.",
       heads: ["LAX traffic eats time. Don’t book a morning flight."],
       pier: { n: "Long Beach Cruise Terminal", ll: [33.7525, -118.1890] },
+      transport: [{ n: "Terminal to the airport", lo: 40, hi: 90 }],
       options: []
     }
   ],
   checklist: {
     dates: [
-      ["Oct 14", "Book ʻĪao Valley for Nov 13. Hold cancellable cars at OGG, LIH, ITO."],
-      ["Oct 15", "Diamond Head window opens, only if you swap it in."],
+      ["Now", "Book Skydive Hawaii for Nov 14 with a noon check-in."],
+      ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15."],
+      ["Now", "Book ʻĪao Valley for Nov 13."],
+      ["Now", "Hold cancellable cars at OGG, HNL, and ITO."],
       ["Oct 25", "Carnival online check-in opens."],
-      ["Before sailing", "Book the ʻIolani Palace audio tour."],
-      ["Nov 7", "Fly in and stay near Long Beach."],
-      ["Nov 13, 3 pm", "Pearl Harbor backup ticket release, if swapping."]
+      ["Nov 7", "Fly in and stay near Long Beach."]
     ],
     pack: [
-      "Grippy walking shoes", "Swimsuit and cover-up", "Light rain jacket", "Hat and sunglasses",
-      "Mineral (reef-safe) sunscreen", "Water bottle", "Small daypack", "Power bank and cable",
-      "Warm layer for the volcano", "Passport book", "Ship card and ID", "Some cash"
+      "Hiking shoes", "Swimsuit and cover-up", "Change of clothes for surfing", "Light rain jacket",
+      "Hat and sunglasses", "Mineral (reef-safe) sunscreen", "Water bottle", "Small daypack",
+      "Power bank and cable", "Warm layer for the volcano", "Passport book", "Ship card and ID"
     ],
     know: [
       "All-aboard follows the ship’s clock. Check if it’s set to local time.",
+      "Skydiving can be delayed by weather. Keep the rest of that day loose.",
       "Before paying for a car, confirm pier pickup and staffed return hours.",
       "Ask a lifeguard before swimming. November surf can be big.",
-      "Give turtles 10 feet and monk seals 50 feet.",
-      "Running late? Cut the beach, shop, or snack stop first."
+      "Give turtles 10 feet and monk seals 50 feet."
     ],
-    budget: "About $770–1,150 for both of you across the four island days. Cap it at $300 a day."
   }
 };
 </script>
@@ -425,9 +357,9 @@ main{padding:22px 20px 40px}
 .ptabs button{padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);font-weight:600;font-size:14.5px;min-height:38px}
 .ptabs button.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .plan{list-style:none;margin:16px 0 0;padding:6px 0;background:var(--surface);border-radius:16px;position:relative}
-.plan li{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:11px 16px;position:relative;animation:rise .35s var(--ease) backwards;animation-delay:calc(var(--k) * 45ms)}
-.plan li::before{content:"";position:absolute;left:92px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--ocean)}
-.plan li::after{content:"";position:absolute;left:95px;top:28px;bottom:-12px;width:2px;background:var(--ocean-soft)}
+.plan li{display:grid;grid-template-columns:76px 1fr;gap:14px;padding:11px 16px;position:relative;animation:rise .35s var(--ease) backwards;animation-delay:calc(var(--k) * 45ms)}
+.plan li::before{content:"";position:absolute;left:104px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--ocean)}
+.plan li::after{content:"";position:absolute;left:107px;top:28px;bottom:-12px;width:2px;background:var(--ocean-soft)}
 .plan li:last-child::after{display:none}
 .plan time{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 .plan span{padding-left:22px}
@@ -470,6 +402,78 @@ main{padding:22px 20px 40px}
 .pack input:checked::after{content:"";width:5px;height:10px;border:solid var(--surface);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .pack input:checked + span{color:var(--muted);text-decoration:line-through}
 .budget{background:var(--surface);border-radius:16px;padding:14px 16px;margin:0}
+
+
+/* Checkboxes, prices, day tally */
+.opt-row{display:flex;align-items:flex-start}
+.opt-row .opt-main{flex:1;min-width:0;width:auto}
+.check{flex:none;width:48px;height:48px;margin:6px 6px 0 0;display:grid;place-items:center;border-radius:50%}
+.check svg{width:28px;height:28px;transition:transform .15s}
+.check:active svg{transform:scale(.86)}
+.check .ring{fill:transparent;stroke:var(--muted);stroke-width:1.8;transition:fill .2s,stroke .2s}
+.check .tick{fill:none;stroke:var(--surface);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:18;stroke-dashoffset:18;transition:stroke-dashoffset .28s var(--ease) .05s}
+.check[aria-pressed="true"] .ring{fill:var(--c);stroke:var(--c)}
+.check[aria-pressed="true"] .tick{stroke-dashoffset:0}
+.opt.picked{background:color-mix(in srgb,var(--c) 6%,var(--surface))}
+.o-meta{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:13.5px;font-weight:600}
+.o-meta span{display:inline-flex;align-items:center;gap:5px}
+.o-meta svg{width:15px;height:15px;color:var(--muted)}
+.getting b{color:var(--ink);font-weight:700;white-space:nowrap}
+.tally{position:fixed;left:0;right:0;bottom:0;z-index:900;padding:0 12px calc(12px + env(safe-area-inset-bottom));pointer-events:none}
+.tally-bar,.tally-panel{pointer-events:auto;max-width:536px;margin:0 auto}
+.tally-bar{display:flex;align-items:center;gap:12px;width:100%;background:var(--ink);color:var(--bg);border-radius:18px;padding:12px 16px;box-shadow:0 6px 24px rgba(0,0,0,.22);text-align:left;min-height:62px}
+.t-label{flex:1;font-weight:600;font-size:15px;line-height:1.25}
+.t-label small{display:block;font-weight:500;font-size:12.5px;opacity:.7}
+.t-nums{display:flex;flex-direction:column;align-items:flex-end}
+.t-nums b{font-size:20px;font-variant-numeric:tabular-nums;display:inline-block;line-height:1.2}
+.t-nums small{font-size:12.5px;opacity:.75}
+.tally-bar svg{width:18px;height:18px;transition:transform .3s var(--ease);flex:none}
+.tally.open .tally-bar svg{transform:rotate(180deg)}
+.tally-panel{background:var(--surface);border-radius:18px;margin-bottom:8px;box-shadow:0 6px 24px rgba(0,0,0,.18);overflow:hidden;max-height:0;opacity:0;transform:translateY(10px);transition:max-height .35s var(--ease),opacity .25s,transform .3s var(--ease)}
+.tally.open .tally-panel{max-height:60vh;opacity:1;transform:none;overflow:auto}
+.tally-panel ul{list-style:none;margin:0;padding:8px 0}
+.tally-panel li{display:flex;justify-content:space-between;gap:12px;padding:8px 16px;font-size:14.5px}
+.tally-panel li.fixed span{color:var(--muted)}
+.tally-panel li b{white-space:nowrap}
+.tally-panel p{margin:0;padding:10px 16px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+body.has-tally main{padding-bottom:120px}
+.budget b{font-size:18px}
+
+
+/* Built plan */
+.ptabs{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ptabs span{color:var(--muted);font-size:14px;margin-right:2px}
+.ptabs button:active{background:var(--ink);color:var(--bg)}
+.p-empty{margin:16px 0 0;padding:18px 16px;background:var(--surface);border-radius:16px;color:var(--muted)}
+.p-status{margin:16px 0 0;padding:12px 14px;border-radius:14px;display:grid;gap:2px;animation:rise .35s var(--ease) backwards}
+.p-status b{font-size:17px}
+.p-status span{font-size:14.5px}
+.p-status.ok{background:var(--ocean-soft);color:var(--ocean)}
+.p-status.ok span{color:var(--ink)}
+.p-status.over{background:var(--warn-bg);color:var(--warn-ink)}
+.p-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 0}
+.p-stats div{background:var(--surface);border-radius:12px;padding:9px 10px}
+.p-stats span{display:block;font-size:12px;color:var(--muted)}
+.p-stats b{font-size:14.5px;white-space:nowrap}
+.plan li.stop::before{background:var(--c)}
+.plan li.leg{padding-top:2px;padding-bottom:2px}
+.plan li.leg::before{display:none}
+.plan li.leg span{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px}
+.plan li.leg svg{width:15px;height:15px;flex:none}
+.plan li.edge::before{background:var(--ink)}
+.plan li span small{display:block;color:var(--muted);font-size:13.5px}
+.plan li span em{display:block;font-style:normal;font-size:13.5px;color:var(--warn-ink);background:var(--warn-bg);border-radius:8px;padding:4px 8px;margin-top:4px}
+.p-name{font-weight:700;text-align:left;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+/* Trip totals */
+.totals{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tot{background:var(--surface);border-radius:14px;padding:12px 14px;animation:rise .4s var(--ease) backwards;animation-delay:calc(var(--k) * 60ms)}
+.tot.cost{grid-column:1 / -1;background:var(--ink);color:var(--bg)}
+.tot span{display:block;font-size:13px;color:var(--muted)}
+.tot.cost span,.tot.cost small{color:inherit;opacity:.75}
+.tot b{display:block;font-size:22px;font-variant-numeric:tabular-nums;margin:2px 0}
+.tot.cost b{font-size:28px}
+.tot small{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.tot-note{color:var(--muted);font-size:13px;margin:8px 2px 0}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -514,6 +518,15 @@ main{padding:22px 20px 40px}
   <p class="hint">Swipe left or right to change days.</p>
 </main>
 
+<div class="tally" id="tally" hidden>
+  <div class="tally-panel" id="tallyPanel"></div>
+  <button class="tally-bar" id="tallyBar" aria-expanded="false" aria-controls="tallyPanel">
+    <span class="t-label" id="tLabel">Our day</span>
+    <span class="t-nums"><b id="tMoney">$0</b><small id="tWalk"></small></span>
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l5-5 5 5"/></svg>
+  </button>
+</div>
+
 <div class="sheet" id="sheet" hidden>
   <div class="scrim" data-close></div>
   <section class="panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
@@ -534,13 +547,96 @@ main{padding:22px 20px 40px}
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const darkMQ = matchMedia('(prefers-color-scheme: dark)');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  let cur = -1, filter = 'all', view = 'options', planIdx = 0;
+  let cur = -1, filter = 'all', view = 'options';
   let map = null, tiles = null, markers = [], pierMk = null;
+
+  /* Checked activities start with the top picks */
+  const picked = {};
+  function usePreset(s, k){
+    const names = s.presets[k].use;
+    picked[s.id] = new Set((s.options || []).map((o, i) => names.includes(o.n) ? i : -1).filter(i => i >= 0));
+  }
+  S.forEach(s => {
+    if (s.presets) usePreset(s, 0);
+    else { picked[s.id] = new Set(); (s.options || []).forEach((o, i) => o.pick && picked[s.id].add(i)); }
+  });
+
+  /* Plan builder: orders checked stops, adds travel, checks the clock */
+  const toRad = x => x * Math.PI / 180;
+  function km(a, b){
+    const dLat = toRad(b[0] - a[0]), dLon = toRad(b[1] - a[1]);
+    const q = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLon / 2) ** 2;
+    return 2 * 6371 * Math.asin(Math.sqrt(q));
+  }
+  const mins = s => { const [a, b] = s.split(':').map(Number); return a * 60 + b; };
+  function clock(m){ m = Math.round(m); let hh = Math.floor(m / 60) % 24; const mm = m % 60; const ap = hh >= 12 ? 'pm' : 'am'; hh = hh % 12 || 12; return hh + ':' + pad(mm) + ' ' + ap; }
+  function hrs(m){ m = Math.round(m); const a = Math.floor(m / 60), b = m % 60; return a ? (b ? a + ' h ' + b + ' min' : a + ' h') : b + ' min'; }
+  function legBetween(s, a, b, pierLeg, extra){
+    const L = s.leg, road = km(a, b) * 1.3;
+    if (L.mode === 'walk' && pierLeg && L.pierMi) return {type: 'walk', min: Math.round(L.pierMi * 1.609 / 4.5 * 60), mi: L.pierMi};
+    if (road < 0.6) return {type: 'walk', min: Math.max(2, Math.round(road / 4.5 * 60)), mi: road * 0.621};
+    if (L.mode === 'car') return {type: 'drive', min: Math.max(5, Math.round(road / L.speed * 60)) + 5 + (extra || 0), mi: road * 0.621};
+    if (road > 1.8) return {type: 'ride', min: 10 + Math.round(road / 30 * 60), mi: 0};
+    return {type: 'walk', min: Math.round(road / 4.5 * 60), mi: road * 0.621};
+  }
+  function buildPlan(s){
+    if (!s.leg || !s.pier) return null;
+    const sel = (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => a.o.order - b.o.order);
+    const st = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
+    const steps = [];
+    let t = mins(s.ashore), pos = s.pier.ll, prev = null;
+    steps.push({kind: 'start', at: t, text: 'Off the ship', sub: s.leg.mode === 'car' ? `About ${hrs(s.leg.start)} to get ashore and pick up the car` : `About ${hrs(s.leg.start)} to get ashore`});
+    t += s.leg.start;
+    const addLeg = l => {
+      steps.push({kind: 'leg', l});
+      t += l.min;
+      if (l.type === 'drive'){ st.drive += l.min; st.driveMi += l.mi; }
+      if (l.type === 'walk') st.walk += l.mi;
+    };
+    sel.forEach(({o, i}) => {
+      addLeg(legBetween(s, pos, o.ll, !prev, (prev && prev.extra || 0) + (o.extra || 0)));
+      let wait = 0, warn = '';
+      if (o.at){ const a = mins(o.at); if (t <= a){ wait = a - t; t = a; } else warn = `Check-in is ${clock(a)}. You’d get there at ${clock(t)}.`; }
+      if (o.by && t > mins(o.by)) warn = `Get here by ${clock(mins(o.by))}. You’d arrive at ${clock(t)}.`;
+      steps.push({kind: 'stop', at: t, o, i, wait, warn});
+      t += o.dur;
+      st.down += wait + (o.c === 'chill' ? o.dur : 0);
+      if (o.hike) st.hike += o.mi || 0; else st.walk += o.mi || 0;
+      pos = o.ll; prev = o;
+    });
+    addLeg(legBetween(s, pos, s.pier.ll, true, prev && prev.extra || 0));
+    t += s.leg.end;
+    steps.push({kind: 'end', at: t, text: 'Back aboard', sub: s.leg.mode === 'car' ? 'Includes gas and returning the car' : ''});
+    const spare = mins(s.backBy) - t;
+    if (spare > 0) st.down += spare;
+    return {steps, st, end: t, spare, count: sel.length};
+  }
+  function dayStats(s){
+    const plan = buildPlan(s);
+    if (plan) return plan.st;
+    let walk = 0, hike = 0;
+    (s.options || []).forEach((o, i) => { if (picked[s.id].has(i)){ if (o.hike) hike += o.mi || 0; else walk += o.mi || 0; } });
+    return {drive: 0, driveMi: 0, walk, hike, down: 0};
+  }
+  const usd = n => '$' + n.toLocaleString('en-US');
+  const money = (lo, hi) => hi === 0 ? 'Free' : lo === hi ? usd(lo) : usd(lo) + '–' + hi.toLocaleString('en-US');
+  const total = (lo, hi) => lo === hi ? usd(lo) : usd(lo) + '–' + hi.toLocaleString('en-US');
+  const miles = m => (Math.round(m * 10) / 10) + ' mi';
+  function dayTotals(s){
+    let lo = 0, hi = 0, mi = 0; const items = [];
+    (s.transport || []).forEach(t => { lo += t.lo; hi += t.hi; mi += t.mi || 0; items.push({n: t.n, lo: t.lo, hi: t.hi, fixed: true}); });
+    (s.options || []).forEach((o, i) => { if (picked[s.id].has(i)){ lo += o.price[0]; hi += o.price[1]; mi += o.mi || 0; items.push({n: o.n, lo: o.price[0], hi: o.price[1]}); } });
+    return {lo, hi, mi, items};
+  }
 
   const ICON = {
     pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 14.5s4.5-4.2 4.5-7.7a4.5 4.5 0 10-9 0c0 3.5 4.5 7.7 4.5 7.7z"/><circle cx="8" cy="6.8" r="1.6"/></svg>',
     car: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13.5v-3l1.6-4.2A1.5 1.5 0 016.5 5.3h7a1.5 1.5 0 011.4 1l1.6 4.2v3z"/><path d="M3.5 13.5v2h2.5v-2M14 13.5v2h2.5v-2"/><circle cx="6.5" cy="11" r=".6" fill="currentColor"/><circle cx="13.5" cy="11" r=".6" fill="currentColor"/></svg>',
     anchor: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="3.2" r="1.5"/><path d="M8 4.7V14M5 7h6M2.5 9.5c0 2.6 2.5 4.5 5.5 4.5s5.5-1.9 5.5-4.5"/></svg>',
+    cash: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="1.5" y="4" width="13" height="8.5" rx="1.5"/><circle cx="8" cy="8.25" r="1.8"/></svg>',
+    walk: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="4" cy="13" r="1.3"/><circle cx="12" cy="3" r="1.3"/><path d="M5.3 13H10a2.5 2.5 0 000-5H6a2.5 2.5 0 010-5h4.7" stroke-dasharray="1.5 2"/></svg>',
+    clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.8V8l2.2 1.4"/></svg>',
+    hike: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 13.5l4.5-8 3 5 2-3 3.5 6z"/></svg>',
     wave: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 8c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1M2 13c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/></svg>'
   };
 
@@ -594,7 +690,7 @@ main{padding:22px 20px 40px}
   function select(i){
     if (i === cur || i < 0 || i >= S.length) return;
     const dir = cur < 0 ? 0 : (i > cur ? 1 : -1);
-    cur = i; filter = 'all'; planIdx = 0; view = 'options';
+    cur = i; filter = 'all'; view = 'options';
     nodes().forEach((n, k) => { n.classList.toggle('on', k === i); n.setAttribute('aria-selected', k === i); });
     placeLine(i);
     const c = centers()[i];
@@ -604,6 +700,11 @@ main{padding:22px 20px 40px}
   }
 
   /* Day rendering */
+  function tr(s){
+    if (!s.transport) return '';
+    const lo = s.transport.reduce((a, t) => a + t.lo, 0), hi = s.transport.reduce((a, t) => a + t.hi, 0);
+    return ` <b>${hi === 0 ? 'Free' : 'About ' + total(lo, hi)}</b>`;
+  }
   function headHTML(s){
     const date = s.end
       ? fmt(s.date, {weekday:'short', month:'short', day:'numeric'}) + ' to ' + fmt(s.end, {weekday:'short', month:'short', day:'numeric'})
@@ -618,14 +719,13 @@ main{padding:22px 20px 40px}
       <p class="d-line">${esc(s.line)}</p>
       ${times}
       <p class="live" id="live" hidden></p>
-      ${s.getting ? `<p class="getting">${ICON.car}<span>${esc(s.getting)}</span></p>` : ''}
+      ${s.getting ? `<p class="getting">${ICON.car}<span>${esc(s.getting)}${tr(s)}</span></p>` : ''}
       ${heads ? `<ul class="heads">${heads}</ul>` : ''}`;
   }
 
   function bodyHTML(s){
     if (s.kind === 'sea') return `<ul class="ideas">${s.ideas.map((x, k) => `<li style="--k:${k}">${ICON.wave}<span>${esc(x)}</span></li>`).join('')}</ul>`;
-    const hasPlan = s.plans && s.plans.length;
-    const seg = hasPlan ? `<div class="seg" id="seg" role="tablist"><span class="seg-pill"></span><button data-v="options" class="on" role="tab">Options</button><button data-v="plan" role="tab">Suggested plan</button></div>` : '';
+    const seg = s.leg ? `<div class="seg" id="seg" role="tablist"><span class="seg-pill"></span><button data-v="options" class="on" role="tab">Options</button><button data-v="plan" role="tab">Our plan</button></div>` : '';
     return seg + '<div id="pane"></div>';
   }
 
@@ -640,19 +740,47 @@ main{padding:22px 20px 40px}
     let k = 0;
     const rows = s.options.map((o, i) => {
       if (filter !== 'all' && filter !== o.c) return '';
-      return `<li class="opt" data-i="${i}" style="--c:var(--c-${o.c});--k:${k++}">
-        <button class="opt-main" data-show="${i}" aria-label="Show ${esc(o.n)} on the map">
-          <span class="o-dot"></span>
-          <span class="o-text"><span class="o-name">${esc(o.n)}</span>${o.pick ? '<span class="tag pick">Top pick</span>' : ''}${o.tag ? `<span class="tag">${esc(o.tag)}</span>` : ''}<span class="o-note">${esc(o.note)}</span></span>
-        </button>${links(o)}</li>`;
+      const on = picked[s.id].has(i);
+      return `<li class="opt${on ? ' picked' : ''}" data-i="${i}" style="--c:var(--c-${o.c});--k:${k++}">
+        <div class="opt-row">
+          <button class="opt-main" data-show="${i}" aria-label="Show ${esc(o.n)} on the map">
+            <span class="o-dot"></span>
+            <span class="o-text"><span class="o-name">${esc(o.n)}</span>${o.pick ? '<span class="tag pick">Top pick</span>' : ''}${o.tag ? `<span class="tag">${esc(o.tag)}</span>` : ''}<span class="o-note">${esc(o.note)}</span>
+              <span class="o-meta"><span>${ICON.cash}${money(o.price[0], o.price[1])}</span>${o.dur ? `<span>${ICON.clock}${hrs(o.dur)}</span>` : ''}${o.mi >= 0.2 ? `<span>${o.hike ? ICON.hike : ICON.walk}${miles(o.mi)} ${o.hike ? 'hiking' : 'walking'}</span>` : ''}</span></span>
+          </button>
+          <button class="check" data-check="${i}" aria-pressed="${on}" aria-label="Add ${esc(o.n)} to our day"><svg viewBox="0 0 28 28" aria-hidden="true"><circle class="ring" cx="14" cy="14" r="12"/><path class="tick" d="M8.5 14.5l3.8 3.7 7.2-8"/></svg></button>
+        </div>${links(o)}</li>`;
     }).join('');
     return chips + `<ul class="opts">${rows}</ul>`;
   }
 
   function planHTML(s){
-    const tabs = s.plans.length > 1 ? `<div class="ptabs">${s.plans.map((p, i) => `<button data-p="${i}" class="${i === planIdx ? 'on' : ''}">${esc(p.name)}</button>`).join('')}</div>` : '';
-    const p = s.plans[planIdx];
-    return tabs + `<ol class="plan">${p.steps.map(([t, x], k) => `<li style="--k:${k}"><time>${esc(t)}</time><span>${esc(x)}</span></li>`).join('')}</ol>` + (p.walk ? `<p class="walk">${esc(p.walk)}</p>` : '');
+    const P = buildPlan(s), st = P.st;
+    const presets = s.presets ? `<div class="ptabs"><span>Start from</span>${s.presets.map((p, k) => `<button data-preset="${k}">${esc(p.name)}</button>`).join('')}</div>` : '';
+    if (!P.count) return presets + `<p class="p-empty">Check a few options and your plan builds itself here.</p>`;
+    const over = P.spare < 0, tight = !over && P.spare < 20, tgt = clock(mins(s.backBy));
+    const msg = over ? `${hrs(-P.spare)} past your ${tgt} target. Uncheck something or swap a stop.`
+      : tight ? `Tight. Only ${hrs(P.spare)} of cushion before your ${tgt} target.`
+      : `${hrs(P.spare)} before your ${tgt} target.`;
+    const status = `<div class="p-status ${over || tight ? 'over' : 'ok'}"><b>Back aboard around ${clock(P.end)}</b><span>${msg}</span></div>`;
+    const stats = `<div class="p-stats">
+      <div><span>Driving</span><b>${st.drive ? hrs(st.drive) : 'None'}</b></div>
+      <div><span>Walking</span><b>${miles(st.walk)}</b></div>
+      <div><span>Hiking</span><b>${st.hike ? miles(st.hike) : 'None'}</b></div>
+      <div><span>Downtime</span><b>${hrs(st.down)}</b></div></div>`;
+    let k = 0;
+    const rows = P.steps.map(x => {
+      if (x.kind === 'leg'){
+        const l = x.l, verb = l.type === 'drive' ? 'Drive' : l.type === 'ride' ? 'Taxi or rideshare' : 'Walk';
+        return `<li class="leg" style="--k:${k++}"><time></time><span>${l.type === 'drive' ? ICON.car : ICON.walk}${verb} ${hrs(l.min)}${l.mi >= 0.2 ? ', ' + miles(l.mi) : ''}</span></li>`;
+      }
+      if (x.kind === 'stop'){
+        const o = x.o;
+        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${hrs(o.dur)}${x.wait >= 10 ? `, after ${hrs(x.wait)} of free time` : ''}</small>${x.warn ? `<em>${esc(x.warn)}</em>` : ''}</span></li>`;
+      }
+      return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
+    }).join('');
+    return presets + status + stats + `<ol class="plan">${rows}</ol><p class="walk">Times are estimates from map distances. Tap a stop to see it on the map.</p>`;
   }
 
   function renderPane(){
@@ -676,6 +804,8 @@ main{padding:22px 20px 40px}
     renderPane();
     if (s.kind !== 'sea') drawMap(s);
     live();
+    tally.classList.remove('open'); $('#tallyBar').setAttribute('aria-expanded', 'false');
+    updateTally(false);
     if (!reduce && dir){
       [head, mw, body].forEach((e, k) => e.animate(
         [{opacity: 0, transform: `translateX(${dir * 28}px)`}, {opacity: 1, transform: 'none'}],
@@ -745,6 +875,64 @@ main{padding:22px 20px 40px}
     setTimeout(() => m.openPopup(), reduce ? 0 : 650);
   }
 
+  /* Day total bar */
+  const tally = $('#tally');
+  let shown = {lo: 0, hi: 0}, tween = 0;
+  function updateTally(bump){
+    const s = S[cur];
+    if (s.kind === 'sea'){ tally.hidden = true; document.body.classList.remove('has-tally'); return; }
+    tally.hidden = false; document.body.classList.add('has-tally');
+    const t = dayTotals(s), n = picked[s.id].size;
+    $('#tLabel').innerHTML = `${s.id === 'home' ? 'Getting home' : 'Our ' + esc(s.place) + ' day'}<small>${n} ${n === 1 ? 'activity' : 'activities'} checked</small>`;
+    const ds = dayStats(s);
+    $('#tWalk').textContent = (ds.walk >= 0.2 ? miles(ds.walk) + ' walking' : 'Little walking') + (ds.hike ? ', ' + miles(ds.hike) + ' hiking' : '');
+    $('#tallyPanel').innerHTML = `<ul>${t.items.map(x => `<li${x.fixed ? ' class="fixed"' : ''}><span>${esc(x.n)}</span><b>${money(x.lo, x.hi)}</b></li>`).join('')}</ul><p>Estimates for both of you. Tips, tax, and shopping are extra.</p>`;
+    countTo(t.lo, t.hi, bump);
+  }
+  function countTo(lo, hi, bump){
+    const el = $('#tMoney'); cancelAnimationFrame(tween);
+    if (reduce || !bump){ shown = {lo, hi}; el.textContent = total(lo, hi); return; }
+    const from = {...shown}, t0 = performance.now();
+    const step = now => {
+      const p = Math.min(1, (now - t0) / 450), e = 1 - Math.pow(1 - p, 3);
+      shown = {lo: Math.round(from.lo + (lo - from.lo) * e), hi: Math.round(from.hi + (hi - from.hi) * e)};
+      el.textContent = total(shown.lo, shown.hi);
+      if (p < 1) tween = requestAnimationFrame(step);
+    };
+    tween = requestAnimationFrame(step);
+    el.animate([{transform: 'scale(1)'}, {transform: 'scale(1.1)'}, {transform: 'scale(1)'}], {duration: 380, easing: 'ease-out'});
+  }
+  $('#tallyBar').addEventListener('click', () => {
+    const open = tally.classList.toggle('open');
+    $('#tallyBar').setAttribute('aria-expanded', open);
+  });
+  function tripTotals(){
+    let lo = 0, hi = 0; const tt = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
+    S.forEach(s => {
+      if (s.kind === 'sea') return;
+      const c = dayTotals(s), d = dayStats(s);
+      lo += c.lo; hi += c.hi;
+      Object.keys(tt).forEach(k => tt[k] += d[k]);
+    });
+    const tiles = [
+      ['Total cost', e => total(Math.round(lo * e), Math.round(hi * e)), 'For both of you, transportation included', 'cost'],
+      ['Driving', e => hrs(tt.drive * e), `About ${Math.round(tt.driveMi)} miles`],
+      ['Walking', e => miles(tt.walk * e), 'Towns, beaches, and getting around'],
+      ['Hiking', e => miles(tt.hike * e), 'Trails and crater walks'],
+      ['Downtime', e => hrs(tt.down * e), 'Beach time, waiting, and spare time ashore']
+    ];
+    const box = $('#totals');
+    box.innerHTML = tiles.map(([l, f, sub, cls], k) => `<div class="tot ${cls || ''}" style="--k:${k}"><span>${l}</span><b data-t="${k}">${f(1)}</b><small>${sub}</small></div>`).join('');
+    if (reduce) return;
+    const t0 = performance.now();
+    const step = now => {
+      const p = Math.min(1, (now - t0) / 700), e = 1 - Math.pow(1 - p, 3);
+      tiles.forEach(([, f], k) => { box.querySelector(`[data-t="${k}"]`).textContent = f(e); });
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
   /* Live "aboard by" countdown on the day itself */
   function live(){
     const s = S[cur], p = $('#live');
@@ -758,7 +946,17 @@ main{padding:22px 20px 40px}
 
   /* Events */
   $('#dayBody').addEventListener('click', e => {
-    const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-p]'), sh = e.target.closest('[data-show]');
+    const ck = e.target.closest('[data-check]');
+    if (ck){
+      const i = +ck.dataset.check, set = picked[S[cur].id];
+      set.has(i) ? set.delete(i) : set.add(i);
+      const on = set.has(i);
+      ck.setAttribute('aria-pressed', on);
+      ck.closest('.opt').classList.toggle('picked', on);
+      updateTally(true);
+      return;
+    }
+    const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-preset]'), sh = e.target.closest('[data-show]');
     if (v && v.dataset.v !== view){
       view = v.dataset.v;
       const seg = $('#seg'); seg.classList.toggle('plan', view === 'plan');
@@ -769,7 +967,8 @@ main{padding:22px 20px 40px}
       const chip = document.querySelector(`.chip[data-f="${filter}"]`);
       chip && chip.scrollIntoView({inline: 'center', block: 'nearest', behavior: reduce ? 'auto' : 'smooth'});
     } else if (p){
-      planIdx = +p.dataset.p; renderPane();
+      usePreset(S[cur], +p.dataset.preset); renderPane(); updateTally(true);
+      drawMap(S[cur]);
     } else if (sh){
       showOnMap(+sh.dataset.show);
     }
@@ -798,19 +997,21 @@ main{padding:22px 20px 40px}
   function buildSheet(){
     const L2 = T.checklist;
     $('#sheetBody').innerHTML = `
+      <h3>Trip totals</h3>
+      <div class="totals" id="totals"></div>
+      <p class="tot-note">Based on what’s checked on each day. Downtime counts port days only.</p>
       <h3>Key dates</h3>
       <ul class="box dates">${L2.dates.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join('')}</ul>
       <h3>Pack for shore days</h3>
       <div class="pack">${L2.pack.map(x => `<label><input type="checkbox"><span>${esc(x)}</span></label>`).join('')}</div>
       <h3>Good to know</h3>
-      <ul class="box">${L2.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
-      <h3>Budget</h3>
-      <p class="budget">${esc(L2.budget)}</p>`;
+      <ul class="box">${L2.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
   }
   const sheet = $('#sheet');
   let lastFocus = null;
   function openSheet(){
     lastFocus = document.activeElement;
+    tripTotals();
     sheet.hidden = false; document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open')));
     sheet.querySelector('.close').focus();
