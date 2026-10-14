@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 
 <script>
 /* =====================================================================
@@ -29,6 +28,9 @@ window.SYNC = {
   trip: "bailey-luke-hawaii-k7q2"
 };
 
+/* Coastlines: Natural Earth (public domain), simplified */
+window.GEO = {"maui":{"rings":[[[-156.5366,20.5709],[-156.5498,20.5415],[-156.5341,20.5318],[-156.5446,20.5132],[-156.5729,20.513],[-156.5995,20.5174],[-156.6465,20.5081],[-156.6793,20.5047],[-156.7006,20.5254],[-156.6885,20.5401],[-156.6672,20.5577],[-156.6392,20.5751],[-156.6088,20.591],[-156.5826,20.6],[-156.5618,20.598],[-156.5366,20.5709]],[[-156.8327,20.8607],[-156.8163,20.8417],[-156.8058,20.8251],[-156.8035,20.8126],[-156.8097,20.7955],[-156.8313,20.7638],[-156.8768,20.7443],[-156.9137,20.7347],[-156.9623,20.7324],[-156.9824,20.7594],[-156.9871,20.7829],[-156.9884,20.8015],[-156.9886,20.8249],[-156.9921,20.8463],[-157.0092,20.8559],[-157.0508,20.8714],[-157.0631,20.8904],[-157.0552,20.9114],[-157.0316,20.9227],[-156.9904,20.9275],[-156.8927,20.9141],[-156.8484,20.8768],[-156.8327,20.8607]],[[-155.9796,20.7574],[-155.9847,20.7176],[-156.0031,20.6859],[-156.0277,20.6794],[-156.0484,20.6509],[-156.0754,20.6507],[-156.1295,20.6245],[-156.1654,20.6252],[-156.1854,20.6272],[-156.2038,20.626],[-156.2537,20.6044],[-156.2849,20.5886],[-156.3026,20.5812],[-156.3267,20.5872],[-156.3359,20.5882],[-156.3525,20.5924],[-156.3655,20.5888],[-156.4077,20.5872],[-156.4355,20.612],[-156.4386,20.6222],[-156.4517,20.6357],[-156.4431,20.6426],[-156.4427,20.6606],[-156.4505,20.7264],[-156.4584,20.7445],[-156.458,20.7648],[-156.4643,20.7814],[-156.4753,20.7908],[-156.4857,20.7967],[-156.5016,20.7962],[-156.5159,20.7901],[-156.5213,20.7762],[-156.5339,20.7741],[-156.5486,20.7821],[-156.5627,20.7918],[-156.5845,20.7955],[-156.606,20.8084],[-156.6202,20.8071],[-156.6333,20.8237],[-156.6571,20.8477],[-156.6849,20.8819],[-156.6861,20.9038],[-156.696,20.9158],[-156.6923,20.9361],[-156.6859,20.9642],[-156.6768,20.988],[-156.6665,21.0034],[-156.6539,21.0048],[-156.6454,21.0134],[-156.6448,21.0212],[-156.6358,21.0271],[-156.6157,21.0252],[-156.6073,21.0273],[-156.6038,21.032],[-156.5979,21.0327],[-156.5896,21.0277],[-156.5814,21.0181],[-156.5714,21.0165],[-156.5557,21.0083],[-156.5424,21.0034],[-156.5375,20.9907],[-156.5259,20.9873],[-156.5229,20.974],[-156.523,20.9622],[-156.5091,20.9503],[-156.5002,20.9376],[-156.493,20.9218],[-156.4817,20.9044],[-156.4641,20.9056],[-156.4529,20.9179],[-156.4337,20.9177],[-156.4188,20.9201],[-156.3896,20.9215],[-156.3785,20.924],[-156.3464,20.9459],[-156.3307,20.9512],[-156.3154,20.9529],[-156.2983,20.9527],[-156.2819,20.9503],[-156.2686,20.9451],[-156.261,20.9437],[-156.2581,20.9416],[-156.2556,20.9376],[-156.2429,20.9416],[-156.2269,20.932],[-156.2218,20.9203],[-156.2153,20.9147],[-156.2072,20.9069],[-156.1973,20.895],[-156.1792,20.8835],[-156.1661,20.8715],[-156.1648,20.8628],[-156.1479,20.8617],[-156.1444,20.8671],[-156.1313,20.8575],[-156.1257,20.844],[-156.1193,20.8361],[-156.085,20.8315],[-156.051,20.8159],[-156.0017,20.8004],[-155.9796,20.7574]],[[-156.739,21.1728],[-156.7332,21.1688],[-156.7359,21.1641],[-156.7292,21.1609],[-156.7132,21.1614],[-156.7057,21.1565],[-156.7248,21.1237],[-156.7556,21.0955],[-156.7934,21.0759],[-156.831,21.0611],[-156.8696,21.0534],[-156.9086,21.057],[-156.9474,21.0645],[-157.0249,21.0838],[-157.0724,21.0994],[-157.1403,21.0942],[-157.1873,21.0918],[-157.2226,21.0868],[-157.251,21.0884],[-157.2731,21.0873],[-157.2926,21.0947],[-157.3039,21.1096],[-157.3043,21.1282],[-157.2965,21.1439],[-157.2854,21.1561],[-157.2674,21.1625],[-157.2512,21.1803],[-157.2466,21.1998],[-157.259,21.2148],[-157.2598,21.2219],[-157.2488,21.2217],[-157.2329,21.2191],[-157.2094,21.2203],[-157.1969,21.217],[-157.1887,21.2051],[-157.1736,21.2051],[-157.0281,21.1846],[-156.9897,21.1828],[-156.9818,21.194],[-156.9808,21.2034],[-156.9756,21.2111],[-156.9658,21.2133],[-156.9524,21.1967],[-156.9478,21.1778],[-156.9252,21.1712],[-156.897,21.1652],[-156.8467,21.1667],[-156.8247,21.1695],[-156.8106,21.1739],[-156.8003,21.1777],[-156.7918,21.176],[-156.7735,21.1772],[-156.7595,21.173],[-156.749,21.171],[-156.739,21.1728]]],"focus":[-156.72,20.56,-155.96,21.04]},"oahu":{"rings":[[[-157.6961,21.3364],[-157.6745,21.3229],[-157.6536,21.3126],[-157.6472,21.3064],[-157.6589,21.2938],[-157.6837,21.2727],[-157.6932,21.2627],[-157.7041,21.2595],[-157.7076,21.2656],[-157.7068,21.275],[-157.7153,21.2818],[-157.7421,21.2755],[-157.7638,21.2731],[-157.7819,21.2646],[-157.795,21.2547],[-157.8108,21.2542],[-157.818,21.2576],[-157.8229,21.2664],[-157.8307,21.2773],[-157.8637,21.2904],[-157.8801,21.298],[-157.8908,21.3128],[-157.895,21.3223],[-157.8949,21.3317],[-157.9021,21.3284],[-157.9152,21.3165],[-157.9052,21.3056],[-157.947,21.3027],[-157.9462,21.3074],[-157.9404,21.3107],[-157.9483,21.3168],[-157.9641,21.3163],[-157.9647,21.3264],[-157.9675,21.3345],[-157.9653,21.3412],[-157.9681,21.3479],[-157.9471,21.357],[-157.9362,21.363],[-157.9318,21.3717],[-157.944,21.3805],[-157.954,21.3846],[-157.9609,21.3888],[-157.9655,21.3847],[-157.9692,21.372],[-157.9778,21.3761],[-157.9913,21.3911],[-157.9907,21.3776],[-157.9844,21.3621],[-157.9895,21.3588],[-158.0202,21.3833],[-158.0131,21.3671],[-157.9968,21.3509],[-157.9754,21.3339],[-157.9806,21.3185],[-157.9987,21.3113],[-158.0225,21.3076],[-158.0592,21.2999],[-158.078,21.2981],[-158.0943,21.2936],[-158.0989,21.2954],[-158.1034,21.2993],[-158.1153,21.3051],[-158.1242,21.3387],[-158.1347,21.3657],[-158.1482,21.3812],[-158.1574,21.3947],[-158.1761,21.4035],[-158.1808,21.4304],[-158.1871,21.4445],[-158.205,21.4587],[-158.2157,21.4655],[-158.2276,21.483],[-158.2293,21.5326],[-158.236,21.5416],[-158.2789,21.5753],[-158.2724,21.5786],[-158.2363,21.5849],[-158.1938,21.5872],[-158.1657,21.5856],[-158.1492,21.5862],[-158.1366,21.5893],[-158.1211,21.5859],[-158.1176,21.5981],[-158.1129,21.6039],[-158.0948,21.6138],[-158.0738,21.629],[-158.0658,21.6356],[-158.0672,21.6414],[-158.06,21.6525],[-158.0506,21.6713],[-158.0353,21.6834],[-158.0144,21.7015],[-157.9826,21.7098],[-157.9697,21.7091],[-157.9624,21.705],[-157.9567,21.6989],[-157.9502,21.6906],[-157.9339,21.6779],[-157.9333,21.6672],[-157.9247,21.6631],[-157.9241,21.6543],[-157.9155,21.6455],[-157.9202,21.6275],[-157.9073,21.6106],[-157.8938,21.5984],[-157.8875,21.5809],[-157.8767,21.5754],[-157.8739,21.5693],[-157.8712,21.5579],[-157.8636,21.5598],[-157.8535,21.5563],[-157.8459,21.548],[-157.8364,21.534],[-157.8364,21.5113],[-157.8444,21.5114],[-157.8495,21.5054],[-157.8476,21.4886],[-157.8421,21.461],[-157.8328,21.4583],[-157.8205,21.4534],[-157.8113,21.4419],[-157.8035,21.4291],[-157.7884,21.4242],[-157.7863,21.4168],[-157.7762,21.4133],[-157.7696,21.4206],[-157.7601,21.4332],[-157.7751,21.4428],[-157.7735,21.4542],[-157.7626,21.4588],[-157.7381,21.4558],[-157.7257,21.459],[-157.7229,21.4516],[-157.7376,21.4377],[-157.7405,21.4196],[-157.7387,21.4055],[-157.7222,21.3958],[-157.7093,21.3836],[-157.7058,21.3749],[-157.7103,21.3635],[-157.7068,21.352],[-157.6961,21.3364]]],"focus":[-158.3,21.24,-157.63,21.73]},"kauai":{"rings":[[[-159.2928,22.1464],[-159.2926,22.1356],[-159.2947,22.1076],[-159.3041,22.0956],[-159.3187,22.0576],[-159.3332,22.0496],[-159.3347,22.0216],[-159.3317,22.0041],[-159.3306,21.9848],[-159.3317,21.9661],[-159.3341,21.9581],[-159.3479,21.9581],[-159.3591,21.9529],[-159.3516,21.9455],[-159.3479,21.9367],[-159.3536,21.93],[-159.3654,21.9308],[-159.3825,21.9174],[-159.3897,21.9054],[-159.3984,21.8981],[-159.415,21.8881],[-159.4164,21.8807],[-159.4272,21.8794],[-159.4337,21.8741],[-159.4373,21.8688],[-159.4819,21.8835],[-159.5093,21.8863],[-159.5296,21.8857],[-159.5676,21.893],[-159.5819,21.8944],[-159.5906,21.9017],[-159.5949,21.9004],[-159.5963,21.8937],[-159.605,21.8917],[-159.61,21.8997],[-159.623,21.9051],[-159.6345,21.9137],[-159.6417,21.9231],[-159.6503,21.9398],[-159.6618,21.9425],[-159.6661,21.9505],[-159.6762,21.9552],[-159.6961,21.9582],[-159.7115,21.9639],[-159.7238,21.9699],[-159.7432,21.9732],[-159.7598,21.9785],[-159.7684,21.9952],[-159.7713,22.0052],[-159.78,22.0093],[-159.7872,22.0193],[-159.7872,22.0333],[-159.7858,22.0447],[-159.7851,22.0573],[-159.7865,22.066],[-159.7766,22.0695],[-159.7497,22.0981],[-159.7357,22.1152],[-159.7343,22.125],[-159.7342,22.1337],[-159.7326,22.1408],[-159.7259,22.1436],[-159.7235,22.1466],[-159.7165,22.1575],[-159.6942,22.1635],[-159.6682,22.1695],[-159.6394,22.1856],[-159.6213,22.2003],[-159.5982,22.2109],[-159.5896,22.221],[-159.5766,22.2257],[-159.5658,22.2256],[-159.5585,22.233],[-159.5484,22.231],[-159.5412,22.225],[-159.5376,22.2183],[-159.5297,22.2176],[-159.5167,22.2136],[-159.5081,22.2082],[-159.4994,22.2088],[-159.5023,22.2162],[-159.4994,22.2236],[-159.4813,22.2302],[-159.4626,22.2275],[-159.4402,22.2275],[-159.4287,22.2208],[-159.4193,22.2221],[-159.4077,22.2288],[-159.3997,22.2355],[-159.3882,22.2288],[-159.3738,22.2221],[-159.3579,22.2227],[-159.3387,22.213],[-159.3312,22.1979],[-159.3187,22.1858],[-159.3118,22.1845],[-159.3013,22.1511],[-159.2928,22.1464]]],"focus":[-159.8,21.86,-159.28,22.25]},"hilo":{"rings":[[[-154.8466,19.5449],[-154.8253,19.5275],[-154.8141,19.5066],[-154.8172,19.4797],[-154.8747,19.4129],[-154.9189,19.3973],[-154.9823,19.3392],[-155.0251,19.3276],[-155.0267,19.3162],[-155.0626,19.3078],[-155.093,19.2862],[-155.203,19.2556],[-155.2451,19.2655],[-155.2693,19.2662],[-155.2911,19.2595],[-155.3144,19.2457],[-155.3457,19.2248],[-155.3641,19.2036],[-155.3847,19.2005],[-155.4001,19.1937],[-155.4226,19.1801],[-155.4368,19.1699],[-155.4878,19.1425],[-155.5028,19.1377],[-155.5461,19.0982],[-155.5537,19.082],[-155.5523,19.0456],[-155.6021,18.9974],[-155.6185,18.9555],[-155.633,18.9402],[-155.6748,18.9061],[-155.6835,18.9112],[-155.6829,18.9329],[-155.7042,18.9491],[-155.7444,18.9693],[-155.7922,18.997],[-155.8173,19.0132],[-155.8781,19.0291],[-155.891,19.0657],[-155.9039,19.0695],[-155.9121,19.0962],[-155.9199,19.1386],[-155.9084,19.189],[-155.8855,19.3342],[-155.8874,19.3596],[-155.9009,19.3828],[-155.9366,19.4813],[-155.9464,19.4936],[-155.9564,19.5142],[-155.954,19.5361],[-155.9656,19.5566],[-155.9714,19.5797],[-155.9822,19.6077],[-155.9995,19.6322],[-156.0148,19.6434],[-156.0363,19.6679],[-156.0602,19.7312],[-156.0502,19.7595],[-156.0388,19.7831],[-156.0174,19.8011],[-155.9968,19.8144],[-155.9875,19.8244],[-155.982,19.8433],[-155.968,19.8542],[-155.926,19.8688],[-155.9058,19.902],[-155.8959,19.9135],[-155.8734,19.9513],[-155.8509,19.9753],[-155.8355,19.9757],[-155.8283,20.007],[-155.8241,20.0201],[-155.8311,20.0394],[-155.8477,20.0545],[-155.8826,20.1049],[-155.897,20.1488],[-155.8994,20.1841],[-155.8993,20.2167],[-155.8805,20.252],[-155.8672,20.2631],[-155.8311,20.2634],[-155.738,20.2438],[-155.7326,20.2388],[-155.7292,20.2313],[-155.728,20.2216],[-155.7117,20.1961],[-155.6733,20.1817],[-155.6481,20.168],[-155.6307,20.1482],[-155.6065,20.138],[-155.5864,20.1229],[-155.5631,20.1284],[-155.5272,20.1263],[-155.4911,20.113],[-155.4207,20.0902],[-155.3323,20.0467],[-155.168,19.9468],[-155.1159,19.8967],[-155.0871,19.8604],[-155.0864,19.821],[-155.0881,19.7686],[-155.0854,19.7274],[-155.0575,19.7285],[-155.0185,19.7458],[-154.9899,19.7267],[-154.9767,19.7058],[-154.98,19.6628],[-154.967,19.6363],[-154.9499,19.6114],[-154.8996,19.567],[-154.8466,19.5449]]],"focus":[-156.08,18.9,-154.79,20.28]},"lb":{"rings":[[[-117.9785,33.636],[-118.0905,33.731],[-118.1174,33.7436],[-118.1526,33.7588],[-118.1736,33.7633],[-118.1855,33.7575],[-118.199,33.764],[-118.2072,33.7638],[-118.1925,33.7523],[-118.1866,33.7415],[-118.1852,33.7324],[-118.1929,33.7317],[-118.2025,33.7393],[-118.2027,33.7466],[-118.2097,33.7423],[-118.2138,33.749],[-118.2215,33.7709],[-118.2307,33.7691],[-118.2403,33.7676],[-118.2501,33.7637],[-118.2546,33.7654],[-118.2604,33.7604],[-118.2695,33.7536],[-118.2768,33.7566],[-118.2738,33.7503],[-118.2783,33.7387],[-118.2745,33.7238],[-118.2722,33.7153],[-118.2824,33.7162],[-118.2817,33.7117],[-118.2761,33.7077],[-118.2827,33.708],[-118.2913,33.7032],[-118.3009,33.7098],[-118.3175,33.714],[-118.3315,33.7201],[-118.3548,33.7263],[-118.3623,33.7357],[-118.3761,33.7372],[-118.385,33.7401],[-118.3942,33.7367],[-118.4014,33.7356],[-118.4048,33.74],[-118.412,33.7417],[-118.4152,33.7544],[-118.4228,33.7638],[-118.4276,33.7737],[-118.4218,33.7839],[-118.4093,33.7911],[-118.4086,33.798],[-118.3957,33.8057],[-118.3918,33.8176],[-118.3914,33.8359],[-118.3972,33.844],[-118.3997,33.8513],[-118.4099,33.8734],[-118.4249,33.9055],[-118.4447,33.9494],[-118.4451,33.95],[-117.95,33.95],[-117.95,33.6194],[-117.9785,33.636]],[[-118.2266,33.7655],[-118.2239,33.7561],[-118.2439,33.7508],[-118.2363,33.728],[-118.2501,33.7236],[-118.2456,33.7149],[-118.2576,33.7166],[-118.2613,33.725],[-118.2591,33.7294],[-118.2443,33.7343],[-118.249,33.7494],[-118.2539,33.7462],[-118.2511,33.7363],[-118.2606,33.7335],[-118.2686,33.7289],[-118.2709,33.7396],[-118.2675,33.747],[-118.255,33.7581],[-118.2503,33.7576],[-118.2455,33.7597],[-118.2347,33.7632],[-118.2266,33.7655]]],"focus":null},"ens":{"rings":[[[-116.6481,31.6592],[-116.6551,31.678],[-116.6685,31.697],[-116.6754,31.7026],[-116.6902,31.7082],[-116.7153,31.711],[-116.7412,31.7385],[-116.7504,31.7524],[-116.7088,31.7442],[-116.6788,31.727],[-116.6613,31.7234],[-116.6436,31.7343],[-116.6304,31.7528],[-116.6196,31.7717],[-116.6126,31.801],[-116.61,31.8226],[-116.6118,31.8429],[-116.6197,31.8576],[-116.6569,31.8639],[-116.6764,31.8688],[-116.6947,31.89],[-116.7188,31.9012],[-116.7353,31.9035],[-116.7548,31.9096],[-116.756,31.9346],[-116.7579,31.965],[-116.7699,31.9778],[-116.8039,31.9787],[-116.8423,31.9865],[-116.85,31.9954],[-116.85,32.05],[-116.4,32.05],[-116.4,31.65],[-116.6507,31.65],[-116.6481,31.6592]]],"focus":null}};
+
 window.TRIP = {
   sail: "2026-11-08T12:00:00-08:00",
   home: "2026-11-22T12:00:00-08:00",
@@ -40,7 +42,7 @@ window.TRIP = {
   },
   stops: [
     {
-      id: "long-beach", kind: "port", node: "Long Beach", place: "Long Beach",
+      id: "long-beach", geo: "lb", kind: "port", node: "Long Beach", place: "Long Beach",
       date: "2026-11-08", tz: "-08:00",
       line: "Sail day. Get here the night before.",
       getting: "Carnival’s terminal is next to the Queen Mary, not San Pedro.",
@@ -64,7 +66,7 @@ window.TRIP = {
       ]
     },
     {
-      id: "maui", kind: "port", node: "Maui", place: "Maui",
+      id: "maui", geo: "maui", kind: "port", node: "Maui", place: "Maui",
       date: "2026-11-13", tz: "-10:00", ashore: "10:00", backBy: "19:45", depart: "21:30",
       line: "Valley, old town, and the north shore.",
       getting: "Rent a car at Kahului Airport (OGG).",
@@ -91,7 +93,7 @@ window.TRIP = {
       presets: [{ name: "Suggested day", use: ["Sam Sato’s", "Market Street, Wailuku", "ʻĪao Valley", "Pāʻia town", "Hoʻokipa Lookout", "Pāʻia Fish Market"] }]
     },
     {
-      id: "oahu", kind: "port", node: "Oʻahu", place: "Oʻahu",
+      id: "oahu", geo: "oahu", kind: "port", node: "Oʻahu", place: "Oʻahu",
       date: "2026-11-14", tz: "-10:00", ashore: "09:00", backBy: "20:00", depart: "22:00",
       line: "Skydive over the North Shore, then a slow Haleʻiwa afternoon.",
       getting: "Rent a car. The drop zone is about 75–90 minutes from the ship.",
@@ -116,7 +118,7 @@ window.TRIP = {
       presets: [{ name: "Skydive day", use: ["Skydive Hawaii", "Haleʻiwa town", "Giovanni’s Shrimp Truck"] }, { name: "If it’s cancelled", use: ["Highway Inn", "Leonard’s Bakery", "Waikīkī Beach"] }]
     },
     {
-      id: "kauai", kind: "port", node: "Kauaʻi", place: "Kauaʻi",
+      id: "kauai", geo: "kauai", kind: "port", node: "Kauaʻi", place: "Kauaʻi",
       date: "2026-11-15", tz: "-10:00", ashore: "07:45", backBy: "14:45", depart: "16:00",
       line: "A beginner surf lesson right by the ship.",
       getting: "No car needed. Kalapakī is about a 20–35 minute walk from the ship.",
@@ -138,7 +140,7 @@ window.TRIP = {
       presets: [{ name: "Surf day", use: ["Kauaʻi Beach Boys surf lesson", "Duke’s Kauaʻi", "Kalapakī Beach"] }]
     },
     {
-      id: "hilo", kind: "port", node: "Hilo", place: "Hilo",
+      id: "hilo", geo: "hilo", kind: "port", node: "Hilo", place: "Hilo",
       date: "2026-11-16", tz: "-10:00", ashore: "09:00", backBy: "15:45", depart: "17:00",
       line: "Hike across a volcanic crater, then poke by the bay.",
       getting: "Rent at Hilo Airport (ITO), not Kona.",
@@ -173,7 +175,7 @@ window.TRIP = {
       ]
     },
     {
-      id: "ensenada", kind: "port", node: "Ensenada", place: "Ensenada",
+      id: "ensenada", geo: "ens", kind: "port", node: "Ensenada", place: "Ensenada",
       date: "2026-11-21", tz: "-08:00", ashore: "15:00", backBy: "19:00", depart: "20:00",
       line: "One great seafood meal and a waterfront walk.",
       getting: "Walk or take the port shuttle into town.",
@@ -190,7 +192,7 @@ window.TRIP = {
       presets: [{ name: "Suggested evening", use: ["Sabina", "Avenida López Mateos", "Malecón"] }]
     },
     {
-      id: "home", kind: "port", node: "Home", place: "Long Beach",
+      id: "home", geo: "lb", kind: "port", node: "Home", place: "Long Beach",
       date: "2026-11-22", tz: "-08:00",
       line: "Back in Long Beach. Fly home in the afternoon.",
       heads: ["LAX traffic eats time. Don’t book a morning flight."],
@@ -308,7 +310,36 @@ main{padding:22px 20px 40px}
 
 /* Map */
 .mapwrap{position:relative;margin:20px -20px 0;padding:0 20px}
-#map{height:230px;border-radius:16px;overflow:hidden;background:var(--ocean-soft);transition:height .35s var(--ease);z-index:1}
+#map{position:relative;height:270px;border-radius:16px;overflow:hidden;background:var(--ocean-soft);transition:height .35s var(--ease)}
+#mapSvg{display:block;width:100%;height:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.m-sea{fill:var(--ocean-soft)}
+.m-land{fill:var(--surface);stroke:color-mix(in srgb,var(--ocean) 40%,transparent);stroke-linejoin:round}
+.m-casing{fill:none;stroke:var(--surface);stroke-linecap:round;stroke-linejoin:round}
+.m-route{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+.m-dot,.m-pier{cursor:pointer}
+.m-dot .hit,.m-pier .hit{fill:transparent}
+.m-dot .pt{fill:var(--c);stroke:var(--surface);opacity:.55;transition:opacity .2s}
+.m-dot.on .pt,.m-dot.sel .pt{opacity:1}
+.m-dot .halo{fill:color-mix(in srgb,var(--c) 30%,transparent)}
+.m-dot text{fill:var(--surface);font-weight:700;text-anchor:middle;font-family:var(--sans);pointer-events:none}
+.m-pier rect{fill:var(--ink)}
+.m-anchor *{fill:none;stroke:var(--bg);stroke-width:1.8;stroke-linecap:round}
+.intro .m-dot .pt,.intro .m-pier rect{transform-box:fill-box;transform-origin:center;animation:pop .45s var(--ease) backwards;animation-delay:calc(var(--k,0) * 35ms + 150ms)}
+@keyframes pop{from{transform:scale(0)}}
+.map-tools{position:absolute;top:10px;right:10px;display:flex;gap:6px}
+.map-tools button{background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;box-shadow:0 1px 4px rgba(0,0,0,.18);min-height:34px}
+.map-tools button[hidden]{display:none}
+.m-scale{position:absolute;left:12px;bottom:10px;display:flex;align-items:flex-end;gap:6px;font-size:11.5px;font-weight:600;color:var(--muted);pointer-events:none}
+.m-scale i{display:block;height:6px;border:2px solid currentColor;border-top:0}
+.map-card{position:absolute;left:10px;right:10px;bottom:10px;background:var(--surface);border-radius:14px;padding:12px 14px;box-shadow:0 4px 18px rgba(0,0,0,.22);animation:rise .25s var(--ease)}
+.map-card b{display:block;font-size:16px;padding-right:30px}
+.map-card > span{display:block;color:var(--muted);font-size:13.5px;margin:2px 0 10px}
+.map-card > span:last-child{margin-bottom:0}
+.mc-row{display:flex;flex-wrap:wrap;gap:6px}
+.mc-row a,.mc-row button{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--bg);text-decoration:none;min-height:34px;display:inline-flex;align-items:center}
+.mc-add.on{background:var(--c);color:var(--surface)}
+.mc-x{position:absolute;top:6px;right:6px;width:36px;height:36px;font-size:24px;line-height:1;color:var(--muted)}
+.map-cap{margin:8px 2px 0;font-size:13px;color:var(--muted)}
 .mapwrap.big #map{height:62vh}
 .map-size{position:absolute;left:30px;bottom:10px;z-index:2;background:var(--surface);color:var(--ink);font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:999px;box-shadow:0 1px 4px rgba(0,0,0,.18);min-height:34px}
 .pin-wrap{background:none;border:0}
@@ -317,15 +348,9 @@ main{padding:22px 20px 40px}
 .pier{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.3)}
 .pier svg{width:16px;height:16px}
 @keyframes drop{from{opacity:0;transform:translateY(-14px) scale(.6)}}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--surface);color:var(--ink);box-shadow:0 3px 14px rgba(0,0,0,.25)}
-.leaflet-popup-content{margin:12px 14px;font:15px/1.4 var(--sans)}
 .pop b{display:block;font-size:16px}
 .pop span{display:block;color:var(--muted);font-size:13.5px;margin:2px 0 8px}
 .pop .o-links{margin:0}
-.leaflet-container a.leaflet-popup-close-button{color:var(--muted)}
-.leaflet-control-attribution{font-size:10px;background:color-mix(in srgb,var(--surface) 80%,transparent)!important;color:var(--muted)}
-.leaflet-control-attribution a{color:var(--muted)}
-.leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line)}
 
 /* Segmented control */
 .seg{position:relative;display:grid;grid-template-columns:1fr 1fr;margin:22px 0 0;padding:4px;border-radius:12px;background:var(--line)}
@@ -528,8 +553,13 @@ body.has-tally main{padding-bottom:120px}
 <main class="wrap" id="main">
   <section id="dayHead" aria-live="polite"></section>
   <div class="mapwrap" id="mapWrap">
-    <div id="map" role="region" aria-label="Map of this stop"></div>
-    <button class="map-size" id="mapSize">Bigger map</button>
+    <div id="map" role="region" aria-label="Map of this stop">
+      <svg id="mapSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"></svg>
+      <div class="m-scale" id="mScale"></div>
+      <div class="map-tools"><button id="mapZoom">Zoom to plan</button><button id="mapSize">Bigger map</button></div>
+      <div class="map-card" id="mapCard" hidden></div>
+    </div>
+    <p class="map-cap" id="mapCap"></p>
   </div>
   <section id="dayBody"></section>
   <nav class="pn" id="pn" aria-label="Previous and next stop"></nav>
@@ -557,7 +587,6 @@ body.has-tally main{padding-bottom:120px}
   </section>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
   const T = window.TRIP, S = T.stops, C = T.categories;
@@ -820,8 +849,9 @@ body.has-tally main{padding-bottom:120px}
     $('#pn').innerHTML = pnHTML();
     mw.hidden = s.kind === 'sea';
     mw.classList.remove('big'); $('#mapSize').textContent = 'Bigger map';
+    mapZoom = autoZoom(s); mapSel = -1; card.hidden = true;
     renderPane();
-    if (s.kind !== 'sea') drawMap(s);
+    if (s.kind !== 'sea') drawMap(s, true);
     live();
     tally.classList.remove('open'); $('#tallyBar').setAttribute('aria-expanded', 'false');
     updateTally(false);
@@ -833,66 +863,163 @@ body.has-tally main{padding-bottom:120px}
     if (dir) window.scrollTo({top: Math.min(window.scrollY, $('.hero').offsetHeight), behavior: 'auto'});
   }
 
-  /* Map */
-  function setTiles(){
-    if (!map) return;
-    if (tiles) map.removeLayer(tiles);
-    const style = darkMQ.matches ? 'dark_all' : 'rastertiles/voyager';
-    tiles = L.tileLayer(`https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png`, {
-      subdomains: 'abcd', maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-    }).addTo(map);
+  /* Map: drawn from coastline data, no map service or key needed */
+  const GEO = window.GEO || {};
+  const mapEl = $('#map'), svg = $('#mapSvg'), card = $('#mapCard');
+  let mapZoom = false, mapSel = -1, lastRouteKey = '';
+  const routeCache = {};
+  function routeStops(s){
+    return (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => (a.o.order || 0) - (b.o.order || 0));
   }
-  function drawMap(s){
-    if (!window.L){ $('#mapWrap').hidden = true; return; }
-    if (!map){
-      map = L.map('map', {zoomControl: false, scrollWheelZoom: false});
-      L.control.zoom({position: 'topright'}).addTo(map);
-      setTiles();
-      darkMQ.addEventListener && darkMQ.addEventListener('change', setTiles);
-    }
-    markers.forEach(m => map.removeLayer(m)); markers = [];
-    if (pierMk){ map.removeLayer(pierMk); pierMk = null; }
-    s.options.forEach((o, i) => {
-      const icon = L.divIcon({className: 'pin-wrap', html: `<span class="pin" style="--c:var(--c-${o.c});--k:${i}"></span>`, iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -10]});
-      const m = L.marker(o.ll, {icon, title: o.n, riseOnHover: true})
-        .bindPopup(`<div class="pop"><b>${esc(o.n)}</b><span>${esc(o.note)}</span>${links(o)}</div>`, {closeButton: false, maxWidth: 260});
-      m.on('click', () => highlight(i));
-      m._i = i; markers.push(m);
-    });
-    if (s.pier){
-      pierMk = L.marker(s.pier.ll, {icon: L.divIcon({className: 'pin-wrap', html: `<span class="pier">${ICON.anchor}</span>`, iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -12]}), zIndexOffset: -200})
-        .bindPopup(`<div class="pop"><b>${esc(s.pier.n)}</b><span>Approximate berth. Confirm on arrival.</span></div>`, {closeButton: false}).addTo(map);
-    }
-    applyFilter(true);
+  function autoZoom(s){
+    const g = GEO[s.geo];
+    if (!g || !g.focus || !s.pier || !s.options) return false;
+    const pts = [s.pier.ll, ...s.options.map(o => o.ll)];
+    const span = Math.max(Math.max(...pts.map(q => q[0])) - Math.min(...pts.map(q => q[0])), Math.max(...pts.map(q => q[1])) - Math.min(...pts.map(q => q[1])));
+    return span < 0.25 * Math.max(g.focus[2] - g.focus[0], g.focus[3] - g.focus[1]);
   }
-  function applyFilter(fit){
-    if (!map) return;
-    const s = S[cur], pts = [];
-    markers.forEach(m => {
-      const o = s.options[m._i], show = filter === 'all' || filter === o.c;
-      if (show){ m.addTo(map); pts.push(o.ll); } else map.removeLayer(m);
+  function frame(s){
+    const g = GEO[s.geo];
+    if (!mapZoom && g && g.focus) return g.focus;
+    let pts = [s.pier.ll, ...(mapZoom ? routeStops(s).map(x => x.o.ll) : s.options.map(o => o.ll))];
+    if (pts.length < 2) pts = [s.pier.ll, ...s.options.map(o => o.ll)];
+    const xs = pts.map(q => q[1]), ys = pts.map(q => q[0]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const px = Math.max((x1 - x0) * .3, .02), py = Math.max((y1 - y0) * .3, .02);
+    return [x0 - px, y0 - py, x1 + px, y1 + py * 1.6];
+  }
+  function drawMap(s, intro, routeIn){
+    if (!s || !s.pier) return;
+    const W = mapEl.clientWidth, H = mapEl.clientHeight;
+    if (!W || !H) return;
+    const f = frame(s), k = Math.cos((f[1] + f[3]) / 2 * Math.PI / 180);
+    const X = lon => (lon - f[0]) * k * 1000, Y = lat => (f[3] - lat) * 1000;
+    let vw = X(f[2]), vh = Y(f[1]), ox = 0, oy = 0;
+    if (vw / vh > W / H){ const nh = vw * H / W; oy = (nh - vh) / 2; vh = nh; }
+    else { const nw = vh * W / H; ox = (nw - vw) / 2; vw = nw; }
+    const u = vw / W;
+    svg.setAttribute('viewBox', `${(-ox).toFixed(1)} ${(-oy).toFixed(1)} ${vw.toFixed(1)} ${vh.toFixed(1)}`);
+    const P = ll => X(ll[1]).toFixed(1) + ',' + Y(ll[0]).toFixed(1);
+    const g = GEO[s.geo];
+    const land = g ? g.rings.map(r => 'M' + r.map(q => X(q[0]).toFixed(1) + ',' + Y(q[1]).toFixed(1)).join('L') + 'Z').join('') : '';
+    const stops = routeStops(s), num = {};
+    stops.forEach((x, n) => num[x.i] = n + 1);
+    const pts = [s.pier.ll, ...stops.map(x => x.o.ll), s.pier.ll];
+    const key = s.id + ':' + stops.map(x => x.i).join(',');
+    const road = routeCache[key];
+    const routeD = !stops.length ? '' : Array.isArray(road)
+      ? 'M' + road.map(c => X(c[0]).toFixed(1) + ',' + Y(c[1]).toFixed(1)).join('L')
+      : 'M' + pts.map(P).join('L');
+    let out = `<rect class="m-sea" x="${-ox - vw}" y="${-oy - vh}" width="${vw * 3}" height="${vh * 3}"/>`
+      + `<path class="m-land" d="${land}" stroke-width="${(1.2 * u).toFixed(2)}"/>`
+      + `<path class="m-casing" id="mCasing" d="${routeD}" stroke-width="${(7 * u).toFixed(2)}" pathLength="1"/>`
+      + `<path class="m-route" id="mRoute" d="${routeD}" stroke-width="${(3.2 * u).toFixed(2)}" pathLength="1"/>`;
+    const sx = X(s.pier.ll[1]), sy = Y(s.pier.ll[0]), ps = 22 * u;
+    out += `<g class="m-pier" data-dot="pier"><circle class="hit" cx="${sx}" cy="${sy}" r="${20 * u}"/>`
+      + `<rect x="${sx - ps / 2}" y="${sy - ps / 2}" width="${ps}" height="${ps}" rx="${6 * u}"/>`
+      + `<g class="m-anchor" transform="translate(${sx - 7 * u},${sy - 7 * u}) scale(${14 * u / 16})"><circle cx="8" cy="3.2" r="1.5"/><path d="M8 4.7V14M5 7h6M2.5 9.5c0 2.6 2.5 4.5 5.5 4.5s5.5-1.9 5.5-4.5"/></g></g>`;
+    const dots = s.options.map((o, i) => ({o, i})).sort((a, b) => (num[a.i] ? 1 : 0) - (num[b.i] ? 1 : 0) || (a.i === mapSel) - (b.i === mapSel));
+    dots.forEach(({o, i}, n) => {
+      const cx = X(o.ll[1]).toFixed(1), cy = Y(o.ll[0]).toFixed(1), on = num[i], sel = i === mapSel;
+      const r = (on ? 11 : 6) * u * (sel ? 1.2 : 1);
+      out += `<g class="m-dot${on ? ' on' : ''}${sel ? ' sel' : ''}" data-dot="${i}" style="--c:var(--c-${o.c});--k:${n}">`
+        + `<circle class="hit" cx="${cx}" cy="${cy}" r="${(20 * u).toFixed(2)}"/>`
+        + (sel ? `<circle class="halo" cx="${cx}" cy="${cy}" r="${(r + 7 * u).toFixed(2)}"/>` : '')
+        + `<circle class="pt" cx="${cx}" cy="${cy}" r="${r.toFixed(2)}" stroke-width="${(2 * u).toFixed(2)}"/>`
+        + (on ? `<text x="${cx}" y="${cy}" font-size="${(12 * u).toFixed(2)}" dy=".36em">${on}</text>` : '')
+        + `</g>`;
     });
-    if (s.pier) pts.push(s.pier.ll);
-    if (fit && pts.length){
-      map.invalidateSize();
-      if (pts.length === 1) map.setView(pts[0], 13, {animate: false});
-      else map.fitBounds(pts, {padding: [30, 30], maxZoom: 14, animate: false});
-    }
+    svg.innerHTML = out;
+    svg.classList.toggle('intro', !!intro && !reduce);
+
+    /* scale bar */
+    const pxPerMi = 1.609 * (1000 / 111.32) / u;
+    const nice = [0.25, 0.5, 1, 2, 5, 10, 20, 50].find(m => m * pxPerMi >= 50) || 50;
+    $('#mScale').innerHTML = `<i style="width:${Math.round(nice * pxPerMi)}px"></i><span>${nice} mi</span>`;
+
+    /* zoom button only where there's a whole island to zoom out to */
+    const zb = $('#mapZoom');
+    zb.hidden = !(g && g.focus);
+    zb.textContent = mapZoom ? 'Whole island' : 'Zoom to plan';
+
+    /* caption */
+    const car = s.leg && s.leg.mode === 'car';
+    $('#mapCap').textContent = !s.options.length ? 'The anchor marks the ship.'
+      : !stops.length ? 'Check options to draw your route from the ship.'
+      : `Numbers are your stops in order, starting at the ship. ${Array.isArray(road) ? 'The line follows the roads.' : car && road === undefined ? 'Loading the road route…' : 'Lines connect stops in order.'}`;
+
+    if (key !== lastRouteKey || routeIn){ lastRouteKey = key; animateRoute(); }
+    if (stops.length && car && road === undefined) roadRoute(s, pts, key);
+  }
+  function animateRoute(){
+    if (reduce) return;
+    const els = [$('#mCasing'), $('#mRoute')].filter(Boolean);
+    els.forEach(p => { p.style.transition = 'none'; p.style.strokeDasharray = '1'; p.style.strokeDashoffset = '1'; });
+    svg.getBoundingClientRect();
+    els.forEach(p => { p.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(.4,.1,.2,1)'; p.style.strokeDashoffset = '0'; });
+  }
+  async function roadRoute(s, pts, key){
+    routeCache[key] = null;
+    try {
+      const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000);
+      const url = 'https://router.project-osrm.org/route/v1/driving/' + pts.map(q => q[1].toFixed(5) + ',' + q[0].toFixed(5)).join(';') + '?overview=full&geometries=geojson';
+      const d = await (await fetch(url, {signal: ctl.signal})).json();
+      clearTimeout(tm);
+      if (d.code !== 'Ok' || !d.routes || !d.routes[0]) throw new Error('no route');
+      routeCache[key] = d.routes[0].geometry.coordinates;
+    } catch (e){ routeCache[key] = 'straight'; }
+    if (cur >= 0 && S[cur].id === s.id && lastRouteKey === key) drawMap(s, false, Array.isArray(routeCache[key]));
   }
   function highlight(i){
     document.querySelectorAll('.opt').forEach(r => r.classList.toggle('on', +r.dataset.i === i));
-    markers.forEach(m => { const e = m.getElement(); e && e.querySelector('.pin').classList.toggle('is-on', m._i === i); });
+  }
+  function showCard(i){
+    const s = S[cur];
+    if (i === 'pier'){
+      card.innerHTML = `<button class="mc-x" data-mc="close" aria-label="Close">×</button><b>${esc(s.pier.n)}</b><span>Approximate berth. Confirm where to get off on arrival.</span>`;
+    } else {
+      const o = s.options[i], on = picked[s.id].has(i);
+      card.innerHTML = `<button class="mc-x" data-mc="close" aria-label="Close">×</button><b>${esc(o.n)}</b><span>${esc(o.note)}</span>
+        <div class="mc-row"><button class="mc-add${on ? ' on' : ''}" data-mc="toggle" style="--c:var(--c-${o.c})">${on ? 'In our plan' : 'Add to our plan'}</button>
+        <a href="${gUrl(o)}" target="_blank" rel="noopener">Google Maps</a><a href="${aUrl(o)}" target="_blank" rel="noopener">Apple Maps</a></div>`;
+    }
+    card.hidden = false;
+  }
+  function closeCard(){ card.hidden = true; mapSel = -1; highlight(-1); drawMap(S[cur]); }
+  function selectDot(i){
+    mapSel = i; highlight(i); drawMap(S[cur]); showCard(i);
   }
   function showOnMap(i){
-    if (!map) return;
-    const o = S[cur].options[i], m = markers[i];
     const top = $('#mapWrap').getBoundingClientRect().top + window.scrollY - strip.offsetHeight - 12;
     window.scrollTo({top, behavior: reduce ? 'auto' : 'smooth'});
-    map.flyTo(o.ll, Math.max(map.getZoom(), 14), {duration: reduce ? 0 : .8});
-    highlight(i);
-    setTimeout(() => m.openPopup(), reduce ? 0 : 650);
+    selectDot(i);
   }
+  function toggleCheck(i){
+    const s = S[cur], set = picked[s.id];
+    set.has(i) ? set.delete(i) : set.add(i);
+    const on = set.has(i);
+    const btn = document.querySelector(`.check[data-check="${i}"]`);
+    if (btn){ btn.setAttribute('aria-pressed', on); btn.closest('.opt').classList.toggle('picked', on); }
+    if (view === 'plan') renderPane();
+    updateTally(true);
+    queue('days/' + s.id, namesFor(s));
+    drawMap(s);
+    if (!card.hidden && mapSel === i) showCard(i);
+  }
+  svg.addEventListener('click', e => {
+    const d = e.target.closest('[data-dot]');
+    if (!d){ if (!card.hidden) closeCard(); return; }
+    if (d.dataset.dot === 'pier'){ mapSel = -1; highlight(-1); drawMap(S[cur]); showCard('pier'); }
+    else selectDot(+d.dataset.dot);
+  });
+  card.addEventListener('click', e => {
+    const b = e.target.closest('[data-mc]'); if (!b) return;
+    if (b.dataset.mc === 'close') closeCard();
+    else if (mapSel >= 0) toggleCheck(mapSel);
+  });
+  $('#mapZoom').addEventListener('click', () => { mapZoom = !mapZoom; drawMap(S[cur], true); });
+  let rzT = 0;
+  if (window.ResizeObserver) new ResizeObserver(() => { cancelAnimationFrame(rzT); rzT = requestAnimationFrame(() => cur >= 0 && S[cur].pier && drawMap(S[cur])); }).observe(mapEl);
 
   /* Day total bar */
   const tally = $('#tally');
@@ -966,16 +1093,7 @@ body.has-tally main{padding-bottom:120px}
   /* Events */
   $('#dayBody').addEventListener('click', e => {
     const ck = e.target.closest('[data-check]');
-    if (ck){
-      const i = +ck.dataset.check, set = picked[S[cur].id];
-      set.has(i) ? set.delete(i) : set.add(i);
-      const on = set.has(i);
-      ck.setAttribute('aria-pressed', on);
-      ck.closest('.opt').classList.toggle('picked', on);
-      updateTally(true);
-      queue('days/' + S[cur].id, namesFor(S[cur]));
-      return;
-    }
+    if (ck){ toggleCheck(+ck.dataset.check); return; }
     const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-preset]'), sh = e.target.closest('[data-show]');
     if (v && v.dataset.v !== view){
       view = v.dataset.v;
@@ -983,7 +1101,7 @@ body.has-tally main{padding-bottom:120px}
       seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
       renderPane();
     } else if (f && f.dataset.f !== filter){
-      filter = f.dataset.f; renderPane(); applyFilter(true);
+      filter = f.dataset.f; renderPane();
       const chip = document.querySelector(`.chip[data-f="${filter}"]`);
       chip && chip.scrollIntoView({inline: 'center', block: 'nearest', behavior: reduce ? 'auto' : 'smooth'});
     } else if (p){
@@ -998,7 +1116,7 @@ body.has-tally main{padding-bottom:120px}
   $('#mapSize').addEventListener('click', () => {
     const mw = $('#mapWrap'), big = mw.classList.toggle('big');
     $('#mapSize').textContent = big ? 'Smaller map' : 'Bigger map';
-    setTimeout(() => applyFilter(true), reduce ? 0 : 360);
+    setTimeout(() => drawMap(S[cur]), reduce ? 0 : 380);
   });
 
   /* Swipe between days */
@@ -1095,6 +1213,7 @@ body.has-tally main{padding-bottom:120px}
       const pane = $('#pane');
       if (pane){ pane.classList.add('quiet'); renderPane(); setTimeout(() => pane.classList.remove('quiet'), 50); }
       updateTally(false);
+      drawMap(S[cur]);
     }
     document.querySelectorAll('[data-pack]').forEach(b => b.checked = packed.has(b.dataset.pack));
     if (!sheet.hidden) tripTotals(true);
