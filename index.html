@@ -682,6 +682,16 @@ body.has-tally main{padding-bottom:120px}
 .bk-steps span{color:var(--muted);grid-column:2}
 .bk-bring{margin:0 16px 4px;padding-left:18px;font-size:14px;display:grid;gap:5px}
 
+
+details.rent > summary{list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+details.rent > summary::-webkit-details-marker{display:none}
+.rent-head b{position:relative}
+.rent-chev{width:18px!important;height:18px!important;margin-left:auto;color:var(--muted);transition:transform .25s var(--ease)}
+details.rent[open] .rent-chev{transform:rotate(180deg)}
+.rent-more{display:block;margin-top:6px;font-size:13px;font-weight:600;color:var(--ocean)}
+details.rent:not([open]){padding-bottom:14px}
+details.rent[open] .rent-body{animation:rise .3s var(--ease)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -1023,6 +1033,14 @@ body.has-tally main{padding-bottom:120px}
       ['Alamo', 'https://www.alamo.com/', '']
     ];
   }
+  const openRent = new Set();
+  document.addEventListener('toggle', e => {
+    const d = e.target;
+    if (!d.matches || !d.matches('details[data-rent]')) return;
+    d.open ? openRent.add(d.dataset.rent) : openRent.delete(d.dataset.rent);
+    const more = d.querySelector('.rent-more');
+    if (more) more.textContent = d.open ? 'Hide details' : 'Show details, steps, and what to bring';
+  }, true);
   function rentalTimes(s){
     const up = Math.ceil((mins(s.ashore) + (s.rental.code === 'ITO' ? 75 : 90)) / 30) * 30, back = Math.floor((mins(s.backBy) - 45) / 30) * 30;
     return {up, back};
@@ -1032,8 +1050,9 @@ body.has-tally main{padding-bottom:120px}
     const r = s.rental;
     if (r.booked){
       const b = r.booked;
-      return `<div class="rent booked"><div class="rent-head"><b>${ICON.car}Rental car <i class="tag-booked">Booked</i></b><span>${b.company ? esc(b.company) + ' at ' : ''}${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}</span></div>
-        <dl class="bk">
+      const short = x => x.split(' at ')[0].split('.')[0];
+      return `<details class="rent booked" data-rent="${s.id}"${openRent.has(s.id) ? ' open' : ''}><summary class="rent-head"><b>${ICON.car}Rental car <i class="tag-booked">Booked</i><svg class="rent-chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg></b><span>${b.company ? esc(b.company) + ' at ' : ''}${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}. Pick up ${esc(short(b.pickup))}, return ${esc(short(b.dropoff))}.</span><small class="rent-more">Show details, steps, and what to bring</small></summary>
+        <div class="rent-body"><dl class="bk">
           <div><dt>Car</dt><dd>${esc(b.car)}</dd></div>
           <div><dt>Pick up</dt><dd>${esc(b.pickup)}</dd></div>
           <div><dt>Return</dt><dd>${esc(b.dropoff)}</dd></div>
@@ -1044,7 +1063,7 @@ body.has-tally main{padding-bottom:120px}
         <h4 class="bk-h">What to do</h4>
         <ol class="bk-steps">${b.steps.map(([w, t]) => `<li><b>${esc(w)}</b><span>${esc(t)}</span></li>`).join('')}</ol>
         <h4 class="bk-h">Bring to the counter</h4>
-        <ul class="bk-bring">${b.bring.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+        <ul class="bk-bring">${b.bring.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></details>`;
     }
     return `<div class="rent"><div class="rent-head"><b>${ICON.car}Rental car from ${esc(r.code)}</b><span>${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}. Pick up around ${clock(rentalTimes(s).up)}, return by about ${clock(rentalTimes(s).back)}.</span></div>
       <div class="rent-sites">${rentalSites(s).map(([n, u, note]) => `<a href="${u}" target="_blank" rel="noopener"><b>${esc(n)}</b>${note ? `<small>${esc(note)}</small>` : ''}</a>`).join('')}</div>
