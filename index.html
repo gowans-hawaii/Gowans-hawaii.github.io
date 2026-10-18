@@ -195,8 +195,30 @@ window.TRIP = {
         "Kīlauea Iki parking is very limited. If it’s full, switch plans."
       ],
       pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
-      transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }, { n: "National park entry", lo: 30, hi: 30 }],
-      rental: { code: "ITO", airport: "Hilo Airport", city: "Hilo", ll: [19.7203, -155.0485] },
+      transport: [{ n: "Rental car (booked, Dollar)", lo: 62, hi: 62 }, { n: "Gas", lo: 5, hi: 15 }, { n: "Taxi between the pier and the airport", lo: 20, hi: 30 }, { n: "National park entry", lo: 30, hi: 30 }],
+      rental: {
+        code: "ITO", airport: "Hilo Airport", city: "Hilo", ll: [19.7203, -155.0485],
+        booked: {
+          company: "Dollar", car: "Chevrolet Spark or similar economy. 4 seats, unlimited miles.",
+          pickup: "10:00 am at Hilo Airport", dropoff: "3:00 pm at Hilo Airport",
+          paid: "$61.52, already paid", via: "Expedia", ref: "itinerary ending 2414",
+          cancelBy: "Check the Expedia itinerary for the rules before relying on a refund.",
+          steps: [
+            ["Before the trip", "Complete Dollar early check-in from the link in the Expedia email and upload your documents, so you can skip the line."],
+            ["Before the trip", "Call Dollar Hilo and ask if they run a shuttle from the cruise pier on Nov 16. If they do, skip the taxi."],
+            ["Nov 16, 9:00 am", "Get off the ship and take a taxi from the pier to Hilo Airport. About 5 minutes and $10–15. The counter is across from the terminal."],
+            ["10:00 am", "Pick up the car and drive about an hour to Volcanoes National Park. Entry is $30 per car, card only."],
+            ["Around 2:00 pm", "Leave the park. Refill the gas to the level you got it at, near the airport."],
+            ["By 3:00 pm", "Return the car, then take a taxi back to the pier. Aim to be aboard by 3:45."]
+          ],
+          bring: [
+            "Bailey’s physical driver’s license",
+            "The Visa ending 6528 that paid for it",
+            "The Expedia itinerary on your phone",
+            "Luke’s license too, if he’ll drive. Ask Dollar about adding a spouse."
+          ]
+        }
+      },
       options: [
         { n: "Kīlauea Iki Trail", c: "out", order: 5, dur: 140, hike: true, price: [0, 0], mi: 3.3, note: "3.3-mile loop across a solid lava lake. 2–3 hrs, 400 ft down and up.", addr: "Kilauea Iki Overlook, Hawaii Volcanoes National Park, HI", ll: [19.4164, -155.2443], pick: true },
         { n: "Devastation Trail", c: "out", order: 7, dur: 40, price: [0, 0], mi: 1.0, note: "1-mile paved walk through the 1959 eruption zone.", addr: "Devastation Trail, Hawaii Volcanoes National Park, HI", ll: [19.4040, -155.2550] },
@@ -207,7 +229,7 @@ window.TRIP = {
         { n: "Cafe 100", c: "eat", order: 9, dur: 40, price: [25, 35], mi: 0.1, note: "Classic loco moco. Call ahead, hours vary.", addr: "969 Kilauea Ave, Hilo, HI", ll: [19.7146, -155.0805], tag: "Confirm hours" },
         { n: "Liliʻuokalani Gardens", c: "chill", order: 10, dur: 40, price: [0, 0], mi: 0.5, note: "Japanese garden on Hilo Bay, next to Suisan.", addr: "Liliuokalani Gardens, Hilo, HI", ll: [19.7255, -155.0670] }
       ],
-      leg: { mode: "car", speed: 55, start: 80, end: 40 },
+      leg: { mode: "car", speed: 55, start: 65, end: 40 },
       presets: [{ name: "Volcano highlights", use: ["Kīlauea caldera overlooks", "Devastation Trail"] }, { name: "Hilo town day", use: ["Hilo Farmers Market", "Suisan Fish Market", "Liliʻuokalani Gardens"] }]
     },
     {
@@ -253,9 +275,9 @@ window.TRIP = {
       ["Now", "Book Skydive Hawaii for Nov 14 with a 12:30 check-in."],
       ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15."],
       ["Now", "Book ʻĪao Valley for Nov 13."],
-      ["Now", "Book a car for Hilo (ITO). Maui and Oʻahu are booked."],
+      ["Done", "All three rental cars are booked: Maui, Oʻahu, and Hilo."],
       ["Oct 19, 7:20 pm", "Free cancellation ends for the Oʻahu rental."],
-      ["Before sailing", "Complete Hertz early check-in for Oʻahu so you can skip the counter."],
+      ["Before sailing", "Complete early check-in for Oʻahu (Hertz) and Hilo (Dollar) so you can skip the counter."],
       ["Nov 10", "Maui rental voucher arrives by email. Save it to your phone."],
       ["Oct 25", "Carnival online check-in opens."],
       ["Nov 7", "Fly in and stay near Long Beach."]
@@ -1002,7 +1024,7 @@ body.has-tally main{padding-bottom:120px}
     ];
   }
   function rentalTimes(s){
-    const up = Math.ceil((mins(s.ashore) + (s.rental.code === 'ITO' ? 75 : 90)) / 15) * 15, back = Math.floor((mins(s.backBy) - 45) / 15) * 15;
+    const up = Math.ceil((mins(s.ashore) + (s.rental.code === 'ITO' ? 75 : 90)) / 30) * 30, back = Math.floor((mins(s.backBy) - 45) / 30) * 30;
     return {up, back};
   }
   function rentalHTML(s){
