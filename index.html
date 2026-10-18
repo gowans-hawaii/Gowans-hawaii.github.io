@@ -75,8 +75,31 @@ window.TRIP = {
         "Skip the Road to Hāna on this day."
       ],
       pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
-      transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }],
-      rental: { code: "OGG", airport: "Kahului Airport", city: "Kahului" },
+      transport: [{ n: "Rental car (booked, paid at pickup)", lo: 19, hi: 19 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Taxi between the pier and the airport", lo: 30, hi: 40 }],
+      rental: {
+        code: "OGG", airport: "Kahului Airport", city: "Kahului", ll: [20.8986, -156.4305],
+        booked: {
+          company: "", car: "Hyundai Accent or similar compact. 5 seats, 2 bags, automatic, A/C.",
+          pickup: "11:30 am at Kahului Airport", dropoff: "7:00 pm at Kahului Airport",
+          paid: "$19.47, paid at the counter (nothing paid yet)", via: "EconomyBookings.com", ref: "4916",
+          cancelBy: "Check the confirmation email for the deadline",
+          steps: [
+            ["Now", "Cancel the old $63.01 booking (ending 0805) in My Bookings on EconomyBookings, if you haven’t. It’s refundable until Nov 11 at 11 am."],
+            ["By Nov 10", "Watch for the rental voucher email about 72 hours before pickup. It also names the rental company. Check spam, then screenshot it or save it to Files so you have it with no service."],
+            ["Before the trip", "Check whether your credit card or car insurance covers rentals, so you can decide on extra coverage instead of buying it at the counter."],
+            ["Nov 13, 10 am", "Get off the ship and take a taxi or Uber about 10 minutes to the airport rental car center."],
+            ["11:30 am", "Be at the rental counter on time and pay the $19.47. Showing up late can count as a no-show. If the ship runs late, call the rental company’s Kahului office (the number is on the voucher)."],
+            ["Before 7:00 pm", "Fill the gas tank near the airport, return the car, then take a taxi back to the pier. Aim to be aboard by 7:45."]
+          ],
+          bring: [
+            "The voucher, printed or on your phone",
+            "Bailey’s physical driver’s license (digital licenses aren’t accepted)",
+            "Bailey’s passport",
+            "A physical Visa or Mastercard credit card in Bailey’s name, with room for the security hold",
+            "Luke’s license too, if he’ll drive. Ask at the counter about adding him."
+          ]
+        }
+      },
       options: [
         { n: "Sam Sato’s", c: "eat", order: 1, dur: 45, by: "13:30", price: [30, 45], mi: 0.1, note: "Dry mein and manju. Fri 7 am–2 pm, so eat here first.", addr: "1750 Wili Pa Loop, Wailuku, HI", ll: [20.8890, -156.4935], pick: true },
         { n: "Tin Roof", c: "eat", order: 9, dur: 30, by: "19:30", price: [30, 45], mi: 0.1, note: "Mochiko chicken, takeout. Open until 8 pm.", addr: "360 Papa Pl, Kahului, HI", ll: [20.8869, -156.4585] },
@@ -90,23 +113,23 @@ window.TRIP = {
         { n: "Hoʻokipa Lookout", c: "chill", order: 8, dur: 45, price: [0, 0], mi: 0.2, note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
         { n: "Baldwin Beach Park", c: "chill", order: 7, dur: 60, price: [0, 0], mi: 1.0, note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
       ],
-      leg: { mode: "car", speed: 40, start: 75, end: 40 },
-      presets: [{ name: "Suggested day", use: ["Sam Sato’s", "Market Street, Wailuku", "ʻĪao Valley", "Pāʻia town", "Hoʻokipa Lookout", "Pāʻia Fish Market"] }]
+      leg: { mode: "car", speed: 40, start: 95, end: 40 },
+      presets: [{ name: "Suggested day", use: ["Sam Sato’s", "ʻĪao Valley", "Pāʻia town", "Hoʻokipa Lookout"] }]
     },
     {
       id: "oahu", geo: "oahu", kind: "port", node: "Oʻahu", place: "Oʻahu",
-      date: "2026-11-14", tz: "-10:00", ashore: "09:00", backBy: "20:00", depart: "22:00",
+      date: "2026-11-14", tz: "-10:00", ashore: "09:00", backBy: "20:30", depart: "22:00",
       line: "Skydive over the North Shore, then a slow Haleʻiwa afternoon.",
       getting: "Rent a car. The drop zone is about 75–90 minutes from the ship.",
       heads: [
-        "Book a noon check-in. Expect 2–4+ hours there, waiting included.",
+        "Book a 12:30 check-in. Expect 2–4+ hours there, waiting included.",
         "Ask about the weather refund policy before you pay."
       ],
       pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
       transport: [{ n: "Rental car, gas, and parking", lo: 120, hi: 190 }],
-      rental: { code: "HNL", airport: "Honolulu Airport", city: "Honolulu" },
+      rental: { code: "HNL", airport: "Honolulu Airport", city: "Honolulu", ll: [21.3245, -157.9251] },
       options: [
-        { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:00", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
+        { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:30", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
         { n: "Haleʻiwa town", c: "see", order: 4, dur: 45, price: [0, 60], mi: 0.8, note: "Old surf town. Galleries, shops, late lunch.", addr: "Haleiwa, HI", ll: [21.5930, -158.1035], pick: true },
         { n: "Matsumoto Shave Ice", c: "eat", order: 4.1, dur: 20, price: [12, 20], mi: 0.1, note: "The famous one. The line moves fast.", addr: "66-111 Kamehameha Hwy, Haleiwa, HI", ll: [21.5918, -158.1029] },
         { n: "Giovanni’s Shrimp Truck", c: "eat", order: 4.2, dur: 35, price: [35, 50], mi: 0.1, note: "Garlic shrimp plate from the Haleʻiwa truck lot.", addr: "Giovanni's Shrimp Truck, Haleiwa, HI", ll: [21.5874, -158.1060] },
@@ -116,8 +139,8 @@ window.TRIP = {
         { n: "Leonard’s Bakery", c: "eat", order: 7, dur: 20, price: [10, 20], mi: 0.1, note: "Hot original malasada. Skip if the line is long.", addr: "933 Kapahulu Ave, Honolulu, HI", ll: [21.2848, -157.8134], tag: "Plan B" },
         { n: "Waikīkī Beach", c: "chill", order: 8, dur: 120, price: [0, 0], mi: 1.5, note: "Shoreline walk and sunset around 5:50 pm.", addr: "Waikiki Beach, Honolulu, HI", ll: [21.2766, -157.8278], tag: "Plan B" }
       ],
-      leg: { mode: "car", speed: 45, start: 75, end: 40 },
-      presets: [{ name: "Skydive day", use: ["Skydive Hawaii", "Haleʻiwa town", "Giovanni’s Shrimp Truck"] }, { name: "If it’s cancelled", use: ["Highway Inn", "Leonard’s Bakery", "Waikīkī Beach"] }]
+      leg: { mode: "car", speed: 45, start: 90, end: 40 },
+      presets: [{ name: "Skydive day", use: ["Skydive Hawaii", "Haleʻiwa town"] }, { name: "If it’s cancelled", use: ["Highway Inn", "Leonard’s Bakery", "Waikīkī Beach"] }]
     },
     {
       id: "kauai", geo: "kauai", kind: "port", node: "Kauaʻi", place: "Kauaʻi",
@@ -139,7 +162,7 @@ window.TRIP = {
         { n: "Ninini Point", c: "out", order: 6, dur: 60, hike: true, price: [0, 0], mi: 2.0, note: "Short walk out to a lighthouse point.", addr: "Ninini Point Lighthouse, Lihue, HI", ll: [21.9606, -159.3404], tag: "Confirm access" }
       ],
       leg: { mode: "walk", start: 45, end: 15, pierMi: 1.2 },
-      presets: [{ name: "Surf day", use: ["Kauaʻi Beach Boys surf lesson", "Duke’s Kauaʻi", "Kalapakī Beach"] }]
+      presets: [{ name: "Surf day", use: ["Kauaʻi Beach Boys surf lesson", "Duke’s Kauaʻi"] }]
     },
     {
       id: "hilo", geo: "hilo", kind: "port", node: "Hilo", place: "Hilo",
@@ -152,19 +175,19 @@ window.TRIP = {
       ],
       pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
       transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }, { n: "National park entry", lo: 30, hi: 30 }],
-      rental: { code: "ITO", airport: "Hilo Airport", city: "Hilo" },
+      rental: { code: "ITO", airport: "Hilo Airport", city: "Hilo", ll: [19.7203, -155.0485] },
       options: [
         { n: "Kīlauea Iki Trail", c: "out", order: 5, dur: 140, hike: true, price: [0, 0], mi: 3.3, note: "3.3-mile loop across a solid lava lake. 2–3 hrs, 400 ft down and up.", addr: "Kilauea Iki Overlook, Hawaii Volcanoes National Park, HI", ll: [19.4164, -155.2443], pick: true },
-        { n: "Devastation Trail", c: "out", order: 7, dur: 45, price: [0, 0], mi: 1.0, note: "1-mile paved walk through the 1959 eruption zone.", addr: "Devastation Trail, Hawaii Volcanoes National Park, HI", ll: [19.4040, -155.2550] },
+        { n: "Devastation Trail", c: "out", order: 7, dur: 40, price: [0, 0], mi: 1.0, note: "1-mile paved walk through the 1959 eruption zone.", addr: "Devastation Trail, Hawaii Volcanoes National Park, HI", ll: [19.4040, -155.2550] },
         { n: "Nāhuku lava tube", c: "out", order: 6, dur: 40, price: [0, 0], mi: 0.5, note: "Short loop through a lava tube. Damp and dim.", addr: "Nahuku Thurston Lava Tube, Hawaii Volcanoes National Park, HI", ll: [19.4136, -155.2390] },
-        { n: "Kīlauea caldera overlooks", c: "out", order: 4, dur: 40, price: [0, 0], mi: 0.8, note: "Rim views. Ask rangers what’s open today.", addr: "Kilauea Visitor Center, Hawaii Volcanoes National Park, HI", ll: [19.4295, -155.2570] },
+        { n: "Kīlauea caldera overlooks", c: "out", order: 4, dur: 35, price: [0, 0], mi: 0.8, note: "Rim views. Ask rangers what’s open today.", addr: "Kilauea Visitor Center, Hawaii Volcanoes National Park, HI", ll: [19.4295, -155.2570] },
         { n: "Suisan Fish Market", c: "eat", order: 2, dur: 15, by: "14:45", price: [30, 45], mi: 0.1, note: "Shoyu ahi poke by the bay. Closes 3 pm, sells out.", addr: "93 Lihiwai St, Hilo, HI", ll: [19.7270, -155.0700], pick: true },
         { n: "Hilo Farmers Market", c: "eat", order: 1, dur: 30, price: [15, 30], mi: 0.3, note: "Smaller Monday market. Fruit, snacks, local makers.", addr: "Hilo Farmers Market, Hilo, HI", ll: [19.7241, -155.0872], pick: true },
         { n: "Cafe 100", c: "eat", order: 9, dur: 40, price: [25, 35], mi: 0.1, note: "Classic loco moco. Call ahead, hours vary.", addr: "969 Kilauea Ave, Hilo, HI", ll: [19.7146, -155.0805], tag: "Confirm hours" },
         { n: "Liliʻuokalani Gardens", c: "chill", order: 10, dur: 40, price: [0, 0], mi: 0.5, note: "Japanese garden on Hilo Bay, next to Suisan.", addr: "Liliuokalani Gardens, Hilo, HI", ll: [19.7255, -155.0670] }
       ],
-      leg: { mode: "car", speed: 55, start: 75, end: 40 },
-      presets: [{ name: "Crater hike", use: ["Suisan Fish Market", "Kīlauea Iki Trail"] }, { name: "Hike + market", use: ["Hilo Farmers Market", "Suisan Fish Market", "Kīlauea caldera overlooks", "Devastation Trail"] }]
+      leg: { mode: "car", speed: 55, start: 80, end: 40 },
+      presets: [{ name: "Volcano highlights", use: ["Kīlauea caldera overlooks", "Devastation Trail"] }, { name: "Hilo town day", use: ["Hilo Farmers Market", "Suisan Fish Market", "Liliʻuokalani Gardens"] }]
     },
     {
       id: "sea-home", kind: "sea", node: "At sea", place: "Four sea days",
@@ -186,13 +209,13 @@ window.TRIP = {
       pier: { n: "Ensenada cruise terminal (ship)", ll: [31.8510, -116.6260] },
       transport: [{ n: "Walk or shuttle into town and back", lo: 0, hi: 20 }],
       options: [
-        { n: "Sabina", c: "eat", order: 1, dur: 50, price: [40, 70], mi: 0.1, note: "Seafood tostadas. Ask what’s freshest. Eat early.", addr: "Av. Adolfo López Mateos 917, Ensenada, B.C., Mexico", ll: [31.8619, -116.6232], pick: true },
+        { n: "Sabina", c: "eat", order: 1, dur: 45, price: [40, 70], mi: 0.1, note: "Seafood tostadas. Ask what’s freshest. Eat early.", addr: "Av. Adolfo López Mateos 917, Ensenada, B.C., Mexico", ll: [31.8619, -116.6232], pick: true },
         { n: "La Guerrerense", c: "eat", order: 2, dur: 30, price: [20, 35], mi: 0.1, note: "The famous seafood cart across the street, if open.", addr: "La Guerrerense, Ensenada, B.C., Mexico", ll: [31.8622, -116.6240] },
         { n: "Avenida López Mateos", c: "see", order: 3, dur: 30, price: [0, 40], mi: 0.6, note: "The main browsing street.", addr: "Av. López Mateos, Ensenada, B.C., Mexico", ll: [31.8635, -116.6255] },
-        { n: "Malecón", c: "chill", order: 4, dur: 30, price: [0, 0], mi: 1.0, note: "Waterfront stroll as the light fades.", addr: "Malecón, Ensenada, B.C., Mexico", ll: [31.8573, -116.6242], pick: true }
+        { n: "Malecón", c: "chill", order: 4, dur: 20, price: [0, 0], mi: 1.0, note: "Waterfront stroll as the light fades.", addr: "Malecón, Ensenada, B.C., Mexico", ll: [31.8573, -116.6242], pick: true }
       ],
       leg: { mode: "walk", start: 30, end: 15, pierMi: 1.2 },
-      presets: [{ name: "Suggested evening", use: ["Sabina", "Avenida López Mateos", "Malecón"] }]
+      presets: [{ name: "Suggested evening", use: ["Sabina", "Malecón"] }]
     },
     {
       id: "home", geo: "lb", kind: "port", node: "Home", place: "Long Beach",
@@ -206,10 +229,13 @@ window.TRIP = {
   ],
   checklist: {
     dates: [
-      ["Now", "Book Skydive Hawaii for Nov 14 with a noon check-in."],
+      ["Now", "Book Skydive Hawaii for Nov 14 with a 12:30 check-in."],
       ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15."],
       ["Now", "Book ʻĪao Valley for Nov 13."],
-      ["Now", "Hold cancellable cars at OGG, HNL, and ITO."],
+      ["Now", "Book cancellable cars for Oʻahu (HNL) and Hilo (ITO). Maui is booked."],
+      ["Now", "Cancel the old Maui rental (ending 0805). The new one ends in 4916."],
+      ["Nov 10", "Maui rental voucher arrives by email. Save it to your phone."],
+      ["Nov 11, 11 am", "Last day the old Maui booking can be refunded."],
       ["Oct 25", "Carnival online check-in opens."],
       ["Nov 7", "Fly in and stay near Long Beach."]
     ],
@@ -598,6 +624,21 @@ body.has-tally main{padding-bottom:120px}
 .rent-sites small{font-size:12px;color:var(--muted);line-height:1.3}
 .rent-tip{margin:8px 16px 0;font-size:13px;color:var(--muted)}
 
+
+.rent.booked{border:2px solid var(--ocean)}
+.tag-booked{font-style:normal;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--ocean);color:var(--surface)}
+.bk{margin:12px 16px 0;display:grid;gap:0;border-top:1px solid var(--line)}
+.bk div{display:grid;grid-template-columns:104px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.bk dt{color:var(--muted)}
+.bk dd{margin:0;font-weight:600}
+.bk-h{margin:16px 16px 8px;font-size:14px;color:var(--muted);font-weight:600}
+.bk-steps{list-style:none;margin:0 16px;padding:0;display:grid;gap:10px;counter-reset:bk}
+.bk-steps li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:14px;counter-increment:bk}
+.bk-steps li::before{content:counter(bk);width:24px;height:24px;border-radius:50%;background:var(--ocean-soft);color:var(--ocean);font-weight:700;font-size:13px;display:grid;place-items:center;grid-row:span 2}
+.bk-steps b{font-size:14px}
+.bk-steps span{color:var(--muted);grid-column:2}
+.bk-bring{margin:0 16px 4px;padding-left:18px;font-size:14px;display:grid;gap:5px}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -706,21 +747,25 @@ body.has-tally main{padding-bottom:120px}
   const mins = s => { const [a, b] = s.split(':').map(Number); return a * 60 + b; };
   function clock(m){ m = Math.round(m); let hh = Math.floor(m / 60) % 24; const mm = m % 60; const ap = hh >= 12 ? 'pm' : 'am'; hh = hh % 12 || 12; return hh + ':' + pad(mm) + ' ' + ap; }
   function hrs(m){ m = Math.round(m); const a = Math.floor(m / 60), b = m % 60; return a ? (b ? a + ' h ' + b + ' min' : a + ' h') : b + ' min'; }
+  /* Breathing room: relaxed walking pace, padded drives, time at every stop */
+  const BUF = {walkKmh: 4, walkPad: 3, drivePad: 1.15, park: 7, stop: 10, end: 10};
   function legBetween(s, a, b, pierLeg, extra){
     const L = s.leg, road = km(a, b) * 1.3;
-    if (L.mode === 'walk' && pierLeg && L.pierMi) return {type: 'walk', min: Math.round(L.pierMi * 1.609 / 4.5 * 60), mi: L.pierMi};
-    if (road < 0.6) return {type: 'walk', min: Math.max(2, Math.round(road / 4.5 * 60)), mi: road * 0.621};
-    if (L.mode === 'car') return {type: 'drive', min: Math.max(5, Math.round(road / L.speed * 60)) + 5 + (extra || 0), mi: road * 0.621};
-    if (road > 1.8) return {type: 'ride', min: 10 + Math.round(road / 30 * 60), mi: 0};
-    return {type: 'walk', min: Math.round(road / 4.5 * 60), mi: road * 0.621};
+    const walkMin = k => Math.max(3, Math.round(k / BUF.walkKmh * 60) + BUF.walkPad);
+    if (L.mode === 'walk' && pierLeg && L.pierMi) return {type: 'walk', min: walkMin(L.pierMi * 1.609), mi: L.pierMi};
+    if (road < 0.6) return {type: 'walk', min: walkMin(road), mi: road * 0.621};
+    if (L.mode === 'car') return {type: 'drive', min: Math.max(5, Math.round(road / L.speed * 60 * BUF.drivePad)) + BUF.park + (extra || 0), mi: road * 0.621};
+    if (road > 1.8) return {type: 'ride', min: 15 + Math.round(road / 30 * 60 * BUF.drivePad), mi: 0};
+    return {type: 'walk', min: walkMin(road), mi: road * 0.621};
   }
   function buildPlan(s){
     if (!s.leg || !s.pier) return null;
     const sel = (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => a.o.order - b.o.order);
     const st = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
     const steps = [];
-    let t = mins(s.ashore), pos = s.pier.ll, prev = null;
-    steps.push({kind: 'start', at: t, text: 'Off the ship', sub: s.leg.mode === 'car' ? `About ${hrs(s.leg.start)} to get ashore and pick up the car` : `About ${hrs(s.leg.start)} to get ashore`});
+    const home = s.leg.mode === 'car' && s.rental && s.rental.ll ? s.rental.ll : s.pier.ll;
+    let t = mins(s.ashore), pos = home, prev = null;
+    steps.push({kind: 'start', at: t, text: 'Off the ship', sub: s.leg.mode === 'car' ? `About ${hrs(s.leg.start)} to get ashore, ride to the airport, and pick up the car` : `About ${hrs(s.leg.start)} to get ashore`});
     t += s.leg.start;
     const addLeg = l => {
       steps.push({kind: 'leg', l});
@@ -734,14 +779,14 @@ body.has-tally main{padding-bottom:120px}
       if (o.at){ const a = mins(o.at); if (t <= a){ wait = a - t; t = a; } else warn = `Check-in is ${clock(a)}. You’d get there at ${clock(t)}.`; }
       if (o.by && t > mins(o.by)) warn = `Get here by ${clock(mins(o.by))}. You’d arrive at ${clock(t)}.`;
       steps.push({kind: 'stop', at: t, o, i, wait, warn});
-      t += o.dur;
-      st.down += wait + (o.c === 'chill' ? o.dur : 0);
+      t += o.dur + BUF.stop;
+      st.down += wait + BUF.stop + (o.c === 'chill' ? o.dur : 0);
       if (o.hike) st.hike += o.mi || 0; else st.walk += o.mi || 0;
       pos = o.ll; prev = o;
     });
-    addLeg(legBetween(s, pos, s.pier.ll, true, prev && prev.extra || 0));
-    t += s.leg.end;
-    steps.push({kind: 'end', at: t, text: 'Back aboard', sub: s.leg.mode === 'car' ? 'Includes gas and returning the car' : ''});
+    addLeg(legBetween(s, pos, home, true, prev && prev.extra || 0));
+    t += s.leg.end + BUF.end;
+    steps.push({kind: 'end', at: t, text: 'Back aboard', sub: s.leg.mode === 'car' ? 'Includes gas, returning the car, and the ride to the pier' : 'Includes getting back through the terminal'});
     const spare = mins(s.backBy) - t;
     if (spare > 0) st.down += spare;
     return {steps, st, end: t, spare, count: sel.length};
@@ -911,11 +956,11 @@ body.has-tally main{padding-bottom:120px}
       }
       if (x.kind === 'stop'){
         const o = x.o;
-        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${hrs(o.dur)}${x.wait >= 10 ? `, after ${hrs(x.wait)} of free time` : ''}</small>${x.warn ? `<em>${esc(x.warn)}</em>` : ''}</span></li>`;
+        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}</small>${x.warn ? `<em>${esc(x.warn)}</em>` : ''}</span></li>`;
       }
       return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
     }).join('');
-    return presets + status + stats + rentalHTML(s) + `<ol class="plan">${rows}</ol><p class="walk">Times are estimates from map distances. Tap a stop to see it on the map.</p>`;
+    return presets + status + stats + rentalHTML(s) + `<ol class="plan">${rows}</ol><p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. Tap a stop to see it on the map.</p>`;
   }
 
   /* Rental car sites, prefilled with the airport and date where the site allows it */
@@ -936,12 +981,28 @@ body.has-tally main{padding-bottom:120px}
     ];
   }
   function rentalTimes(s){
-    const up = Math.ceil((mins(s.ashore) + 60) / 30) * 30, back = Math.floor((mins(s.backBy) - 45) / 30) * 30;
+    const up = Math.ceil((mins(s.ashore) + (s.rental.code === 'ITO' ? 75 : 90)) / 15) * 15, back = Math.floor((mins(s.backBy) - 45) / 15) * 15;
     return {up, back};
   }
   function rentalHTML(s){
     if (!s.rental) return '';
     const r = s.rental;
+    if (r.booked){
+      const b = r.booked;
+      return `<div class="rent booked"><div class="rent-head"><b>${ICON.car}Rental car <i class="tag-booked">Booked</i></b><span>${b.company ? esc(b.company) + ' at ' : ''}${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}</span></div>
+        <dl class="bk">
+          <div><dt>Car</dt><dd>${esc(b.car)}</dd></div>
+          <div><dt>Pick up</dt><dd>${esc(b.pickup)}</dd></div>
+          <div><dt>Return</dt><dd>${esc(b.dropoff)}</dd></div>
+          <div><dt>Price</dt><dd>${esc(b.paid)}. Booked through ${esc(b.via)}.</dd></div>
+          <div><dt>Booking</dt><dd>Ends in ${esc(b.ref)}. The full number is in your email.</dd></div>
+          <div><dt>Free cancellation</dt><dd>Until ${esc(b.cancelBy)}</dd></div>
+        </dl>
+        <h4 class="bk-h">What to do</h4>
+        <ol class="bk-steps">${b.steps.map(([w, t]) => `<li><b>${esc(w)}</b><span>${esc(t)}</span></li>`).join('')}</ol>
+        <h4 class="bk-h">Bring to the counter</h4>
+        <ul class="bk-bring">${b.bring.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+    }
     return `<div class="rent"><div class="rent-head"><b>${ICON.car}Rental car from ${esc(r.code)}</b><span>${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}. Pick up around ${clock(rentalTimes(s).up)}, return by about ${clock(rentalTimes(s).back)}.</span></div>
       <div class="rent-sites">${rentalSites(s).map(([n, u, note]) => `<a href="${u}" target="_blank" rel="noopener"><b>${esc(n)}</b>${note ? `<small>${esc(note)}</small>` : ''}</a>`).join('')}</div>
       <p class="rent-tip">Pick one you can cancel for free. Ask how you get from the cruise pier to the counter, and what time the counter closes.</p></div>`;
