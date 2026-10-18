@@ -272,17 +272,17 @@ window.TRIP = {
   ],
   checklist: {
     dates: [
-      ["Now", "Book Skydive Hawaii for Nov 14 with a 12:30 check-in."],
-      ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15."],
-      ["Now", "Book ʻĪao Valley for Nov 13."],
+      ["Now", "Book Skydive Hawaii for Nov 14 with a 12:30 check-in.", [["Skydive Hawaii booking", "https://www.skydivehawaii.com/booking/"]]],
+      ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15.", [["Kauaʻi Beach Boys lessons", "https://kauaibeachboys.com/tours-lessons/surf-lessons/"]]],
+      ["Now", "Book ʻĪao Valley for Nov 13.", [["Hawaiʻi State Parks reservations", "https://gostateparks.hawaii.gov/"]]],
       ["Oct 18", "Book all three rental cars: Maui, Oʻahu, and Hilo."],
-      ["By Oct 19, 7:20 pm", "Decide on the Oʻahu rental. Free cancellation ends then."],
-      ["Oct 25", "Do Carnival online check-in."],
-      ["Before sailing", "Complete early check-in for Oʻahu (Hertz) and Hilo (Dollar) so you can skip the counter."],
+      ["By Oct 19, 7:20 pm", "Decide on the Oʻahu rental. Free cancellation ends then.", [["Expedia trips", "https://www.expedia.com/trips"]]],
+      ["Oct 25", "Do Carnival online check-in.", [["Carnival", "https://www.carnival.com/"]]],
+      ["Before sailing", "Complete early check-in for Oʻahu (Hertz) and Hilo (Dollar) so you can skip the counter. The quickest links are in the Expedia emails.", [["Hertz", "https://www.hertz.com/"], ["Dollar", "https://www.dollar.com/"]]],
       ["Before sailing", "Open this site on both phones with service and add it to your Home Screen."],
       ["Nov 7", "Fly in and stay near Long Beach."],
-      ["Nov 7", "Save the plans as a PDF, in case there’s no service."],
-      ["Nov 10", "Save the Maui rental voucher from your email to your phone."]
+      ["Nov 7", "Save the plans as a PDF, in case there’s no service.", [["Save the PDF", "#pdf"]]],
+      ["Nov 10", "Save the Maui rental voucher from your email to your phone.", [["EconomyBookings", "https://www.economybookings.com/"]]]
     ],
     packNote: "One carry-on each plus a daypack. Do laundry on two sea days (Nov 12 and Nov 19) so 7 days of clothes covers all 15.",
     packing: {
@@ -704,6 +704,12 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 .todo small{display:block;font-size:12px;font-weight:700;color:var(--ocean);margin-bottom:1px}
 .todo input:checked + span{color:var(--muted);text-decoration:line-through}
 .todo input:checked + span small{color:var(--muted)}
+
+
+.todo-row{background:var(--surface);border-radius:12px}
+.todo-row .todo{background:transparent}
+.todo-links{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px 48px;margin-top:-4px}
+.todo-links a,.todo-links button{font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--bg);color:var(--ocean);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -1568,7 +1574,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     $('#sheetBody').innerHTML = `
       <h3>To do</h3>
       <div class="pack-prog" id="todoProg"><span></span><i></i></div>
-      <div class="todos">${L2.dates.map(([d, t]) => { const k = 'todo:' + t; return `<label class="todo"><input type="checkbox" data-pack="${esc(k)}"${packed.has(k) ? ' checked' : ''}><span><small>${esc(d)}</small>${esc(t)}</span></label>`; }).join('')}</div>
+      <div class="todos">${L2.dates.map(([d, t, links]) => { const k = 'todo:' + t; return `<div class="todo-row"><label class="todo"><input type="checkbox" data-pack="${esc(k)}"${packed.has(k) ? ' checked' : ''}><span><small>${esc(d)}</small>${esc(t)}</span></label>${links ? `<div class="todo-links">${links.map(([l, u]) => u === '#pdf' ? `<button class="todo-pdf">${esc(l)}</button>` : `<a href="${u}" target="_blank" rel="noopener">${esc(l)}</a>`).join('')}</div>` : ''}</div>`; }).join('')}</div>
       <h3>Trip totals</h3>
       <div class="totals" id="totals"></div>
       <p class="tot-note">Based on what’s checked on each day. Downtime counts port days only.</p>
@@ -1616,7 +1622,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       <section class="pr-day"><h2>Good to know</h2><ul>${T.checklist.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul></section>`;
   }
   $('#sheetBody').addEventListener('click', e => {
-    if (!e.target.closest('#pdfBtn')) return;
+    if (!e.target.closest('#pdfBtn, .todo-pdf')) return;
     $('#printOut').innerHTML = printHTML();
     setTimeout(() => window.print(), 50);
   });
