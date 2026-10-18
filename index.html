@@ -76,6 +76,7 @@ window.TRIP = {
       ],
       pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
       transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }],
+      rental: { code: "OGG", airport: "Kahului Airport", city: "Kahului" },
       options: [
         { n: "Sam Sato’s", c: "eat", order: 1, dur: 45, by: "13:30", price: [30, 45], mi: 0.1, note: "Dry mein and manju. Fri 7 am–2 pm, so eat here first.", addr: "1750 Wili Pa Loop, Wailuku, HI", ll: [20.8890, -156.4935], pick: true },
         { n: "Tin Roof", c: "eat", order: 9, dur: 30, by: "19:30", price: [30, 45], mi: 0.1, note: "Mochiko chicken, takeout. Open until 8 pm.", addr: "360 Papa Pl, Kahului, HI", ll: [20.8869, -156.4585] },
@@ -103,6 +104,7 @@ window.TRIP = {
       ],
       pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
       transport: [{ n: "Rental car, gas, and parking", lo: 120, hi: 190 }],
+      rental: { code: "HNL", airport: "Honolulu Airport", city: "Honolulu" },
       options: [
         { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:00", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
         { n: "Haleʻiwa town", c: "see", order: 4, dur: 45, price: [0, 60], mi: 0.8, note: "Old surf town. Galleries, shops, late lunch.", addr: "Haleiwa, HI", ll: [21.5930, -158.1035], pick: true },
@@ -150,6 +152,7 @@ window.TRIP = {
       ],
       pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
       transport: [{ n: "Rental car, gas, and transfers", lo: 110, hi: 170 }, { n: "National park entry", lo: 30, hi: 30 }],
+      rental: { code: "ITO", airport: "Hilo Airport", city: "Hilo" },
       options: [
         { n: "Kīlauea Iki Trail", c: "out", order: 5, dur: 140, hike: true, price: [0, 0], mi: 3.3, note: "3.3-mile loop across a solid lava lake. 2–3 hrs, 400 ft down and up.", addr: "Kilauea Iki Overlook, Hawaii Volcanoes National Park, HI", ll: [19.4164, -155.2443], pick: true },
         { n: "Devastation Trail", c: "out", order: 7, dur: 45, price: [0, 0], mi: 1.0, note: "1-mile paved walk through the 1959 eruption zone.", addr: "Devastation Trail, Hawaii Volcanoes National Park, HI", ll: [19.4040, -155.2550] },
@@ -580,6 +583,21 @@ body.has-tally main{padding-bottom:120px}
 #packList h4{font-size:14px;color:var(--muted);font-weight:600;margin:16px 0 8px}
 .leave{margin-top:14px}
 
+
+.rent{margin:12px 0 0;background:var(--surface);border-radius:16px;padding:14px 0 12px}
+.rent-days .rent{margin:0 0 10px}
+.rent-head{padding:0 16px}
+.rent-head b{display:flex;align-items:center;gap:7px;font-size:15.5px}
+.rent-head b svg{width:18px;height:18px}
+.rent-head span{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+.rent-sites{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 4px;scroll-padding:0 16px;scrollbar-width:none;scroll-snap-type:x proximity}
+.rent-sites::-webkit-scrollbar{display:none}
+.rent-sites a{flex:none;display:grid;gap:2px;min-width:118px;max-width:170px;padding:10px 12px;border-radius:12px;background:var(--bg);text-decoration:none;scroll-snap-align:start;transition:transform .15s}
+.rent-sites a:active{transform:scale(.96)}
+.rent-sites b{font-size:14px;color:var(--ocean)}
+.rent-sites small{font-size:12px;color:var(--muted);line-height:1.3}
+.rent-tip{margin:8px 16px 0;font-size:13px;color:var(--muted)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -874,7 +892,7 @@ body.has-tally main{padding-bottom:120px}
   function planHTML(s){
     const P = buildPlan(s), st = P.st;
     const presets = s.presets ? `<div class="ptabs"><span>Start from</span>${s.presets.map((p, k) => `<button data-preset="${k}">${esc(p.name)}</button>`).join('')}</div>` : '';
-    if (!P.count) return presets + `<p class="p-empty">Check a few options and your plan builds itself here.</p>`;
+    if (!P.count) return presets + rentalHTML(s) + `<p class="p-empty">Check a few options and your plan builds itself here.</p>`;
     const over = P.spare < 0, tight = !over && P.spare < 20, tgt = clock(mins(s.backBy));
     const msg = over ? `${hrs(-P.spare)} past your ${tgt} target. Uncheck something or swap a stop.`
       : tight ? `Tight. Only ${hrs(P.spare)} of cushion before your ${tgt} target.`
@@ -897,7 +915,36 @@ body.has-tally main{padding-bottom:120px}
       }
       return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
     }).join('');
-    return presets + status + stats + `<ol class="plan">${rows}</ol><p class="walk">Times are estimates from map distances. Tap a stop to see it on the map.</p>`;
+    return presets + status + stats + rentalHTML(s) + `<ol class="plan">${rows}</ol><p class="walk">Times are estimates from map distances. Tap a stop to see it on the map.</p>`;
+  }
+
+  /* Rental car sites, prefilled with the airport and date where the site allows it */
+  function rentalSites(s){
+    const r = s.rental, d = s.date, [y, m, dd] = d.split('-'), q = encodeURIComponent(r.airport + ' (' + r.code + ')');
+    const {up, back} = rentalTimes(s), H = x => pad(Math.floor(x / 60)), HM = x => H(x) + ':' + pad(x % 60);
+    return [
+      ['Kayak', `https://www.kayak.com/cars/${r.code}/${d}-${H(up)}h/${d}-${H(back + 59)}h`, 'Compares most companies'],
+      ['Discount Hawaii Car Rental', 'https://www.discounthawaiicarrental.com/', 'Hawaii specialist, no prepayment'],
+      ['Costco Travel', 'https://www.costcotravel.com/Rental-Cars', 'If you’re members'],
+      ['Priceline', `https://www.priceline.com/drive/search/r/${r.code}/${r.code}/${y}${m}${dd}-${HM(up)}/${y}${m}${dd}-${HM(back)}/list`, 'Another price check'],
+      ['Turo', `https://turo.com/us/en/search?location=${q}`, 'Cars from local owners'],
+      ['Enterprise', 'https://www.enterprise.com/', ''],
+      ['Hertz', 'https://www.hertz.com/', ''],
+      ['Avis', 'https://www.avis.com/', ''],
+      ['Budget', 'https://www.budget.com/', ''],
+      ['Alamo', 'https://www.alamo.com/', '']
+    ];
+  }
+  function rentalTimes(s){
+    const up = Math.ceil((mins(s.ashore) + 60) / 30) * 30, back = Math.floor((mins(s.backBy) - 45) / 30) * 30;
+    return {up, back};
+  }
+  function rentalHTML(s){
+    if (!s.rental) return '';
+    const r = s.rental;
+    return `<div class="rent"><div class="rent-head"><b>${ICON.car}Rental car from ${esc(r.code)}</b><span>${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}. Pick up around ${clock(rentalTimes(s).up)}, return by about ${clock(rentalTimes(s).back)}.</span></div>
+      <div class="rent-sites">${rentalSites(s).map(([n, u, note]) => `<a href="${u}" target="_blank" rel="noopener"><b>${esc(n)}</b>${note ? `<small>${esc(note)}</small>` : ''}</a>`).join('')}</div>
+      <p class="rent-tip">Pick one you can cancel for free. Ask how you get from the cruise pier to the counter, and what time the counter closes.</p></div>`;
   }
 
   function renderPane(){
@@ -1382,6 +1429,8 @@ body.has-tally main{padding-bottom:120px}
       <h3>No service?</h3>
       <p class="box-p">This page keeps working offline once you’ve opened it with service. For an extra backup, save every day’s plan as a PDF.</p>
       <button class="pdf-btn" id="pdfBtn">Save our plans as a PDF</button>
+      <h3>Rental cars</h3>
+      <div class="rent-days">${S.filter(s => s.rental).map(s => rentalHTML(s)).join('')}</div>
       <h3>Key dates</h3>
       <ul class="box dates">${L2.dates.map(([d, t]) => `<li><b>${esc(d)}</b><span>${esc(t)}</span></li>`).join('')}</ul>
       <h3>Packing</h3>
