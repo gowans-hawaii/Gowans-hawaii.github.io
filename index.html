@@ -84,7 +84,6 @@ window.TRIP = {
           paid: "$19.47, paid at the counter (nothing paid yet)", via: "EconomyBookings.com", ref: "4916",
           cancelBy: "Check the confirmation email for the deadline",
           steps: [
-            ["Now", "Cancel the old $63.01 booking (ending 0805) in My Bookings on EconomyBookings, if you haven’t. It’s refundable until Nov 11 at 11 am."],
             ["By Nov 10", "Watch for the rental voucher email about 72 hours before pickup. It also names the rental company. Check spam, then screenshot it or save it to Files so you have it with no service."],
             ["Before the trip", "Check whether your credit card or car insurance covers rentals, so you can decide on extra coverage instead of buying it at the counter."],
             ["Nov 13, 10 am", "Get off the ship and take a taxi or Uber about 10 minutes to the airport rental car center."],
@@ -126,8 +125,30 @@ window.TRIP = {
         "Ask about the weather refund policy before you pay."
       ],
       pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
-      transport: [{ n: "Rental car, gas, and parking", lo: 120, hi: 190 }],
-      rental: { code: "HNL", airport: "Honolulu Airport", city: "Honolulu", ll: [21.3245, -157.9251] },
+      transport: [{ n: "Rental car (booked, Hertz)", lo: 56, hi: 56 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Uber between the pier and the airport", lo: 50, hi: 70 }],
+      rental: {
+        code: "HNL", airport: "Honolulu Airport", city: "Honolulu", ll: [21.3245, -157.9251],
+        booked: {
+          company: "Hertz", car: "Chevrolet Trax or similar compact SUV. 5 seats, unlimited miles, automatic.",
+          pickup: "10:30 am at the HNL rental car center", dropoff: "8:00 pm at the same place. Plan to return around 7:30.",
+          paid: "$55.77, already paid", via: "Expedia", ref: "itinerary ending 3869",
+          cancelBy: "Free until Oct 19 at about 7:20 pm (24 hours after booking). A fee may apply after that.",
+          steps: [
+            ["Before the trip", "Complete Hertz early check-in from the link in the Expedia email and upload your documents. That lets you skip the counter line."],
+            ["Before the trip", "Check whether your credit card or car insurance covers rentals, so you can decide on collision protection ahead of time."],
+            ["Nov 14, 9:00 am", "Get off the ship and walk away from the crowd outside the terminal before calling an Uber. Ask to go to the airport rental car center, not the terminal. About 20–25 minutes."],
+            ["10:30 am", "Pick up the car at Hertz, then head north. Skydiving check-in is 12:30."],
+            ["Around 7:00 pm", "Fill the gas tank near the airport. The fuel rule is full to full."],
+            ["Around 7:30 pm", "Return the car, then take an Uber back to the pier. Aim to be aboard by 8:30."]
+          ],
+          bring: [
+            "The physical driver’s license of the person who booked",
+            "The Visa ending 6528 that paid for it",
+            "The Expedia itinerary on your phone",
+            "The other driver’s license too, if you’ll both drive. Ask Hertz about adding a spouse."
+          ]
+        }
+      },
       options: [
         { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:30", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
         { n: "Haleʻiwa town", c: "see", order: 4, dur: 45, price: [0, 60], mi: 0.8, note: "Old surf town. Galleries, shops, late lunch.", addr: "Haleiwa, HI", ll: [21.5930, -158.1035], pick: true },
@@ -232,10 +253,10 @@ window.TRIP = {
       ["Now", "Book Skydive Hawaii for Nov 14 with a 12:30 check-in."],
       ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15."],
       ["Now", "Book ʻĪao Valley for Nov 13."],
-      ["Now", "Book cancellable cars for Oʻahu (HNL) and Hilo (ITO). Maui is booked."],
-      ["Now", "Cancel the old Maui rental (ending 0805). The new one ends in 4916."],
+      ["Now", "Book a car for Hilo (ITO). Maui and Oʻahu are booked."],
+      ["Oct 19, 7:20 pm", "Free cancellation ends for the Oʻahu rental."],
+      ["Before sailing", "Complete Hertz early check-in for Oʻahu so you can skip the counter."],
       ["Nov 10", "Maui rental voucher arrives by email. Save it to your phone."],
-      ["Nov 11, 11 am", "Last day the old Maui booking can be refunded."],
       ["Oct 25", "Carnival online check-in opens."],
       ["Nov 7", "Fly in and stay near Long Beach."]
     ],
@@ -995,8 +1016,8 @@ body.has-tally main{padding-bottom:120px}
           <div><dt>Pick up</dt><dd>${esc(b.pickup)}</dd></div>
           <div><dt>Return</dt><dd>${esc(b.dropoff)}</dd></div>
           <div><dt>Price</dt><dd>${esc(b.paid)}. Booked through ${esc(b.via)}.</dd></div>
-          <div><dt>Booking</dt><dd>Ends in ${esc(b.ref)}. The full number is in your email.</dd></div>
-          <div><dt>Free cancellation</dt><dd>Until ${esc(b.cancelBy)}</dd></div>
+          <div><dt>Booking</dt><dd>${/^\d+$/.test(b.ref) ? 'Ends in ' + esc(b.ref) : esc(b.ref.charAt(0).toUpperCase() + b.ref.slice(1))}. The full number is in your email.</dd></div>
+          <div><dt>Cancellation</dt><dd>${esc(b.cancelBy)}</dd></div>
         </dl>
         <h4 class="bk-h">What to do</h4>
         <ol class="bk-steps">${b.steps.map(([w, t]) => `<li><b>${esc(w)}</b><span>${esc(t)}</span></li>`).join('')}</ol>
