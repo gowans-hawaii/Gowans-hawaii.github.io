@@ -71,7 +71,7 @@ window.TRIP = {
       line: "Valley, old town, and the north shore.",
       getting: "Rent a car at Kahului Airport (OGG).",
       heads: [
-        "Book ʻĪao Valley entry now. $20 per car, 30-day window.",
+        "ʻĪao Valley is booked for 1:30–3:00 pm. Have the QR code ticket ready.",
         "Skip the Road to Hāna on this day."
       ],
       pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
@@ -107,7 +107,7 @@ window.TRIP = {
         { n: "Pāʻia Fish Market", c: "eat", order: 8.5, dur: 45, price: [50, 80], mi: 0.1, note: "Fish plate or burger. Popular, so go early.", addr: "100 Baldwin Ave, Paia, HI", ll: [20.9131, -156.3808] },
         { n: "Market Street, Wailuku", c: "see", order: 2, dur: 45, price: [0, 40], mi: 0.7, note: "Murals and independent shops. Easy wander.", addr: "Market St, Wailuku, HI", ll: [20.8873, -156.5040], pick: true },
         { n: "Pāʻia town", c: "see", order: 6, dur: 60, price: [0, 50], mi: 0.7, note: "Galleries and small shops on the north shore.", addr: "Baldwin Ave & Hana Hwy, Paia, HI", ll: [20.9126, -156.3810], pick: true },
-        { n: "ʻĪao Valley", c: "out", order: 3, dur: 60, price: [20, 25], mi: 0.6, note: "0.6 mile paved walk with steps. Read the signs.", addr: "Iao Valley State Monument, Wailuku, HI", ll: [20.8810, -156.5450], pick: true, tag: "Book ahead" },
+        { n: "ʻĪao Valley", c: "out", order: 3, dur: 60, at: "13:30", by: "14:30", price: [20, 20], mi: 0.6, note: "Booked for 1:30–3:00 pm, parking and entry for 2. Show the QR code at the gate. Paved 0.6 mile walk with steps.", addr: "54 S High St, Wailuku, HI 96793", ll: [20.8810, -156.5450], pick: true, tag: "Booked" },
         { n: "Haleakalā summit", c: "out", order: 5, dur: 90, extra: 50, hike: true, price: [30, 30], mi: 1.0, note: "Replaces the whole day. 2 hrs each way, bring layers.", addr: "Haleakala Visitor Center, Kula, HI", ll: [20.7148, -156.2502], tag: "Swap option" },
         { n: "Hoʻokipa Lookout", c: "chill", order: 8, dur: 45, price: [0, 0], mi: 0.2, note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
         { n: "Baldwin Beach Park", c: "chill", order: 7, dur: 60, price: [0, 0], mi: 1.0, note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
@@ -274,7 +274,8 @@ window.TRIP = {
     dates: [
       ["Now", "Book Skydive Hawaii for Nov 14 with a 12:30 check-in.", [["Skydive Hawaii booking", "https://www.skydivehawaii.com/booking/"]]],
       ["Now", "Book the 10 am Kauaʻi Beach Boys surf lesson for Nov 15.", [["Kauaʻi Beach Boys lessons", "https://kauaibeachboys.com/tours-lessons/surf-lessons/"]]],
-      ["Now", "Book ʻĪao Valley for Nov 13.", [["Hawaiʻi State Parks reservations", "https://gostateparks.hawaii.gov/"]]],
+      ["Before sailing", "Save the ʻĪao Valley QR code ticket (Ticket.pdf in the email) to your phone. Booked for Nov 13, 1:30–3:00 pm.", [["Hawaiʻi State Parks", "https://gostateparks.hawaii.gov/"]]],
+      ["By Nov 10", "Last day to change or cancel ʻĪao Valley (3 days ahead, partial refund only)."],
       ["Oct 18", "Book all three rental cars: Maui, Oʻahu, and Hilo."],
       ["By Oct 19, 7:20 pm", "Decide on the Oʻahu rental. Free cancellation ends then.", [["Expedia trips", "https://www.expedia.com/trips"]]],
       ["Oct 25", "Do Carnival online check-in.", [["Carnival", "https://www.carnival.com/"]]],
