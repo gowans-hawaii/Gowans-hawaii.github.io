@@ -82,6 +82,7 @@ window.TRIP = {
           company: "", car: "Hyundai Accent or similar compact. 5 seats, 2 bags, automatic, A/C.",
           pickup: "11:30 am at Kahului Airport", dropoff: "7:00 pm at Kahului Airport",
           addr: "1 Kahului Airport Rd, Kahului, HI 96732", where: "Rental car center at Kahului Airport", pickupAt: "11:30", returnAt: "19:00", secret: "maui",
+          pickTip: "Pay $19.47 at the counter. Bring the voucher, license, and credit card.", retTip: "Fill the gas tank first.",
           paid: "$19.47, paid at the counter (nothing paid yet)", via: "EconomyBookings.com", ref: "4916",
           cancelBy: "Check the confirmation email for the deadline",
           steps: [
@@ -133,6 +134,7 @@ window.TRIP = {
           company: "Hertz", car: "Chevrolet Trax or similar compact SUV. 5 seats, unlimited miles, automatic.",
           pickup: "10:30 am at the HNL rental car center", dropoff: "8:00 pm at the same place. Plan to return around 7:30.",
           addr: "300 Rodgers Blvd, Honolulu, HI 96819", where: "Hertz at the Honolulu Airport rental car center", pickupAt: "10:30", returnAt: "20:00", secret: "oahu",
+          pickTip: "Already paid. Bring your license and the Visa ending 6528.", retTip: "Fill the gas tank first (full to full).",
           paid: "$55.77, already paid", via: "Expedia", ref: "itinerary ending 3869",
           cancelBy: "Free until Oct 19 at about 7:20 pm (24 hours after booking). A fee may apply after that.",
           steps: [
@@ -204,6 +206,7 @@ window.TRIP = {
           company: "Dollar", car: "Chevrolet Spark or similar economy. 4 seats, unlimited miles.",
           pickup: "10:00 am at Hilo Airport", dropoff: "3:00 pm at Hilo Airport",
           addr: "1 General Lyman Field, Ste 13, Hilo, HI 96720", where: "Dollar at Hilo Airport", pickupAt: "10:00", returnAt: "15:00", secret: "hilo",
+          pickTip: "Already paid. Bring your license and the Visa ending 6528.", retTip: "Fill the gas tank first.",
           paid: "$61.52, already paid", via: "Expedia", ref: "itinerary ending 2414",
           cancelBy: "Check the Expedia itinerary for the rules before relying on a refund.",
           steps: [
@@ -744,6 +747,12 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 .pin-acts button{padding:10px 16px;border-radius:12px;font-weight:600;min-height:44px}
 .pin-go{background:var(--ink);color:var(--bg)}
 
+
+.m-car{cursor:pointer}
+.m-car .hit{fill:transparent}
+.m-car rect{fill:var(--ocean)}
+.m-carglyph *{fill:none;stroke:var(--surface);stroke-width:1.8;stroke-linejoin:round}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -1056,7 +1065,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   function planHTML(s){
     const P = buildPlan(s), st = P.st;
     const presets = s.presets ? `<div class="ptabs"><span>Start from</span>${s.presets.map((p, k) => `<button data-preset="${k}">${esc(p.name)}</button>`).join('')}</div>` : '';
-    if (!P.count) return presets + rentalHTML(s) + `<p class="p-empty">Check a few options and your plan builds itself here.</p>`;
+    if (!P.count) return presets + `<p class="p-empty">Check a few options and your plan builds itself here.</p>`;
     const over = P.spare < 0, tight = !over && P.spare < 20, tgt = clock(mins(s.backBy));
     const msg = over ? `${hrs(-P.spare)} past your ${tgt} target. Uncheck something or swap a stop.`
       : tight ? `Tight. Only ${hrs(P.spare)} of cushion before your ${tgt} target.`
@@ -1080,14 +1089,15 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       if (x.kind === 'car'){
         const c = x.car, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
         return `<li class="edge carstep" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>
-          <small>${esc(c.where)}${x.ret ? `. Due back by ${clock(mins(c.returnAt))}` : ''}</small><small>${esc(c.addr)}</small>
+          <small>${esc(c.where)}, ${esc(c.addr)}</small>
+          <small class="sec">${x.ret ? `${esc(c.retTip)} Due back by ${clock(mins(c.returnAt))}.` : esc(c.pickTip)}</small>
           ${!x.ret && c.secret ? `<small class="sec">Booking ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
           ${x.warn ? `<em>${esc(x.warn)}</em>` : ''}
           <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></span></span></li>`;
       }
       return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
     }).join('');
-    return presets + status + stats + rentalHTML(s) + `<ol class="plan">${rows}</ol><p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. Tap a stop to see it on the map.</p>`;
+    return presets + status + stats + `<ol class="plan">${rows}</ol><p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. Tap a stop to see it on the map.</p>`;
   }
 
   /* Locked confirmation numbers: stored encrypted, unlocked with the passcode */
@@ -1213,11 +1223,13 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     const span = Math.max(Math.max(...pts.map(q => q[0])) - Math.min(...pts.map(q => q[0])), Math.max(...pts.map(q => q[1])) - Math.min(...pts.map(q => q[1])));
     return span < 0.25 * Math.max(g.focus[2] - g.focus[0], g.focus[3] - g.focus[1]);
   }
+  const carSpot = s => (s.rental && s.rental.booked && s.rental.ll && s.leg && s.leg.mode === 'car') ? s.rental.ll : null;
   function frame(s){
     const g = GEO[s.geo];
     if (!mapZoom && g && g.focus) return g.focus;
-    let pts = [s.pier.ll, ...(mapZoom ? routeStops(s).map(x => x.o.ll) : s.options.map(o => o.ll))];
-    if (pts.length < 2) pts = [s.pier.ll, ...s.options.map(o => o.ll)];
+    const carLL = carSpot(s) ? [carSpot(s)] : [];
+    let pts = [s.pier.ll, ...carLL, ...(mapZoom ? routeStops(s).map(x => x.o.ll) : s.options.map(o => o.ll))];
+    if (pts.length < 2) pts = [s.pier.ll, ...carLL, ...s.options.map(o => o.ll)];
     const xs = pts.map(q => q[1]), ys = pts.map(q => q[0]);
     const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
     const px = Math.max((x1 - x0) * .3, .02), py = Math.max((y1 - y0) * .3, .02);
@@ -1247,7 +1259,8 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     const land = g ? g.rings.map(r => 'M' + r.map(q => X(q[0]).toFixed(1) + ',' + Y(q[1]).toFixed(1)).join('L') + 'Z').join('') : '';
     const stops = routeStops(s), num = {};
     stops.forEach((x, n) => num[x.i] = n + 1);
-    const pts = [s.pier.ll, ...stops.map(x => x.o.ll), s.pier.ll];
+    const cs = carSpot(s);
+    const pts = cs ? [s.pier.ll, cs, ...stops.map(x => x.o.ll), cs, s.pier.ll] : [s.pier.ll, ...stops.map(x => x.o.ll), s.pier.ll];
     const key = s.id + ':' + stops.map(x => x.i).join(',');
     const road = routeCache[key];
     const routeD = !stops.length ? '' : Array.isArray(road)
@@ -1261,6 +1274,12 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     out += `<g class="m-pier" data-dot="pier"><circle class="hit" cx="${sx}" cy="${sy}" r="${20 * u}"/>`
       + `<rect x="${sx - ps / 2}" y="${sy - ps / 2}" width="${ps}" height="${ps}" rx="${6 * u}"/>`
       + `<g class="m-anchor" transform="translate(${sx - 7 * u},${sy - 7 * u}) scale(${14 * u / 16})"><circle cx="8" cy="3.2" r="1.5"/><path d="M8 4.7V14M5 7h6M2.5 9.5c0 2.6 2.5 4.5 5.5 4.5s5.5-1.9 5.5-4.5"/></g></g>`;
+    if (cs){
+      const qx = X(cs[1]), qy = Y(cs[0]), qs = 22 * u;
+      out += `<g class="m-car" data-dot="car"><circle class="hit" cx="${qx}" cy="${qy}" r="${20 * u}"/>`
+        + `<rect x="${qx - qs / 2}" y="${qy - qs / 2}" width="${qs}" height="${qs}" rx="${6 * u}"/>`
+        + `<g class="m-carglyph" transform="translate(${qx - 7.5 * u},${qy - 7.5 * u}) scale(${15 * u / 20})"><path d="M3.5 13.5v-3l1.6-4.2A1.5 1.5 0 016.5 5.3h7a1.5 1.5 0 011.4 1l1.6 4.2v3z"/><path d="M3.5 13.5v2h2.5v-2M14 13.5v2h2.5v-2"/></g></g>`;
+    }
     const dots = s.options.map((o, i) => ({o, i})).sort((a, b) => (num[a.i] ? 1 : 0) - (num[b.i] ? 1 : 0) || (a.i === mapSel) - (b.i === mapSel));
     dots.forEach(({o, i}, n) => {
       const cx = X(o.ll[1]).toFixed(1), cy = Y(o.ll[0]).toFixed(1), on = num[i], sel = i === mapSel;
@@ -1289,7 +1308,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     const car = s.leg && s.leg.mode === 'car';
     $('#mapCap').textContent = !s.options.length ? 'The anchor marks the ship.'
       : !stops.length ? 'Pinch or use + and − to zoom. Check options to draw your route from the ship.'
-      : `Pinch or use + and − to zoom. Numbers are your stops in order, starting at the ship. ${Array.isArray(road) ? 'The line follows the roads.' : car && road === undefined ? 'Loading the road route…' : 'Lines connect stops in order.'}`;
+      : `Pinch or use + and − to zoom. Numbers are your stops in order, starting at the ship${cs ? ' and going through the rental car pickup' : ''}. ${Array.isArray(road) ? 'The line follows the roads.' : car && road === undefined ? 'Loading the road route…' : 'Lines connect stops in order.'}`;
 
     if (key !== lastRouteKey || routeIn){ lastRouteKey = key; animateRoute(); }
     if (stops.length && car && road === undefined) roadRoute(s, pts, key);
@@ -1318,6 +1337,12 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   }
   function showCard(i){
     const s = S[cur];
+    if (i === 'car'){
+      const c = s.rental.booked, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
+      card.innerHTML = `<button class="mc-x" data-mc="close" aria-label="Close">×</button><b>Rental car</b><span>${esc(c.where)}. Pick up ${clock(mins(c.pickupAt))}, return by ${clock(mins(c.returnAt))}.</span>
+        <div class="mc-row"><a href="${gUrl(place)}" target="_blank" rel="noopener">Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">Apple Maps</a></div>`;
+      card.hidden = false; return;
+    }
     if (i === 'pier'){
       card.innerHTML = `<button class="mc-x" data-mc="close" aria-label="Close">×</button><b>${esc(s.pier.n)}</b><span>Approximate berth. Confirm where to get off on arrival.</span>`;
     } else {
@@ -1353,7 +1378,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     if (Date.now() - suppressClick < 350) return;
     const d = e.target.closest('[data-dot]');
     if (!d){ if (!card.hidden) closeCard(); return; }
-    if (d.dataset.dot === 'pier'){ mapSel = -1; highlight(-1); drawMap(S[cur]); showCard('pier'); }
+    if (d.dataset.dot === 'pier' || d.dataset.dot === 'car'){ mapSel = -1; highlight(-1); drawMap(S[cur]); showCard(d.dataset.dot); }
     else selectDot(+d.dataset.dot);
   });
   card.addEventListener('click', e => {
