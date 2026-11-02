@@ -75,13 +75,14 @@ window.TRIP = {
         "Skip the Road to Hāna on this day."
       ],
       pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
-      transport: [{ n: "Rental car (booked, paid at pickup)", lo: 19, hi: 19 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Taxi between the pier and the airport", lo: 30, hi: 40 }],
+      transport: [{ n: "Rental car (booked, paid at pickup)", lo: 19, hi: 19 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Taxi between the pier and the airport", lo: 30, hi: 40, trip: true }],
       rental: {
         code: "OGG", airport: "Kahului Airport", city: "Kahului", ll: [20.8986, -156.4305],
         booked: {
           company: "", car: "Hyundai Accent or similar compact. 5 seats, 2 bags, automatic, A/C.",
           pickup: "11:30 am at Kahului Airport", dropoff: "7:00 pm at Kahului Airport",
           addr: "1 Kahului Airport Rd, Kahului, HI 96732", where: "Rental car center at Kahului Airport", pickupAt: "11:30", returnAt: "19:00", secret: "maui",
+          fromPier: { mi: 3, ride: 15, walk: 65, walkOk: false, ride$: "$15–20 taxi or Uber", why: "About 3 miles along a busy highway without good sidewalks." },
           pickTip: "Pay $19.47 at the counter. Bring the voucher, license, and credit card.", retTip: "Fill the gas tank first.",
           paid: "$19.47, paid at the counter (nothing paid yet)", via: "EconomyBookings.com", ref: "4916",
           cancelBy: "Check the confirmation email for the deadline",
@@ -127,13 +128,14 @@ window.TRIP = {
         "Ask about the weather refund policy before you pay."
       ],
       pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
-      transport: [{ n: "Rental car (booked, Hertz)", lo: 56, hi: 56 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Uber between the pier and the airport", lo: 50, hi: 70 }],
+      transport: [{ n: "Rental car (booked, Hertz)", lo: 56, hi: 56 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Uber between the pier and the airport", lo: 50, hi: 70, trip: true }],
       rental: {
         code: "HNL", airport: "Honolulu Airport", city: "Honolulu", ll: [21.3245, -157.9251],
         booked: {
           company: "Hertz", car: "Chevrolet Trax or similar compact SUV. 5 seats, unlimited miles, automatic.",
           pickup: "10:30 am at the HNL rental car center", dropoff: "8:00 pm at the same place. Plan to return around 7:30.",
           addr: "300 Rodgers Blvd, Honolulu, HI 96819", where: "Hertz at the Honolulu Airport rental car center", pickupAt: "10:30", returnAt: "20:00", secret: "oahu",
+          fromPier: { mi: 7, ride: 30, walk: 150, walkOk: false, ride$: "$25–35 Uber", why: "About 7 miles, mostly along the freeway." },
           pickTip: "Already paid. Bring your license and the Visa ending 6528.", retTip: "Fill the gas tank first (full to full).",
           paid: "$55.77, already paid", via: "Expedia", ref: "itinerary ending 3869",
           cancelBy: "Free until Oct 19 at about 7:20 pm (24 hours after booking). A fee may apply after that.",
@@ -199,13 +201,14 @@ window.TRIP = {
         "Kīlauea Iki parking is very limited. If it’s full, switch plans."
       ],
       pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
-      transport: [{ n: "Rental car (booked, Dollar)", lo: 62, hi: 62 }, { n: "Gas", lo: 5, hi: 15 }, { n: "Taxi between the pier and the airport", lo: 20, hi: 30 }, { n: "National park entry", lo: 30, hi: 30 }],
+      transport: [{ n: "Rental car (booked, Dollar)", lo: 62, hi: 62 }, { n: "Gas", lo: 5, hi: 15 }, { n: "Taxi between the pier and the airport", lo: 20, hi: 30, trip: true }, { n: "National park entry", lo: 30, hi: 30 }],
       rental: {
         code: "ITO", airport: "Hilo Airport", city: "Hilo", ll: [19.7203, -155.0485],
         booked: {
           company: "Dollar", car: "Chevrolet Spark or similar economy. 4 seats, unlimited miles.",
           pickup: "10:00 am at Hilo Airport", dropoff: "3:00 pm at Hilo Airport",
           addr: "1 General Lyman Field, Ste 13, Hilo, HI 96720", where: "Dollar at Hilo Airport", pickupAt: "10:00", returnAt: "15:00", secret: "hilo",
+          fromPier: { mi: 2, ride: 15, walk: 45, walkOk: true, ride$: "$10–15 taxi", why: "Flat, but through the harbor’s industrial area with patchy sidewalks." },
           pickTip: "Already paid. Bring your license and the Visa ending 6528.", retTip: "Fill the gas tank first.",
           paid: "$61.52, already paid", via: "Expedia", ref: "itinerary ending 2414",
           cancelBy: "Check the Expedia itinerary for the rules before relying on a refund.",
@@ -753,6 +756,16 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 .m-car rect{fill:var(--ocean)}
 .m-carglyph *{fill:none;stroke:var(--surface);stroke-width:1.8;stroke-linejoin:round}
 
+
+.trip{display:block;margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--bg)}
+.plan li span .trip{padding-left:12px}
+.trip small b{color:var(--ink)}
+.trip-sw{display:flex;gap:6px;margin:8px 0 6px;padding-left:0!important}
+.trip-sw button{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);min-height:36px}
+.trip-sw button svg{width:15px;height:15px}
+.trip-sw button.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.trip-sw button:disabled{opacity:.55;cursor:not-allowed}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -890,10 +903,15 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     const steps = [];
     const home = s.leg.mode === 'car' && s.rental && s.rental.ll ? s.rental.ll : s.pier.ll;
     let t = mins(s.ashore), pos = home, prev = null;
-    steps.push({kind: 'start', at: t, text: 'Off the ship', sub: s.leg.mode === 'car' ? `About ${hrs(s.leg.start)} to get ashore, ride to the airport, and pick up the car` : `About ${hrs(s.leg.start)} to get ashore`});
-    t += s.leg.start;
     const car = s.leg.mode === 'car' && s.rental && s.rental.booked ? s.rental.booked : null;
-    if (car) steps.push({kind: 'car', at: mins(car.pickupAt), text: 'Pick up the rental car', car});
+    const fp = car && car.fromPier, walking = walkToCar(s), tripExtra = fp && walking ? fp.walk - fp.ride : 0;
+    steps.push({kind: 'start', at: t, text: 'Off the ship', sub: car ? `About ${hrs(s.leg.start + tripExtra)} to get ashore, ${walking ? 'walk' : 'ride'} to the rental car, and pick it up` : `About ${hrs(s.leg.start)} to get ashore`, trip: fp ? {fp, walking} : null});
+    t += s.leg.start + tripExtra;
+    if (car){
+      const atCounter = mins(s.ashore) + 30 + (walking ? fp.walk : fp.ride);
+      steps.push({kind: 'car', at: mins(car.pickupAt), text: 'Pick up the rental car', car,
+        warn: atCounter > mins(car.pickupAt) ? `You’d reach the counter around ${clock(atCounter)}, after your ${clock(mins(car.pickupAt))} pickup. Take the ${fp.ride$.split(' ').pop() === 'Uber' ? 'Uber' : 'taxi'} instead, or call ahead.` : ''});
+    }
     const addLeg = l => {
       steps.push({kind: 'leg', l});
       t += l.min;
@@ -913,7 +931,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     });
     addLeg(legBetween(s, pos, home, true, prev && prev.extra || 0));
     if (car) steps.push({kind: 'car', at: t, text: 'Return the rental car', car, ret: true, warn: t > mins(car.returnAt) ? `Due back by ${clock(mins(car.returnAt))}. You’d return it at ${clock(t)}.` : ''});
-    t += s.leg.end + BUF.end;
+    t += s.leg.end + BUF.end + tripExtra;
     steps.push({kind: 'end', at: t, text: 'Back aboard', sub: s.leg.mode === 'car' ? 'Includes gas, returning the car, and the ride to the pier' : 'Includes getting back through the terminal'});
     const spare = mins(s.backBy) - t;
     if (spare > 0) st.down += spare;
@@ -930,9 +948,13 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   const money = (lo, hi) => hi === 0 ? 'Free' : lo === hi ? usd(lo) : usd(lo) + '–' + hi.toLocaleString('en-US');
   const total = (lo, hi) => lo === hi ? usd(lo) : usd(lo) + '–' + hi.toLocaleString('en-US');
   const miles = m => (Math.round(m * 10) / 10) + ' mi';
+  function walkToCar(s){
+    const b = s.rental && s.rental.booked;
+    return !!(b && b.fromPier && b.fromPier.walkOk && packed.has('cartrip:' + s.id + '=walk'));
+  }
   function dayTotals(s){
     let lo = 0, hi = 0, mi = 0; const items = [];
-    (s.transport || []).forEach(t => { lo += t.lo; hi += t.hi; mi += t.mi || 0; items.push({n: t.n, lo: t.lo, hi: t.hi, fixed: true}); });
+    (s.transport || []).forEach(t => { if (t.trip && walkToCar(s)) return; lo += t.lo; hi += t.hi; mi += t.mi || 0; items.push({n: t.n, lo: t.lo, hi: t.hi, fixed: true}); });
     (s.options || []).forEach((o, i) => { if (picked[s.id].has(i)){ lo += o.price[0]; hi += o.price[1]; mi += o.mi || 0; items.push({n: o.n, lo: o.price[0], hi: o.price[1]}); } });
     return {lo, hi, mi, items};
   }
@@ -1094,6 +1116,15 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
           ${!x.ret && c.secret ? `<small class="sec">Booking ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
           ${x.warn ? `<em>${esc(x.warn)}</em>` : ''}
           <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></span></span></li>`;
+      }
+      if (x.trip){
+        const f = x.trip.fp, w = x.trip.walking;
+        return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}
+          <span class="trip"><small><b>To the rental car: ${f.mi} miles.</b> ${f.walkOk ? `Ride about ${f.ride} min (${esc(f.ride$)}) or walk about ${f.walk} min. ${esc(f.why)}` : `Ride about ${f.ride} min (${esc(f.ride$)}). Not walkable: ${esc(f.why)}`}</small>
+          <span class="trip-sw" role="radiogroup" aria-label="How to get to the rental car">
+            <button data-trip="ride" class="${w ? '' : 'on'}" role="radio" aria-checked="${!w}">${ICON.car}Ride</button>
+            <button data-trip="walk" class="${w ? 'on' : ''}" role="radio" aria-checked="${w}"${f.walkOk ? '' : ' disabled'}>${ICON.walk}${f.walkOk ? 'Walk' : 'Too far to walk'}</button>
+          </span><small>Coming back the same way at the end of the day.</small></span></span></li>`;
       }
       return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
     }).join('');
@@ -1595,6 +1626,14 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 
   /* Events */
   $('#dayBody').addEventListener('click', e => {
+    const tp = e.target.closest('[data-trip]');
+    if (tp && !tp.disabled){
+      const key = 'cartrip:' + S[cur].id + '=walk';
+      tp.dataset.trip === 'walk' ? packed.add(key) : packed.delete(key);
+      renderPane(); updateTally(true);
+      queue('pack', '|' + [...packed].join('|'));
+      return;
+    }
     const ck = e.target.closest('[data-check]');
     if (ck){ toggleCheck(+ck.dataset.check); return; }
     const v = e.target.closest('[data-v]'), f = e.target.closest('[data-f]'), p = e.target.closest('[data-preset]'), sh = e.target.closest('[data-show]');
