@@ -110,7 +110,7 @@ window.TRIP = {
         { n: "Pāʻia Fish Market", c: "eat", order: 8.5, dur: 45, price: [50, 80], mi: 0.1, note: "Fish plate or burger. Popular, so go early.", addr: "100 Baldwin Ave, Paia, HI", ll: [20.9131, -156.3808] },
         { n: "Market Street, Wailuku", c: "see", order: 2, dur: 45, price: [0, 40], mi: 0.7, note: "Murals and independent shops. Easy wander.", addr: "Market St, Wailuku, HI", ll: [20.8873, -156.5040], pick: true },
         { n: "Pāʻia town", c: "see", order: 6, dur: 60, price: [0, 50], mi: 0.7, note: "Galleries and small shops on the north shore.", addr: "Baldwin Ave & Hana Hwy, Paia, HI", ll: [20.9126, -156.3810], pick: true },
-        { n: "ʻĪao Valley", c: "out", order: 3, dur: 60, at: "13:30", by: "14:30", price: [20, 20], mi: 0.6, note: "Booked for 1:30–3:00 pm, parking and entry for 2. Show the QR code at the gate. Paved 0.6 mile walk with steps.", addr: "54 S High St, Wailuku, HI 96793", ll: [20.8810, -156.5450], pick: true, tag: "Booked", secret: "iao", ref: "7656" },
+        { n: "ʻĪao Valley", c: "out", paid: true, order: 3, dur: 60, at: "13:30", by: "14:30", price: [20, 20], mi: 0.6, note: "Booked for 1:30–3:00 pm, parking and entry for 2. Show the QR code at the gate. Paved 0.6 mile walk with steps.", addr: "54 S High St, Wailuku, HI 96793", ll: [20.8810, -156.5450], pick: true, tag: "Booked", secret: "iao", ref: "7656" },
         { n: "Haleakalā summit", c: "out", order: 5, dur: 90, extra: 50, hike: true, price: [30, 30], mi: 1.0, note: "Replaces the whole day. 2 hrs each way, bring layers.", addr: "Haleakala Visitor Center, Kula, HI", ll: [20.7148, -156.2502], tag: "Swap option" },
         { n: "Hoʻokipa Lookout", c: "chill", order: 8, dur: 45, price: [0, 0], mi: 0.2, note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
         { n: "Baldwin Beach Park", c: "chill", order: 7, dur: 60, price: [0, 0], mi: 1.0, note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
@@ -128,7 +128,7 @@ window.TRIP = {
         "Ask about the weather refund policy before you pay."
       ],
       pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660], addr: "Aloha Tower cruise terminal, 1 Aloha Tower Dr, Honolulu, HI 96813", uber: true },
-      transport: [{ n: "Rental car (booked, Hertz)", lo: 56, hi: 56 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Uber between the pier and the airport", lo: 50, hi: 70, trip: true }],
+      transport: [{ n: "Rental car (Hertz)", lo: 56, hi: 56, paid: true }, { n: "Gas", lo: 10, hi: 20 }, { n: "Uber between the pier and the airport", lo: 50, hi: 70, trip: true }],
       rental: {
         code: "HNL", airport: "Honolulu Airport", city: "Honolulu", ll: [21.3245, -157.9251],
         booked: {
@@ -156,7 +156,7 @@ window.TRIP = {
         }
       },
       options: [
-        { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:30", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
+        { n: "Skydive Hawaii", c: "out", paid: true, order: 2, dur: 240, at: "12:30", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
         { n: "Haleʻiwa town", c: "see", order: 4, dur: 45, price: [0, 60], mi: 0.8, note: "Old surf town. Galleries, shops, late lunch.", addr: "Haleiwa, HI", ll: [21.5930, -158.1035], pick: true },
         { n: "Surf N Salsa", c: "eat", order: 4.05, dur: 40, price: [30, 45], mi: 0.1, note: "Mexican food truck in Haleʻiwa. Your late lunch after the jump.", addr: "Surf N Salsa, Haleiwa, HI", ll: [21.5905, -158.1040], pick: true, tag: "Confirm hours" },
         { n: "Matsumoto Shave Ice", c: "eat", order: 4.1, dur: 20, price: [12, 20], mi: 0.1, note: "The famous one. The line moves fast.", addr: "66-111 Kamehameha Hwy, Haleiwa, HI", ll: [21.5918, -158.1029], pick: true },
@@ -201,7 +201,7 @@ window.TRIP = {
         "Kīlauea Iki parking is very limited. If it’s full, switch plans."
       ],
       pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510], addr: "Hilo Harbor cruise pier, Hilo, HI 96720", uber: true },
-      transport: [{ n: "Rental car (booked, Dollar)", lo: 62, hi: 62 }, { n: "Gas", lo: 5, hi: 15 }, { n: "Taxi between the pier and the airport", lo: 20, hi: 30, trip: true }, { n: "National park entry", lo: 30, hi: 30 }],
+      transport: [{ n: "Rental car (Dollar)", lo: 62, hi: 62, paid: true }, { n: "Gas", lo: 5, hi: 15 }, { n: "Taxi between the pier and the airport", lo: 20, hi: 30, trip: true }, { n: "National park entry", lo: 30, hi: 30 }],
       rental: {
         code: "ITO", airport: "Hilo Airport", city: "Hilo", ll: [19.7203, -155.0485],
         booked: {
@@ -819,6 +819,12 @@ a.uber svg{width:14px;height:14px}
 .plan li.leg span b{font-weight:700;color:var(--ink)}
 .plan li.leg span.leg-t{display:inline;padding-left:0}
 
+
+.tally-panel h5{margin:0;padding:12px 16px 2px;font-size:12.5px;color:var(--muted);font-weight:700}
+.tally-panel ul.paid li{color:var(--muted)}
+.tally-panel ul.paid b{text-decoration:line-through;text-decoration-color:var(--line)}
+.paid-tag{font-style:normal;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--ocean-soft);color:var(--ocean)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -1052,10 +1058,14 @@ a.uber svg{width:14px;height:14px}
     return !!(b && b.fromPier && b.fromPier.walkOk && packed.has('cartrip:' + s.id + '=walk'));
   }
   function dayTotals(s){
-    let lo = 0, hi = 0, mi = 0; const items = [];
-    (s.transport || []).forEach(t => { if (t.trip && walkToCar(s)) return; lo += t.lo; hi += t.hi; mi += t.mi || 0; items.push({n: t.n, lo: t.lo, hi: t.hi, fixed: true}); });
-    (s.options || []).forEach((o, i) => { if (picked[s.id].has(i)){ lo += o.price[0]; hi += o.price[1]; mi += o.mi || 0; items.push({n: o.n, lo: o.price[0], hi: o.price[1]}); } });
-    return {lo, hi, mi, items};
+    let lo = 0, hi = 0, mi = 0, pLo = 0, pHi = 0; const items = [], paid = [];
+    const add = (n, a, b, fixed, isPaid) => {
+      if (isPaid){ pLo += a; pHi += b; paid.push({n, lo: a, hi: b}); }
+      else { lo += a; hi += b; items.push({n, lo: a, hi: b, fixed}); }
+    };
+    (s.transport || []).forEach(t => { if (t.trip && walkToCar(s)) return; mi += t.mi || 0; add(t.n, t.lo, t.hi, true, t.paid); });
+    (s.options || []).forEach((o, i) => { if (picked[s.id].has(i)){ mi += o.mi || 0; add(o.n, o.price[0], o.price[1], false, o.paid); } });
+    return {lo, hi, mi, items, paid, pLo, pHi};
   }
 
   const ICON = {
@@ -1084,7 +1094,9 @@ a.uber svg{width:14px;height:14px}
   const uberUrl = (name, ll, addr) => 'https://m.uber.com/ul/?action=setPickup&pickup=my_location'
     + `&dropoff[latitude]=${ll[0]}&dropoff[longitude]=${ll[1]}&dropoff[nickname]=${encodeURIComponent(name)}` + (addr ? `&dropoff[formatted_address]=${encodeURIComponent(addr)}` : '');
   const uberChip = (label, name, ll, addr) => `<a class="uber" href="${uberUrl(name, ll, addr)}" target="_blank" rel="noopener">${ICON.car}${label}</a>`;
-  const links = o => `<div class="o-links"><a href="${gUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a>${uberChip('Uber', o.n, o.ll, o.addr)}</div>`;
+  /* Uber only where there's no rental car for the day */
+  const uberDay = s => !!(s && s.pier && s.pier.uber && !(s.rental && s.rental.booked && s.leg && s.leg.mode === 'car'));
+  const links = (o, s) => `<div class="o-links"><a href="${gUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a>${uberDay(s) ? uberChip('Uber', o.n, o.ll, o.addr) : ''}</div>`;
 
   /* Hero countdown */
   function hero(){
@@ -1181,10 +1193,10 @@ a.uber svg{width:14px;height:14px}
           <button class="opt-main" data-show="${i}" aria-label="Show ${esc(o.n)} on the map">
             <span class="o-dot"></span>
             <span class="o-text"><span class="o-name">${esc(o.n)}</span>${o.pick ? '<span class="tag pick">Top pick</span>' : ''}${o.tag ? `<span class="tag">${esc(o.tag)}</span>` : ''}<span class="o-note">${esc(o.note)}</span>
-              <span class="o-meta"><span>${ICON.cash}${money(o.price[0], o.price[1])}</span>${o.dur ? `<span>${ICON.clock}${hrs(o.dur)}</span>` : ''}${o.mi >= 0.2 ? `<span>${o.hike ? ICON.hike : ICON.walk}${miles(o.mi)} ${o.hike ? 'hiking' : 'walking'}</span>` : ''}</span></span>
+              <span class="o-meta"><span>${ICON.cash}${o.paid ? `${money(o.price[0], o.price[1])}, <i class="paid-tag">Paid</i>` : money(o.price[0], o.price[1])}</span>${o.dur ? `<span>${ICON.clock}${hrs(o.dur)}</span>` : ''}${o.mi >= 0.2 ? `<span>${o.hike ? ICON.hike : ICON.walk}${miles(o.mi)} ${o.hike ? 'hiking' : 'walking'}</span>` : ''}</span></span>
           </button>
           <button class="check" data-check="${i}" aria-pressed="${on}" aria-label="Add ${esc(o.n)} to our day"><svg viewBox="0 0 28 28" aria-hidden="true"><circle class="ring" cx="14" cy="14" r="12"/><path class="tick" d="M8.5 14.5l3.8 3.7 7.2-8"/></svg></button>
-        </div>${links(o)}</li>`;
+        </div>${links(o, s)}</li>`;
     }).join('');
     return chips + `<ul class="opts">${rows}</ul>`;
   }
@@ -1214,7 +1226,7 @@ a.uber svg{width:14px;height:14px}
         return `<li class="stop${isLocked(o) ? ' locked' : ''}" data-i="${x.i}" style="--k:${k++};--c:var(--c-${o.c})">${isLocked(o)
           ? `<i class="row-lock" title="Set time, stays in place" aria-label="Locked: set time">${ICON.lock}</i>`
           : `<button class="drag-h" data-drag="${x.i}" aria-label="Drag to reorder ${esc(o.n)}">${ICON.grip}</button>`}
-          <button class="row-trash" data-trash="${x.i}" aria-label="Remove ${esc(o.n)} from the plan">${ICON.trash}<span>Remove</span></button><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${x.logged && x.logged.arr && x.logged.end ? `Actually took ${hrs(x.leave - x.at)}` : `${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}`}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}<span class="stop-links">${uberChip('Uber here', o.n, o.ll, o.addr)}</span>${logHTML(x)}</span></li>`;
+          <button class="row-trash" data-trash="${x.i}" aria-label="Remove ${esc(o.n)} from the plan">${ICON.trash}<span>Remove</span></button><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${x.logged && x.logged.arr && x.logged.end ? `Actually took ${hrs(x.leave - x.at)}` : `${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}`}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}${uberDay(s) ? `<span class="stop-links">${uberChip('Uber here', o.n, o.ll, o.addr)}</span>` : ''}${logHTML(x)}</span></li>`;
       }
       if (x.kind === 'car'){
         const c = x.car, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
@@ -1713,7 +1725,7 @@ a.uber svg{width:14px;height:14px}
     $('#tLabel').innerHTML = `${s.id === 'home' ? 'Getting home' : 'Our ' + esc(s.place) + ' day'}<small>${n} ${n === 1 ? 'activity' : 'activities'} checked</small>`;
     const ds = dayStats(s);
     $('#tWalk').textContent = (ds.walk >= 0.2 ? miles(ds.walk) + ' walking' : 'Little walking') + (ds.hike ? ', ' + miles(ds.hike) + ' hiking' : '');
-    $('#tallyPanel').innerHTML = `<ul>${t.items.map(x => `<li${x.fixed ? ' class="fixed"' : ''}><span>${esc(x.n)}</span><b>${money(x.lo, x.hi)}</b></li>`).join('')}</ul><p>Estimates for both of you. Tips, tax, and shopping are extra.</p>`;
+    $('#tallyPanel').innerHTML = `<h5>Still to spend</h5><ul>${t.items.map(x => `<li${x.fixed ? ' class="fixed"' : ''}><span>${esc(x.n)}</span><b>${money(x.lo, x.hi)}</b></li>`).join('') || '<li class="fixed"><span>Nothing else</span><b>$0</b></li>'}</ul>${t.paid.length ? `<h5>Already paid (not in the total)</h5><ul class="paid">${t.paid.map(x => `<li><span>${esc(x.n)}</span><b>${money(x.lo, x.hi)}</b></li>`).join('')}</ul>` : ''}<p>Estimates for both of you. Tips, tax, and shopping are extra.</p>`;
     countTo(t.lo, t.hi, bump);
   }
   function countTo(lo, hi, bump){
@@ -1750,15 +1762,17 @@ a.uber svg{width:14px;height:14px}
     $('#tallyBar').setAttribute('aria-expanded', open);
   });
   function tripTotals(quiet){
-    let lo = 0, hi = 0; const tt = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
+    let lo = 0, hi = 0, pLo = 0, pHi = 0; const tt = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
     S.forEach(s => {
       if (s.kind === 'sea') return;
       const c = dayTotals(s), d = dayStats(s);
-      lo += c.lo; hi += c.hi;
+      lo += c.lo; hi += c.hi; pLo += c.pLo; pHi += c.pHi;
       Object.keys(tt).forEach(k => tt[k] += d[k]);
     });
     const tiles = [
-      ['Total cost', e => total(Math.round(lo * e), Math.round(hi * e)), 'For both of you, transportation included', 'cost'],
+      ['Total cost of everything', e => total(Math.round((lo + pLo) * e), Math.round((hi + pHi) * e)), 'For both of you, transportation and bookings included', 'cost'],
+      ['Already paid', e => total(Math.round(pLo * e), Math.round(pHi * e)), 'Rental cars, ʻĪao Valley, skydiving'],
+      ['Still to spend', e => total(Math.round(lo * e), Math.round(hi * e)), 'Food, gas, rides, fees, and the Maui car'],
       ['Driving', e => hrs(tt.drive * e), `About ${Math.round(tt.driveMi)} miles`],
       ['Walking', e => miles(tt.walk * e), 'Towns, beaches, and getting around'],
       ['Hiking', e => miles(tt.hike * e), 'Trails and crater walks'],
