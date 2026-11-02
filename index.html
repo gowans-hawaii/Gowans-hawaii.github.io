@@ -74,7 +74,7 @@ window.TRIP = {
         "ʻĪao Valley is booked for 1:30–3:00 pm. Have the QR code ticket ready.",
         "Skip the Road to Hāna on this day."
       ],
-      pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705] },
+      pier: { n: "Kahului Harbor (ship)", ll: [20.8955, -156.4705], addr: "Kahului Harbor cruise pier, Kahului, HI 96732", uber: true },
       transport: [{ n: "Rental car (booked, paid at pickup)", lo: 19, hi: 19 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Taxi between the pier and the airport", lo: 30, hi: 40, trip: true }],
       rental: {
         code: "OGG", airport: "Kahului Airport", city: "Kahului", ll: [20.8986, -156.4305],
@@ -127,7 +127,7 @@ window.TRIP = {
         "Book a 12:30 check-in. Expect 2–4+ hours there, waiting included.",
         "Ask about the weather refund policy before you pay."
       ],
-      pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660] },
+      pier: { n: "Honolulu Harbor (ship)", ll: [21.3069, -157.8660], addr: "Aloha Tower cruise terminal, 1 Aloha Tower Dr, Honolulu, HI 96813", uber: true },
       transport: [{ n: "Rental car (booked, Hertz)", lo: 56, hi: 56 }, { n: "Gas", lo: 10, hi: 20 }, { n: "Uber between the pier and the airport", lo: 50, hi: 70, trip: true }],
       rental: {
         code: "HNL", airport: "Honolulu Airport", city: "Honolulu", ll: [21.3245, -157.9251],
@@ -178,7 +178,7 @@ window.TRIP = {
         "Book the 10 am lesson. You both need to be able to swim.",
         "Skip the 2 pm lesson. It ends too close to sailing."
       ],
-      pier: { n: "Nawiliwili Harbor (ship)", ll: [21.9550, -159.3560] },
+      pier: { n: "Nawiliwili Harbor (ship)", ll: [21.9550, -159.3560], addr: "Nawiliwili Harbor cruise pier, Lihue, HI 96766", uber: true },
       transport: [{ n: "Walk to Kalapakī and back, or a taxi", lo: 0, hi: 30 }],
       options: [
         { n: "Kauaʻi Beach Boys surf lesson", c: "out", order: 2, dur: 120, at: "09:45", price: [198, 300], mi: 0, note: "1.5 hours, gear included. Group $99 each, private $300 for two.", addr: "3610 Rice St, Lihue, HI", ll: [21.9585, -159.3535], pick: true, tag: "Book ahead" },
@@ -200,7 +200,7 @@ window.TRIP = {
         "Park entry is $30 per car, card only.",
         "Kīlauea Iki parking is very limited. If it’s full, switch plans."
       ],
-      pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510] },
+      pier: { n: "Hilo Harbor (ship)", ll: [19.7290, -155.0510], addr: "Hilo Harbor cruise pier, Hilo, HI 96720", uber: true },
       transport: [{ n: "Rental car (booked, Dollar)", lo: 62, hi: 62 }, { n: "Gas", lo: 5, hi: 15 }, { n: "Taxi between the pier and the airport", lo: 20, hi: 30, trip: true }, { n: "National park entry", lo: 30, hi: 30 }],
       rental: {
         code: "ITO", airport: "Hilo Airport", city: "Hilo", ll: [19.7203, -155.0485],
@@ -780,6 +780,45 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 .log-acts .log-save{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .log-clearall{display:block;margin:10px auto 0;font-size:13px;font-weight:600;color:var(--warn-ink);padding:8px 14px;border-radius:999px;background:var(--warn-bg)}
 
+
+.plan li span .log-lab,.plan li span .log-lab > span,.plan li span .log-ed .log-acts{padding-left:0}
+.log-lab b{white-space:nowrap}
+.log-lab{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px}
+.log-lab > span{display:flex;gap:6px}
+.log-now{font-size:12.5px;font-weight:600;color:var(--ocean);padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);min-height:30px}
+.log-add{justify-self:start;font-size:13px;font-weight:600;color:var(--ocean);padding:6px 0;min-height:34px}
+.wheel{position:relative;display:grid!important;grid-template-columns:1fr 1fr 1fr;gap:4px;height:120px;padding:0!important;border-radius:12px;background:var(--surface);overflow:hidden;
+  -webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+.wcol{display:block!important;height:120px;overflow-y:scroll;scroll-snap-type:y mandatory;padding:40px 0!important;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;position:relative;z-index:1}
+.wcol::-webkit-scrollbar{display:none}
+.wcol > span{display:flex!important;align-items:center;justify-content:center;height:40px;padding:0!important;scroll-snap-align:center;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);cursor:pointer}
+.wband{position:absolute;left:6px;right:6px;top:40px;height:40px;border-radius:10px;background:var(--ocean-soft);pointer-events:none;z-index:0}
+
+
+ol.plan{overflow:hidden}
+.plan li.stop{background:var(--surface);transition:transform .25s var(--ease);touch-action:pan-y}
+.plan li.stop > span,.plan li.carstep > span{padding-right:34px}
+.drag-h,.row-lock{position:absolute;right:8px;top:8px;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;color:var(--muted);z-index:2}
+.drag-h{touch-action:none;cursor:grab}
+.drag-h svg{width:18px;height:18px}
+.row-lock svg{width:16px;height:16px}
+.row-lock{color:var(--ocean);opacity:.8}
+.row-trash{position:absolute;top:0;bottom:0;right:-96px;width:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#C8344A;color:#fff;font-size:12.5px;font-weight:700}
+.row-trash svg{width:20px;height:20px}
+.plan li.stop.dragging{z-index:5;box-shadow:0 10px 30px rgba(0,0,0,.25);border-radius:14px;transition:none;opacity:.96}
+.drop-line{position:absolute;left:12px;right:12px;top:0;height:3px;border-radius:2px;background:var(--ocean);opacity:0;transition:opacity .15s;pointer-events:none;z-index:4}
+.drop-line.on{opacity:1}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,12px);max-width:calc(100% - 32px);width:max-content;background:var(--ink);color:var(--bg);font-size:14px;font-weight:600;padding:11px 16px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transition:opacity .25s,transform .3s var(--ease);z-index:2500;pointer-events:none;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+
+.stop-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.plan li span .stop-links{padding-left:0}
+a.uber{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px;background:#000;color:#fff!important;text-decoration:none;min-height:30px}
+a.uber svg{width:14px;height:14px}
+.plan li.leg span b{font-weight:700;color:var(--ink)}
+.plan li.leg span.leg-t{display:inline;padding-left:0}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -843,6 +882,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 </div>
 
 <div id="printOut" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <div class="passcode" id="pin" hidden>
   <div class="pin-scrim" data-pinclose></div>
@@ -910,6 +950,23 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     if (road > 1.8) return {type: 'ride', min: 15 + Math.round(road / 30 * 60 * BUF.drivePad), mi: 0};
     return {type: 'walk', min: walkMin(road), mi: road * 0.621};
   }
+  /* Custom stop order per day (from dragging). New stops slot in by their usual order. */
+  const orders = {};
+  function orderedSel(s, override){
+    const base = (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => (a.o.order || 0) - (b.o.order || 0));
+    const ov = override || orders[s.id];
+    if (!ov || !ov.length) return base;
+    const out = [];
+    ov.forEach(n => { const x = base.find(b => b.o.n === n); if (x && !out.includes(x)) out.push(x); });
+    base.forEach(x => {
+      if (out.includes(x)) return;
+      const j = out.findIndex(y => (y.o.order || 0) > (x.o.order || 0));
+      j < 0 ? out.push(x) : out.splice(j, 0, x);
+    });
+    return out;
+  }
+  const isLocked = o => !!o.at;
+
   /* Logged real times: {dayId: {key: {arr, end}}}, key = stop name, __ship, or __car */
   const actuals = {};
   let logOpen = null;
@@ -929,9 +986,9 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   }
   const hhmm = m => pad(Math.floor(((m % 1440) + 1440) % 1440 / 60)) + ':' + pad(Math.round(m) % 60);
 
-  function buildPlan(s){
+  function buildPlan(s, override){
     if (!s.leg || !s.pier) return null;
-    const sel = (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => a.o.order - b.o.order);
+    const sel = orderedSel(s, override);
     const st = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
     const steps = [];
     const home = s.leg.mode === 'car' && s.rental && s.rental.ll ? s.rental.ll : s.pier.ll;
@@ -949,14 +1006,14 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       steps.push({kind: 'car', at: aCar && aCar.arr ? t : mins(car.pickupAt), text: aCar && aCar.arr ? 'Drove off in the rental car' : 'Pick up the rental car', car, logKey: '__car', logged: aCar,
         warn: aCar && aCar.arr ? '' : atCounter > mins(car.pickupAt) ? `You’d reach the counter around ${clock(atCounter)}, after your ${clock(mins(car.pickupAt))} pickup. Take the ${fp.ride$.split(' ').pop() === 'Uber' ? 'Uber' : 'taxi'} instead, or call ahead.` : ''});
     }
-    const addLeg = l => {
-      steps.push({kind: 'leg', l});
+    const addLeg = (l, to) => {
+      steps.push({kind: 'leg', l, to});
       t += l.min;
       if (l.type === 'drive'){ st.drive += l.min; st.driveMi += l.mi; }
       if (l.type === 'walk') st.walk += l.mi;
     };
     sel.forEach(({o, i}) => {
-      addLeg(legBetween(s, pos, o.ll, !prev, (prev && prev.extra || 0) + (o.extra || 0)));
+      addLeg(legBetween(s, pos, o.ll, !prev, (prev && prev.extra || 0) + (o.extra || 0)), o.n);
       let wait = 0, warn = '';
       const A = actOf(s, o.n);
       if (A && A.arr) t = mins(A.arr);
@@ -971,7 +1028,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       if (o.hike) st.hike += o.mi || 0; else st.walk += o.mi || 0;
       pos = o.ll; prev = o;
     });
-    addLeg(legBetween(s, pos, home, true, prev && prev.extra || 0));
+    addLeg(legBetween(s, pos, home, true, prev && prev.extra || 0), car ? 'the rental car return' : 'the ship');
     if (car) steps.push({kind: 'car', at: t, text: 'Return the rental car', car, ret: true, warn: t > mins(car.returnAt) ? `Due back by ${clock(mins(car.returnAt))}. You’d return it at ${clock(t)}.` : ''});
     t += s.leg.end + BUF.end + tripExtra;
     steps.push({kind: 'end', at: t, text: 'Back aboard', sub: s.leg.mode === 'car' ? 'Includes gas, returning the car, and the ride to the pier' : 'Includes getting back through the terminal'});
@@ -1009,6 +1066,9 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     walk: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="4" cy="13" r="1.3"/><circle cx="12" cy="3" r="1.3"/><path d="M5.3 13H10a2.5 2.5 0 000-5H6a2.5 2.5 0 010-5h4.7" stroke-dasharray="1.5 2"/></svg>',
     clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.8V8l2.2 1.4"/></svg>',
     hike: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 13.5l4.5-8 3 5 2-3 3.5 6z"/></svg>',
+    lock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="7" width="9" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>',
+    grip: '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="6" cy="4" r="1.3"/><circle cx="10" cy="4" r="1.3"/><circle cx="6" cy="8" r="1.3"/><circle cx="10" cy="8" r="1.3"/><circle cx="6" cy="12" r="1.3"/><circle cx="10" cy="12" r="1.3"/></svg>',
+    trash: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"/></svg>',
     wave: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 8c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1M2 13c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/></svg>'
   };
 
@@ -1021,7 +1081,10 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   function shortDate(s){ return s.end ? fmt(s.date, {month:'short', day:'numeric'}) + '–' + D(s.end).getDate() : fmt(s.date, {month:'short', day:'numeric'}); }
   const gUrl = o => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(o.n + ', ' + o.addr);
   const aUrl = o => 'https://maps.apple.com/?q=' + encodeURIComponent(o.n) + '&address=' + encodeURIComponent(o.addr) + '&ll=' + o.ll.join(',');
-  const links = o => `<div class="o-links"><a href="${gUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></div>`;
+  const uberUrl = (name, ll, addr) => 'https://m.uber.com/ul/?action=setPickup&pickup=my_location'
+    + `&dropoff[latitude]=${ll[0]}&dropoff[longitude]=${ll[1]}&dropoff[nickname]=${encodeURIComponent(name)}` + (addr ? `&dropoff[formatted_address]=${encodeURIComponent(addr)}` : '');
+  const uberChip = (label, name, ll, addr) => `<a class="uber" href="${uberUrl(name, ll, addr)}" target="_blank" rel="noopener">${ICON.car}${label}</a>`;
+  const links = o => `<div class="o-links"><a href="${gUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(o)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a>${uberChip('Uber', o.n, o.ll, o.addr)}</div>`;
 
   /* Hero countdown */
   function hero(){
@@ -1144,20 +1207,23 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     const rows = P.steps.map(x => {
       if (x.kind === 'leg'){
         const l = x.l, verb = l.type === 'drive' ? 'Drive' : l.type === 'ride' ? 'Taxi or rideshare' : 'Walk';
-        return `<li class="leg" style="--k:${k++}"><time></time><span>${l.type === 'drive' ? ICON.car : ICON.walk}${verb} ${hrs(l.min)}${l.mi >= 0.2 ? ', ' + miles(l.mi) : ''}</span></li>`;
+        return `<li class="leg" style="--k:${k++}"><time></time><span>${l.type === 'drive' ? ICON.car : ICON.walk}<span class="leg-t">${verb} ${hrs(l.min)}${x.to ? ` to <b>${esc(x.to)}</b>` : ''}${l.mi >= 0.2 ? ', ' + miles(l.mi) : ''}</span></span></li>`;
       }
       if (x.kind === 'stop'){
         const o = x.o;
-        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${x.logged && x.logged.arr && x.logged.end ? `Actually took ${hrs(x.leave - x.at)}` : `${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}`}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}${logHTML(x)}</span></li>`;
+        return `<li class="stop${isLocked(o) ? ' locked' : ''}" data-i="${x.i}" style="--k:${k++};--c:var(--c-${o.c})">${isLocked(o)
+          ? `<i class="row-lock" title="Set time, stays in place" aria-label="Locked: set time">${ICON.lock}</i>`
+          : `<button class="drag-h" data-drag="${x.i}" aria-label="Drag to reorder ${esc(o.n)}">${ICON.grip}</button>`}
+          <button class="row-trash" data-trash="${x.i}" aria-label="Remove ${esc(o.n)} from the plan">${ICON.trash}<span>Remove</span></button><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${x.logged && x.logged.arr && x.logged.end ? `Actually took ${hrs(x.leave - x.at)}` : `${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}`}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}<span class="stop-links">${uberChip('Uber here', o.n, o.ll, o.addr)}</span>${logHTML(x)}</span></li>`;
       }
       if (x.kind === 'car'){
         const c = x.car, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
-        return `<li class="edge carstep" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>
+        return `<li class="edge carstep" style="--k:${k++}"><i class="row-lock" title="Set time, stays in place" aria-label="Locked: set time">${ICON.lock}</i><time>${clock(x.at)}</time><span><b>${x.text}</b>
           <small>${esc(c.where)}, ${esc(c.addr)}</small>
           <small class="sec">${x.ret ? `${esc(c.retTip)} Due back by ${clock(mins(c.returnAt))}.` : esc(c.pickTip)}</small>
           ${!x.ret && c.secret ? `<small class="sec">Booking ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
           ${x.warn ? `<em>${esc(x.warn)}</em>` : ''}
-          <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></span>${x.logKey ? logHTML(x) : ''}</span></li>`;
+          <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a>${x.ret && s.pier.uber ? uberChip('Uber to the pier', s.pier.n.replace(' (ship)', ''), s.pier.ll, s.pier.addr) : ''}</span>${x.ret && s.pier.addr ? `<small>Pier: ${esc(s.pier.addr)}</small>` : ''}${x.logKey ? logHTML(x) : ''}</span></li>`;
       }
       if (x.trip){
         const f = x.trip.fp, w = x.trip.walking;
@@ -1166,12 +1232,13 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
           <span class="trip-sw" role="radiogroup" aria-label="How to get to the rental car">
             <button data-trip="ride" class="${w ? '' : 'on'}" role="radio" aria-checked="${!w}">${ICON.car}Ride</button>
             <button data-trip="walk" class="${w ? 'on' : ''}" role="radio" aria-checked="${w}"${f.walkOk ? '' : ' disabled'}>${ICON.walk}${f.walkOk ? 'Walk' : 'Too far to walk'}</button>
-          </span><small>Coming back the same way at the end of the day.</small></span>${logHTML(x)}</span></li>`;
+          </span><small>Coming back the same way at the end of the day.</small>${!w && s.rental && s.rental.booked ? `<span class="stop-links">${uberChip('Uber to the rental car', s.rental.booked.where, s.rental.ll, s.rental.booked.addr)}</span>` : ''}</span>${logHTML(x)}</span></li>`;
       }
-      return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}${x.logKey ? logHTML(x) : ''}</span></li>`;
+      const pierUber = x.kind === 'end' && s.pier.uber && !(s.rental && s.rental.booked) ? `<span class="stop-links">${uberChip('Uber to the pier', s.pier.n.replace(' (ship)', ''), s.pier.ll, s.pier.addr)}</span><small>Pier: ${esc(s.pier.addr)}</small>` : '';
+      return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}${pierUber}${x.logKey ? logHTML(x) : ''}</span></li>`;
     }).join('');
     const anyLogged = Object.keys(actuals[s.id] || {}).length;
-    return presets + status + stats + `<ol class="plan">${rows}</ol>${anyLogged ? `<button class="log-clearall" data-log-clearall>Clear all logged times for this day</button>` : ''}<p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. On the day, tap <b>Log real times</b> on a stop and the rest of the plan adjusts. Tap a stop name to see it on the map.</p>`;
+    return presets + status + stats + `<ol class="plan">${rows}</ol>${anyLogged ? `<button class="log-clearall" data-log-clearall>Clear all logged times for this day</button>` : ''}<p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. Drag the dots to reorder, swipe a stop left to remove it. Stops with a lock have set times and stay put. On the day, tap <b>Log real times</b> and the rest of the plan adjusts. Tap a stop name to see it on the map.</p>`;
   }
 
   /* Locked confirmation numbers: stored encrypted, unlocked with the passcode */
@@ -1251,15 +1318,50 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   function logHTML(x){
     const k = x.logKey, L = x.logged, single = k === '__ship' || k === '__car';
     if (logOpen === k){
-      const arr = (L && L.arr) || hhmm(x.at);
+      const d = logDraft;
       return `<span class="log-ed" data-logkey="${esc(k)}">
-        <label>${k === '__ship' ? 'Got off at' : k === '__car' ? 'Drove off at' : 'Arrived'}<input type="time" data-log-arr value="${arr}"></label>
-        ${single ? '' : `<label>Left<input type="time" data-log-end value="${(L && L.end) || ''}"></label>`}
+        <span class="log-lab"><b>${k === '__ship' ? 'Got off the ship at' : k === '__car' ? 'Drove off at' : 'Arrived at'}</b><button class="log-now" data-now="arr">Now</button></span>
+        ${wheelHTML('arr', d.arr)}
+        ${single ? '' : d.showEnd
+          ? `<span class="log-lab"><b>Left at</b><span><button class="log-now" data-now="end">Now</button><button class="log-now" data-noend>Remove</button></span></span>${wheelHTML('end', d.end)}`
+          : `<button class="log-add" data-addend>+ Add when we left</button>`}
         <span class="log-acts"><button class="log-save" data-log-save>Save</button>${L ? '<button data-log-clear>Clear</button>' : ''}<button data-log-cancel>Cancel</button></span></span>`;
     }
     const label = L && (L.arr || L.end) ? 'Logged ' + [L.arr && clock(mins(L.arr)), L.end && 'to ' + clock(mins(L.end))].filter(Boolean).join(' ') : '';
     return `<span class="log-row">${label ? `<i class="logged">${label}</i>` : ''}<button class="log-btn" data-log="${esc(k)}">${ICON.clock}${label ? 'Edit times' : 'Log real times'}</button></span>`;
   }
+  /* Spinning time wheels: hour, minute (5-minute steps), am/pm */
+  const WH = 40;
+  let logDraft = null;
+  function wheelHTML(name, val){
+    return `<span class="wheel" data-wheel="${name}" data-v="${val}" role="group" aria-label="${name === 'end' ? 'Time we left' : 'Time'}">
+      <span class="wcol" data-col="h">${Array.from({length: 12}, (_, i) => `<span>${i + 1}</span>`).join('')}</span>
+      <span class="wcol" data-col="m">${Array.from({length: 12}, (_, i) => `<span>${pad(i * 5)}</span>`).join('')}</span>
+      <span class="wcol" data-col="ap"><span>am</span><span>pm</span></span>
+      <i class="wband" aria-hidden="true"></i></span>`;
+  }
+  function wheelIdx(val){
+    let [H, M] = val.split(':').map(Number);
+    M = Math.round(M / 5) * 5; if (M === 60){ M = 0; H = (H + 1) % 24; }
+    return [(H % 12 || 12) - 1, M / 5, H >= 12 ? 1 : 0];
+  }
+  function setWheel(w, val, smooth){
+    const cols = w.querySelectorAll('.wcol');
+    wheelIdx(val).forEach((ix, c) => cols[c].scrollTo({top: ix * WH, behavior: smooth && !reduce ? 'smooth' : 'auto'}));
+  }
+  function readWheel(w){
+    const cols = w.querySelectorAll('.wcol'), ix = c => Math.max(0, Math.round(cols[c].scrollTop / WH));
+    const H = (ix(0) + 1) % 12 + (ix(2) ? 12 : 0);
+    return pad(H) + ':' + pad(Math.min(11, ix(1)) * 5);
+  }
+  function initWheels(){ document.querySelectorAll('.wheel').forEach(w => setWheel(w, w.dataset.v)); }
+  const nowHHMM = () => { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+  function draftFromWheels(){
+    const a = document.querySelector('.wheel[data-wheel="arr"]'), e = document.querySelector('.wheel[data-wheel="end"]');
+    if (a) logDraft.arr = readWheel(a);
+    if (e) logDraft.end = readWheel(e);
+  }
+
   function afterLog(){
     const s = S[cur];
     logOpen = null;
@@ -1269,6 +1371,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 
   function renderPane(){
     const s = S[cur], pane = $('#pane'); if (!pane) return;
+    requestAnimationFrame(initWheels);
     pane.innerHTML = view === 'plan' ? planHTML(s) : optsHTML(s);
   }
 
@@ -1306,9 +1409,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   let zk = 1, zc = null, mv = null;
   const ZMAX = 16;
   const routeCache = {};
-  function routeStops(s){
-    return (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => (a.o.order || 0) - (b.o.order || 0));
-  }
+  function routeStops(s){ return orderedSel(s); }
   function autoZoom(s){
     const g = GEO[s.geo];
     if (!g || !g.focus || !s.pier || !s.options) return false;
@@ -1688,14 +1789,29 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 
   /* Events */
   $('#dayBody').addEventListener('click', e => {
+    const tr = e.target.closest('[data-trash]');
+    if (tr){ const i = +tr.dataset.trash, n = S[cur].options[i].n; swOpen = null; toggleCheck(i); toast(`Removed ${n}. Check it again in Options to bring it back.`); return; }
+    if (e.target.closest('.drag-h')) return;
     const s0 = S[cur];
     const lb = e.target.closest('[data-log]');
-    if (lb){ logOpen = lb.dataset.log; renderPane(); const inp = document.querySelector('.log-ed input'); inp && inp.focus({preventScroll: true}); return; }
+    if (lb){
+      const k = lb.dataset.log, P = buildPlan(s0), stp = P.steps.find(z => z.logKey === k), L = actOf(s0, k);
+      const plannedEnd = stp && stp.leave != null ? hhmm(stp.leave - BUF.stop) : hhmm((stp ? stp.at : 720) + 60);
+      logDraft = {arr: (L && L.arr) || hhmm(stp ? stp.at : 720), end: (L && L.end) || plannedEnd, showEnd: !!(L && L.end)};
+      logOpen = k; renderPane(); return;
+    }
+    const nw = e.target.closest('[data-now]');
+    if (nw){ const w = document.querySelector(`.wheel[data-wheel="${nw.dataset.now}"]`); w && setWheel(w, nowHHMM(), true); return; }
+    if (e.target.closest('[data-addend]')){ draftFromWheels(); logDraft.showEnd = true; renderPane(); return; }
+    if (e.target.closest('[data-noend]')){ draftFromWheels(); logDraft.showEnd = false; renderPane(); return; }
+    const wi = e.target.closest('.wcol > span');
+    if (wi){ const col = wi.parentElement; col.scrollTo({top: [...col.children].indexOf(wi) * WH, behavior: reduce ? 'auto' : 'smooth'}); return; }
     if (e.target.closest('[data-log-cancel]')){ logOpen = null; renderPane(); return; }
     const ls = e.target.closest('[data-log-save]');
     if (ls){
       const ed = ls.closest('.log-ed'), k = ed.dataset.logkey;
-      const arr = ed.querySelector('[data-log-arr]').value, endEl = ed.querySelector('[data-log-end]'), end = endEl ? endEl.value : '';
+      const aw = ed.querySelector('.wheel[data-wheel="arr"]'), ew = ed.querySelector('.wheel[data-wheel="end"]');
+      const arr = aw ? readWheel(aw) : '', end = ew ? readWheel(ew) : '';
       actuals[s0.id] = actuals[s0.id] || {};
       if (arr || end) actuals[s0.id][k] = {arr, end}; else delete actuals[s0.id][k];
       afterLog(); return;
@@ -1727,6 +1843,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       const chip = document.querySelector(`.chip[data-f="${filter}"]`);
       chip && chip.scrollIntoView({inline: 'center', block: 'nearest', behavior: reduce ? 'auto' : 'smooth'});
     } else if (p){
+      if (orders[S[cur].id]){ delete orders[S[cur].id]; queue('orders/' + S[cur].id, '|'); }
       usePreset(S[cur], +p.dataset.preset); renderPane(); updateTally(true);
       queue('days/' + S[cur].id, namesFor(S[cur]));
       drawMap(S[cur]);
@@ -1745,7 +1862,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   let sx = 0, sy = 0, ok = false;
   const main = $('#main');
   main.addEventListener('touchstart', e => {
-    ok = !e.target.closest('#mapWrap, .chips, .ptabs');
+    ok = !e.target.closest('#mapWrap, .chips, .ptabs, ol.plan, .tally');
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
   }, {passive: true});
   main.addEventListener('touchend', e => {
@@ -1883,10 +2000,12 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       if (!window.caches) return;
       const days = {};
       S.forEach(s => { if (s.options && s.options.length) days[s.id] = namesFor(s); });
+      const ords = {};
+      S.forEach(s => { if (orders[s.id]) ords[s.id] = '|' + orders[s.id].join('|'); });
       const acts = {};
       S.forEach(s => { if (actuals[s.id]) acts[s.id] = actEncode(s); });
       const c = await caches.open('hawaii-trip-state');
-      await c.put(STATE_KEY, new Response(JSON.stringify({days, actuals: acts, pack: '|' + [...packed].join('|'), pending}), {headers: {'Content-Type': 'application/json'}}));
+      await c.put(STATE_KEY, new Response(JSON.stringify({days, actuals: acts, orders: ords, pack: '|' + [...packed].join('|'), pending}), {headers: {'Content-Type': 'application/json'}}));
     } catch (e){}
   }
   async function loadLocal(){
@@ -1901,6 +2020,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       if (k === 'pack'){ packed.clear(); p[k].split('|').filter(Boolean).forEach(x => packed.add(x)); }
       else if (k.startsWith('days/')){ const s = S.find(x => x.id === k.slice(5)); if (s && s.options) fromNames(s, p[k]); }
       else if (k.startsWith('actuals/')){ const s = S.find(x => x.id === k.slice(8)); if (s) actDecode(s, p[k]); }
+      else if (k.startsWith('orders/')){ const s = S.find(x => x.id === k.slice(7)); if (s) orders[s.id] = p[k].split('|').filter(Boolean); }
     });
   }
   function queue(path, value){
@@ -1930,6 +2050,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     if (!d) return;
     if (d.days) S.forEach(s => { if (typeof d.days[s.id] === 'string' && s.options) fromNames(s, d.days[s.id]); });
     if (d.actuals) S.forEach(s => { if (typeof d.actuals[s.id] === 'string') actDecode(s, d.actuals[s.id]); });
+    if (d.orders) S.forEach(s => { if (typeof d.orders[s.id] === 'string') orders[s.id] = d.orders[s.id].split('|').filter(Boolean); });
     if (typeof d.pack === 'string'){ packed.clear(); d.pack.split('|').filter(Boolean).forEach(x => packed.add(x)); }
   }
   function refreshUI(){
@@ -2023,6 +2144,98 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     else if (e.target.closest('#pinGo')) tryPin();
   }, true);
   pinIn.addEventListener('keydown', e => { if (e.key === 'Enter') tryPin(); if (e.key === 'Escape') closePin(); });
+
+  /* Swipe a stop left to reveal Remove */
+  let sw = null, swOpen = null;
+  const closeSwipe = () => { if (swOpen){ swOpen.style.transform = ''; swOpen.classList.remove('open'); swOpen = null; } };
+  $('#dayBody').addEventListener('touchstart', e => {
+    const li = e.target.closest('ol.plan li.stop');
+    if (!li || e.target.closest('.drag-h, .log-ed, .wheel, button, a')) { if (!e.target.closest('.row-trash')) closeSwipe(); return; }
+    if (swOpen && swOpen !== li) closeSwipe();
+    const t = e.touches[0];
+    sw = {li, x: t.clientX, y: t.clientY, dx: 0, base: li === swOpen ? -96 : 0, dir: null};
+  }, {passive: true});
+  $('#dayBody').addEventListener('touchmove', e => {
+    if (!sw) return;
+    const t = e.touches[0], dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+    if (!sw.dir) sw.dir = Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) ? 'x' : Math.abs(dy) > 8 ? 'y' : null;
+    if (sw.dir !== 'x') return;
+    sw.dx = Math.max(-120, Math.min(0, sw.base + dx));
+    sw.li.style.transition = 'none';
+    sw.li.style.transform = `translateX(${sw.dx}px)`;
+  }, {passive: true});
+  $('#dayBody').addEventListener('touchend', () => {
+    if (!sw) return;
+    const li = sw.li;
+    li.style.transition = '';
+    if (sw.dir === 'x'){
+      if (sw.dx < -48){ li.style.transform = 'translateX(-96px)'; li.classList.add('open'); swOpen = li; }
+      else { li.style.transform = ''; li.classList.remove('open'); if (swOpen === li) swOpen = null; }
+    }
+    sw = null;
+  }, {passive: true});
+
+  /* Toast messages */
+  let toastT = 0;
+  function toast(msg){
+    const t = $('#toast'); t.textContent = msg; t.hidden = false;
+    requestAnimationFrame(() => t.classList.add('show'));
+    clearTimeout(toastT); toastT = setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.hidden = true, 300); }, 3600);
+  }
+
+  /* Check a move before accepting it */
+  function moveProblem(s, names){
+    const before = buildPlan(s), after = buildPlan(s, names);
+    const lateLock = after.steps.find(x => x.kind === 'stop' && x.o.at && x.warn && !(before.steps.find(y => y.kind === 'stop' && y.o.n === x.o.n) || {}).warn);
+    if (lateLock) return `No time for that. You’d reach ${lateLock.o.n} after its ${clock(mins(lateLock.o.at))} check-in.`;
+    const carBefore = before.steps.find(x => x.kind === 'car' && x.ret), carAfter = after.steps.find(x => x.kind === 'car' && x.ret);
+    if (carAfter && carAfter.warn && !(carBefore && carBefore.warn)) return 'No time for that. The rental car would go back late.';
+    if (after.spare < 0 && before.spare >= 0) return 'No time for that. You’d miss your back-aboard time.';
+    return '';
+  }
+
+  /* Drag the handle to reorder */
+  let drag = null;
+  $('#dayBody').addEventListener('pointerdown', e => {
+    const hd = e.target.closest('.drag-h'); if (!hd) return;
+    e.preventDefault(); closeSwipe();
+    const ol = hd.closest('ol.plan'), rows = [...ol.querySelectorAll('li.stop')], li = hd.closest('li.stop');
+    const mids = rows.map(r => { const b = r.getBoundingClientRect(); return {top: b.top + scrollY, bottom: b.bottom + scrollY, mid: (b.top + b.bottom) / 2 + scrollY}; });
+    drag = {ol, rows, li, from: rows.indexOf(li), y0: e.clientY + scrollY, mids, to: rows.indexOf(li), id: e.pointerId};
+    hd.setPointerCapture(e.pointerId);
+    li.classList.add('dragging');
+    let line = ol.querySelector('.drop-line'); if (!line){ line = document.createElement('i'); line.className = 'drop-line'; ol.appendChild(line); }
+    drag.line = line;
+  });
+  $('#dayBody').addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const y = e.clientY + scrollY, dy = y - drag.y0;
+    drag.li.style.transform = `translateY(${dy}px)`;
+    const m = drag.mids[drag.from].mid + dy;
+    const others = drag.mids.map((r, j) => ({...r, j})).filter(r => r.j !== drag.from);
+    let to = others.filter(r => r.mid < m).length;
+    drag.to = to;
+    const olTop = drag.ol.getBoundingClientRect().top + scrollY;
+    const lineY = to < others.length ? others[to].top - olTop - 3 : others[others.length - 1].bottom - olTop + 1;
+    drag.line.style.transform = `translateY(${lineY}px)`; drag.line.classList.add('on');
+    if (e.clientY < 110) window.scrollBy(0, -10); else if (e.clientY > innerHeight - 140) window.scrollBy(0, 10);
+  });
+  function endDrag(){
+    if (!drag) return;
+    const s = S[cur], d = drag; drag = null;
+    d.li.classList.remove('dragging'); d.li.style.transform = ''; d.line.classList.remove('on');
+    if (d.to === d.from) return;
+    const names = orderedSel(s).map(x => x.o.n), [moved] = names.splice(d.from, 1);
+    names.splice(d.to, 0, moved);
+    const why = moveProblem(s, names);
+    if (why){ toast(why); return; }
+    orders[s.id] = names;
+    queue('orders/' + s.id, '|' + names.join('|'));
+    renderPane(); updateTally(false); drawMap(s);
+    toast(`Moved ${moved}.`);
+  }
+  $('#dayBody').addEventListener('pointerup', endDrag);
+  $('#dayBody').addEventListener('pointercancel', endDrag);
 
   /* Start */
   hero(); buildStrip(); buildSheet(); renderPack(); startSync();
