@@ -766,6 +766,20 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 .trip-sw button.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .trip-sw button:disabled{opacity:.55;cursor:not-allowed}
 
+
+.log-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;padding-left:0!important}
+.plan li span .log-row,.plan li span .log-ed,.plan li span .log-acts{padding-left:0}
+.log-btn{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--ocean);padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);min-height:30px}
+.log-btn svg{width:14px;height:14px}
+.logged{font-style:normal;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--ocean);color:var(--surface)}
+.log-ed{display:grid;gap:8px;margin-top:8px;padding:10px 12px!important;border-radius:12px;background:var(--bg)}
+.log-ed label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;font-weight:600}
+.log-ed input{font:600 16px var(--sans);padding:6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);min-height:40px}
+.log-acts{display:flex;flex-wrap:wrap;gap:6px}
+.log-acts button{font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);min-height:36px}
+.log-acts .log-save{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.log-clearall{display:block;margin:10px auto 0;font-size:13px;font-weight:600;color:var(--warn-ink);padding:8px 14px;border-radius:999px;background:var(--warn-bg)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -896,6 +910,25 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     if (road > 1.8) return {type: 'ride', min: 15 + Math.round(road / 30 * 60 * BUF.drivePad), mi: 0};
     return {type: 'walk', min: walkMin(road), mi: road * 0.621};
   }
+  /* Logged real times: {dayId: {key: {arr, end}}}, key = stop name, __ship, or __car */
+  const actuals = {};
+  let logOpen = null;
+  const actOf = (s, k) => (actuals[s.id] || {})[k] || null;
+  function actEncode(s){
+    const A = actuals[s.id] || {};
+    return '|' + Object.keys(A).map(k => k + '=' + (A[k].arr || '') + '~' + (A[k].end || '')).join('|');
+  }
+  function actDecode(s, str){
+    const A = {};
+    String(str).split('|').filter(Boolean).forEach(x => {
+      const i = x.lastIndexOf('='); if (i < 0) return;
+      const [arr, end] = x.slice(i + 1).split('~');
+      A[x.slice(0, i)] = {arr: arr || '', end: end || ''};
+    });
+    actuals[s.id] = A;
+  }
+  const hhmm = m => pad(Math.floor(((m % 1440) + 1440) % 1440 / 60)) + ':' + pad(Math.round(m) % 60);
+
   function buildPlan(s){
     if (!s.leg || !s.pier) return null;
     const sel = (s.options || []).map((o, i) => ({o, i})).filter(x => picked[s.id].has(x.i)).sort((a, b) => a.o.order - b.o.order);
@@ -905,12 +938,16 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     let t = mins(s.ashore), pos = home, prev = null;
     const car = s.leg.mode === 'car' && s.rental && s.rental.booked ? s.rental.booked : null;
     const fp = car && car.fromPier, walking = walkToCar(s), tripExtra = fp && walking ? fp.walk - fp.ride : 0;
-    steps.push({kind: 'start', at: t, text: 'Off the ship', sub: car ? `About ${hrs(s.leg.start + tripExtra)} to get ashore, ${walking ? 'walk' : 'ride'} to the rental car, and pick it up` : `About ${hrs(s.leg.start)} to get ashore`, trip: fp ? {fp, walking} : null});
-    t += s.leg.start + tripExtra;
+    const aShip = actOf(s, '__ship');
+    if (aShip && aShip.arr) t = mins(aShip.arr);
+    steps.push({kind: 'start', at: t, text: aShip && aShip.arr ? 'Got off the ship' : 'Off the ship', sub: car ? `About ${hrs(s.leg.start + tripExtra)} to get ashore, ${walking ? 'walk' : 'ride'} to the rental car, and pick it up` : `About ${hrs(s.leg.start)} to get ashore`, trip: fp ? {fp, walking} : null, logKey: '__ship', logged: aShip});
+    t += aShip && aShip.arr ? Math.max(0, s.leg.start + tripExtra - 30) : s.leg.start + tripExtra;
     if (car){
       const atCounter = mins(s.ashore) + 30 + (walking ? fp.walk : fp.ride);
-      steps.push({kind: 'car', at: mins(car.pickupAt), text: 'Pick up the rental car', car,
-        warn: atCounter > mins(car.pickupAt) ? `You’d reach the counter around ${clock(atCounter)}, after your ${clock(mins(car.pickupAt))} pickup. Take the ${fp.ride$.split(' ').pop() === 'Uber' ? 'Uber' : 'taxi'} instead, or call ahead.` : ''});
+      const aCar = actOf(s, '__car');
+      if (aCar && aCar.arr) t = mins(aCar.arr);
+      steps.push({kind: 'car', at: aCar && aCar.arr ? t : mins(car.pickupAt), text: aCar && aCar.arr ? 'Drove off in the rental car' : 'Pick up the rental car', car, logKey: '__car', logged: aCar,
+        warn: aCar && aCar.arr ? '' : atCounter > mins(car.pickupAt) ? `You’d reach the counter around ${clock(atCounter)}, after your ${clock(mins(car.pickupAt))} pickup. Take the ${fp.ride$.split(' ').pop() === 'Uber' ? 'Uber' : 'taxi'} instead, or call ahead.` : ''});
     }
     const addLeg = l => {
       steps.push({kind: 'leg', l});
@@ -921,10 +958,15 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     sel.forEach(({o, i}) => {
       addLeg(legBetween(s, pos, o.ll, !prev, (prev && prev.extra || 0) + (o.extra || 0)));
       let wait = 0, warn = '';
-      if (o.at){ const a = mins(o.at); if (t <= a){ wait = a - t; t = a; } else warn = `Check-in is ${clock(a)}. You’d get there at ${clock(t)}.`; }
-      if (o.by && t > mins(o.by)) warn = `Get here by ${clock(mins(o.by))}. You’d arrive at ${clock(t)}.`;
-      steps.push({kind: 'stop', at: t, o, i, wait, warn});
-      t += o.dur + BUF.stop;
+      const A = actOf(s, o.n);
+      if (A && A.arr) t = mins(A.arr);
+      else {
+        if (o.at){ const a = mins(o.at); if (t <= a){ wait = a - t; t = a; } else warn = `Check-in is ${clock(a)}. You’d get there at ${clock(t)}.`; }
+        if (o.by && t > mins(o.by)) warn = `Get here by ${clock(mins(o.by))}. You’d arrive at ${clock(t)}.`;
+      }
+      const arrive = t;
+      t = A && A.end ? mins(A.end) : t + o.dur + BUF.stop;
+      steps.push({kind: 'stop', at: arrive, leave: t, o, i, wait, warn, logKey: o.n, logged: A});
       st.down += wait + BUF.stop + (o.c === 'chill' ? o.dur : 0);
       if (o.hike) st.hike += o.mi || 0; else st.walk += o.mi || 0;
       pos = o.ll; prev = o;
@@ -1020,7 +1062,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   function select(i){
     if (i === cur || i < 0 || i >= S.length) return;
     const dir = cur < 0 ? 0 : (i > cur ? 1 : -1);
-    cur = i; filter = 'all'; view = S[i].leg ? 'plan' : 'options';
+    cur = i; filter = 'all'; logOpen = null; view = S[i].leg ? 'plan' : 'options';
     nodes().forEach((n, k) => { n.classList.toggle('on', k === i); n.setAttribute('aria-selected', k === i); });
     placeLine(i);
     const c = centers()[i];
@@ -1106,7 +1148,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       }
       if (x.kind === 'stop'){
         const o = x.o;
-        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}</span></li>`;
+        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${x.logged && x.logged.arr && x.logged.end ? `Actually took ${hrs(x.leave - x.at)}` : `${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}`}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}${logHTML(x)}</span></li>`;
       }
       if (x.kind === 'car'){
         const c = x.car, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
@@ -1115,7 +1157,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
           <small class="sec">${x.ret ? `${esc(c.retTip)} Due back by ${clock(mins(c.returnAt))}.` : esc(c.pickTip)}</small>
           ${!x.ret && c.secret ? `<small class="sec">Booking ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
           ${x.warn ? `<em>${esc(x.warn)}</em>` : ''}
-          <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></span></span></li>`;
+          <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></span>${x.logKey ? logHTML(x) : ''}</span></li>`;
       }
       if (x.trip){
         const f = x.trip.fp, w = x.trip.walking;
@@ -1124,11 +1166,12 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
           <span class="trip-sw" role="radiogroup" aria-label="How to get to the rental car">
             <button data-trip="ride" class="${w ? '' : 'on'}" role="radio" aria-checked="${!w}">${ICON.car}Ride</button>
             <button data-trip="walk" class="${w ? 'on' : ''}" role="radio" aria-checked="${w}"${f.walkOk ? '' : ' disabled'}>${ICON.walk}${f.walkOk ? 'Walk' : 'Too far to walk'}</button>
-          </span><small>Coming back the same way at the end of the day.</small></span></span></li>`;
+          </span><small>Coming back the same way at the end of the day.</small></span>${logHTML(x)}</span></li>`;
       }
-      return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
+      return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}${x.logKey ? logHTML(x) : ''}</span></li>`;
     }).join('');
-    return presets + status + stats + `<ol class="plan">${rows}</ol><p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. Tap a stop to see it on the map.</p>`;
+    const anyLogged = Object.keys(actuals[s.id] || {}).length;
+    return presets + status + stats + `<ol class="plan">${rows}</ol>${anyLogged ? `<button class="log-clearall" data-log-clearall>Clear all logged times for this day</button>` : ''}<p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. On the day, tap <b>Log real times</b> on a stop and the rest of the plan adjusts. Tap a stop name to see it on the map.</p>`;
   }
 
   /* Locked confirmation numbers: stored encrypted, unlocked with the passcode */
@@ -1203,6 +1246,25 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     return `<div class="rent"><div class="rent-head"><b>${ICON.car}Rental car from ${esc(r.code)}</b><span>${esc(r.airport)}, ${fmt(s.date, {weekday: 'short', month: 'short', day: 'numeric'})}. Pick up around ${clock(rentalTimes(s).up)}, return by about ${clock(rentalTimes(s).back)}.</span></div>
       <div class="rent-sites">${rentalSites(s).map(([n, u, note]) => `<a href="${u}" target="_blank" rel="noopener"><b>${esc(n)}</b>${note ? `<small>${esc(note)}</small>` : ''}</a>`).join('')}</div>
       <p class="rent-tip">Pick one you can cancel for free. Ask how you get from the cruise pier to the counter, and what time the counter closes.</p></div>`;
+  }
+
+  function logHTML(x){
+    const k = x.logKey, L = x.logged, single = k === '__ship' || k === '__car';
+    if (logOpen === k){
+      const arr = (L && L.arr) || hhmm(x.at);
+      return `<span class="log-ed" data-logkey="${esc(k)}">
+        <label>${k === '__ship' ? 'Got off at' : k === '__car' ? 'Drove off at' : 'Arrived'}<input type="time" data-log-arr value="${arr}"></label>
+        ${single ? '' : `<label>Left<input type="time" data-log-end value="${(L && L.end) || ''}"></label>`}
+        <span class="log-acts"><button class="log-save" data-log-save>Save</button>${L ? '<button data-log-clear>Clear</button>' : ''}<button data-log-cancel>Cancel</button></span></span>`;
+    }
+    const label = L && (L.arr || L.end) ? 'Logged ' + [L.arr && clock(mins(L.arr)), L.end && 'to ' + clock(mins(L.end))].filter(Boolean).join(' ') : '';
+    return `<span class="log-row">${label ? `<i class="logged">${label}</i>` : ''}<button class="log-btn" data-log="${esc(k)}">${ICON.clock}${label ? 'Edit times' : 'Log real times'}</button></span>`;
+  }
+  function afterLog(){
+    const s = S[cur];
+    logOpen = null;
+    queue('actuals/' + s.id, actEncode(s));
+    renderPane(); updateTally(false);
   }
 
   function renderPane(){
@@ -1626,6 +1688,24 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 
   /* Events */
   $('#dayBody').addEventListener('click', e => {
+    const s0 = S[cur];
+    const lb = e.target.closest('[data-log]');
+    if (lb){ logOpen = lb.dataset.log; renderPane(); const inp = document.querySelector('.log-ed input'); inp && inp.focus({preventScroll: true}); return; }
+    if (e.target.closest('[data-log-cancel]')){ logOpen = null; renderPane(); return; }
+    const ls = e.target.closest('[data-log-save]');
+    if (ls){
+      const ed = ls.closest('.log-ed'), k = ed.dataset.logkey;
+      const arr = ed.querySelector('[data-log-arr]').value, endEl = ed.querySelector('[data-log-end]'), end = endEl ? endEl.value : '';
+      actuals[s0.id] = actuals[s0.id] || {};
+      if (arr || end) actuals[s0.id][k] = {arr, end}; else delete actuals[s0.id][k];
+      afterLog(); return;
+    }
+    const lc = e.target.closest('[data-log-clear]');
+    if (lc){ const k = lc.closest('.log-ed').dataset.logkey; if (actuals[s0.id]) delete actuals[s0.id][k]; afterLog(); return; }
+    if (e.target.closest('[data-log-clearall]')){
+      if (confirm('Clear all logged times for this day?')){ actuals[s0.id] = {}; afterLog(); }
+      return;
+    }
     const tp = e.target.closest('[data-trip]');
     if (tp && !tp.disabled){
       const key = 'cartrip:' + S[cur].id + '=walk';
@@ -1803,8 +1883,10 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       if (!window.caches) return;
       const days = {};
       S.forEach(s => { if (s.options && s.options.length) days[s.id] = namesFor(s); });
+      const acts = {};
+      S.forEach(s => { if (actuals[s.id]) acts[s.id] = actEncode(s); });
       const c = await caches.open('hawaii-trip-state');
-      await c.put(STATE_KEY, new Response(JSON.stringify({days, pack: '|' + [...packed].join('|'), pending}), {headers: {'Content-Type': 'application/json'}}));
+      await c.put(STATE_KEY, new Response(JSON.stringify({days, actuals: acts, pack: '|' + [...packed].join('|'), pending}), {headers: {'Content-Type': 'application/json'}}));
     } catch (e){}
   }
   async function loadLocal(){
@@ -1818,6 +1900,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     Object.keys(p || {}).forEach(k => {
       if (k === 'pack'){ packed.clear(); p[k].split('|').filter(Boolean).forEach(x => packed.add(x)); }
       else if (k.startsWith('days/')){ const s = S.find(x => x.id === k.slice(5)); if (s && s.options) fromNames(s, p[k]); }
+      else if (k.startsWith('actuals/')){ const s = S.find(x => x.id === k.slice(8)); if (s) actDecode(s, p[k]); }
     });
   }
   function queue(path, value){
@@ -1846,12 +1929,13 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
   function applyRemote(d){
     if (!d) return;
     if (d.days) S.forEach(s => { if (typeof d.days[s.id] === 'string' && s.options) fromNames(s, d.days[s.id]); });
+    if (d.actuals) S.forEach(s => { if (typeof d.actuals[s.id] === 'string') actDecode(s, d.actuals[s.id]); });
     if (typeof d.pack === 'string'){ packed.clear(); d.pack.split('|').filter(Boolean).forEach(x => packed.add(x)); }
   }
   function refreshUI(){
     if (cur >= 0 && S[cur].kind !== 'sea'){
       const pane = $('#pane');
-      if (pane){ pane.classList.add('quiet'); renderPane(); setTimeout(() => pane.classList.remove('quiet'), 50); }
+      if (pane && !logOpen){ pane.classList.add('quiet'); renderPane(); setTimeout(() => pane.classList.remove('quiet'), 50); }
       updateTally(false);
       drawMap(S[cur]);
     }
