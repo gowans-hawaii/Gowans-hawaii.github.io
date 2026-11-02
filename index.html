@@ -79,15 +79,15 @@ window.TRIP = {
       rental: {
         code: "OGG", airport: "Kahului Airport", city: "Kahului", ll: [20.8986, -156.4305],
         booked: {
-          company: "", car: "Hyundai Accent or similar compact. 5 seats, 2 bags, automatic, A/C.",
+          company: "Dollar", car: "Hyundai Accent or similar compact. 5 seats, 2 bags, automatic, A/C.",
           pickup: "11:30 am at Kahului Airport", dropoff: "7:00 pm at Kahului Airport",
-          addr: "1 Kahului Airport Rd, Kahului, HI 96732", where: "Rental car center at Kahului Airport", pickupAt: "11:30", returnAt: "19:00", secret: "maui",
+          addr: "1 Kahului Airport Rd, Kahului, HI 96732", where: "Dollar at the Kahului Airport rental car center", pickupAt: "11:30", returnAt: "19:00", secret: "maui",
           fromPier: { mi: 3, ride: 15, walk: 65, walkOk: false, ride$: "$15–20 taxi or Uber", why: "About 3 miles along a busy highway without good sidewalks." },
           pickTip: "Pay $19.47 at the counter. Bring the voucher, license, and credit card.", retTip: "Fill the gas tank first.",
           paid: "$19.47, paid at the counter (nothing paid yet)", via: "EconomyBookings.com", ref: "4916",
           cancelBy: "Check the confirmation email for the deadline",
           steps: [
-            ["By Nov 10", "Watch for the rental voucher email about 72 hours before pickup. It also names the rental company. Check spam, then screenshot it or save it to Files so you have it with no service."],
+            ["Nov 10, around 11:30 am", "The voucher email arrives 72 hours before pickup. Check spam, then screenshot it or save it to Files so you have it with no service."],
             ["Before the trip", "Check whether your credit card or car insurance covers rentals, so you can decide on extra coverage instead of buying it at the counter."],
             ["Nov 13, 10 am", "Get off the ship and take a taxi or Uber about 10 minutes to the airport rental car center."],
             ["11:30 am", "Be at the rental counter on time and pay the $19.47. Showing up late can count as a no-show. If the ship runs late, call the rental company’s Kahului office (the number is on the voucher)."],
@@ -134,13 +134,13 @@ window.TRIP = {
         booked: {
           company: "Hertz", car: "Chevrolet Trax or similar compact SUV. 5 seats, unlimited miles, automatic.",
           pickup: "10:30 am at the HNL rental car center", dropoff: "8:00 pm at the same place. Plan to return around 7:30.",
-          addr: "300 Rodgers Blvd, Honolulu, HI 96819", where: "Hertz at the Honolulu Airport rental car center", pickupAt: "10:30", returnAt: "20:00", secret: "oahu",
+          addr: "300 Rodgers Blvd, Honolulu, HI 96819", where: "Hertz at the Honolulu Airport rental car center", pickupAt: "10:30", returnAt: "20:00", secret: "oahu", conf: "oahuConf", confTail: "C275",
           fromPier: { mi: 7, ride: 30, walk: 150, walkOk: false, ride$: "$25–35 Uber", why: "About 7 miles, mostly along the freeway." },
           pickTip: "Already paid. Bring your license and the Visa ending 6528.", retTip: "Fill the gas tank first (full to full).",
           paid: "$55.77, already paid", via: "Expedia", ref: "itinerary ending 3869",
           cancelBy: "Free until Oct 19 at about 7:20 pm (24 hours after booking). A fee may apply after that.",
           steps: [
-            ["Before the trip", "Complete Hertz early check-in from the link in the Expedia email and upload your documents. That lets you skip the counter line."],
+            ["Nov 7, from 1:30 pm HST", "Hertz online check-in opens. Upload your documents so you can skip the counter line. The link is on the to-do list."],
             ["Before the trip", "Check whether your credit card or car insurance covers rentals, so you can decide on collision protection ahead of time."],
             ["Nov 14, 9:00 am", "Get off the ship and walk away from the crowd outside the terminal before calling an Uber. Ask to go to the airport rental car center, not the terminal. About 20–25 minutes."],
             ["10:30 am", "Pick up the car at Hertz, then head north. Skydiving check-in is 12:30."],
@@ -207,13 +207,13 @@ window.TRIP = {
         booked: {
           company: "Dollar", car: "Chevrolet Spark or similar economy. 4 seats, unlimited miles.",
           pickup: "10:00 am at Hilo Airport", dropoff: "3:00 pm at Hilo Airport",
-          addr: "1 General Lyman Field, Ste 13, Hilo, HI 96720", where: "Dollar at Hilo Airport", pickupAt: "10:00", returnAt: "15:00", secret: "hilo",
+          addr: "1 General Lyman Field, Ste 13, Hilo, HI 96720", where: "Dollar at Hilo Airport", pickupAt: "10:00", returnAt: "15:00", secret: "hilo", conf: "hiloConf", confTail: "82A2",
           fromPier: { mi: 2, ride: 15, walk: 45, walkOk: true, ride$: "$10–15 taxi", why: "Flat, but through the harbor’s industrial area with patchy sidewalks." },
           pickTip: "Already paid. Bring your license and the Visa ending 6528.", retTip: "Fill the gas tank first.",
           paid: "$61.52, already paid", via: "Expedia", ref: "itinerary ending 2414",
           cancelBy: "Check the Expedia itinerary for the rules before relying on a refund.",
           steps: [
-            ["Before the trip", "Complete Dollar early check-in from the link in the Expedia email and upload your documents, so you can skip the line."],
+            ["Nov 9, from 1:00 pm HST", "Dollar online check-in opens. You’ll be at sea, so use the ship’s Wi-Fi. The link is on the to-do list."],
             ["Before the trip", "Call Dollar Hilo and ask if they run a shuttle from the cruise pier on Nov 16. If they do, skip the taxi."],
             ["Nov 16, 9:00 am", "Get off the ship and take a taxi from the pier to Hilo Airport. About 5 minutes and $10–15. The counter is across from the terminal."],
             ["10:00 am", "Pick up the car and drive about an hour to Volcanoes National Park. Entry is $30 per car, card only."],
@@ -288,11 +288,12 @@ window.TRIP = {
       ["Oct 18", "Book all three rental cars: Maui, Oʻahu, and Hilo."],
       ["By Oct 19, 7:20 pm", "Decide on the Oʻahu rental. Free cancellation ends then.", [["Expedia trips", "https://www.expedia.com/trips"]]],
       ["Oct 25", "Do Carnival online check-in.", [["Carnival", "https://www.carnival.com/"]]],
-      ["Before sailing", "Complete early check-in for Oʻahu (Hertz) and Hilo (Dollar) so you can skip the counter. The quickest links are in the Expedia emails.", [["Hertz", "https://www.hertz.com/"], ["Dollar", "https://www.dollar.com/"]]],
       ["Before sailing", "Open this site on both phones with service and add it to your Home Screen."],
       ["Nov 7", "Fly in and stay near Long Beach."],
       ["Nov 7", "Save the plans as a PDF, in case there’s no service.", [["Save the PDF", "#pdf"]]],
-      ["Nov 10", "Save the Maui rental voucher from your email to your phone.", [["EconomyBookings", "https://www.economybookings.com/"]]]
+      ["Nov 7, 1:30 pm HST", "Do Hertz online check-in for the Oʻahu car (3:30 pm Pacific). Upload your documents to skip the counter.", [["Hertz check-in", "https://www.hertz.com/us/en/checkin/?EMLCID=US.TRC.UNKWN.f08ab0899c5a9b2113cf5a0f12fe3e13.EML&EMLDTL=DATE20261018-LANGEN_US.TESTX.VERSX.CAT01G250&cta=paragraphComponent.Car_V1_Online_CheckIn.link"]]],
+      ["Nov 9, 1:00 pm HST", "Do Dollar online check-in for the Hilo car (3:00 pm Pacific). You’ll be at sea, so use the ship’s Wi-Fi.", [["Dollar check-in", "https://www.dollar.com/us/en/checkin/?EMLCID=US.TRC.UNKWN.f08ab0899c5a9b2113cf5a0f12fe3e13.EML&EMLDTL=DATE20261018-LANGEN_US.TESTX.VERSX.CAT01G250&cta=paragraphComponent.Car_V1_Online_CheckIn.link"]]],
+      ["Nov 10, around 11:30 am HST", "The Maui rental voucher (Dollar, booking ending 4916) arrives by email, 72 hours before pickup. Check spam, then save it to your phone.", [["EconomyBookings", "https://www.economybookings.com/"]]]
     ],
     packNote: "One carry-on each plus a daypack. Do laundry on two sea days (Nov 12 and Nov 19) so 7 days of clothes covers all 15.",
     packing: {
@@ -825,6 +826,13 @@ a.uber svg{width:14px;height:14px}
 .tally-panel ul.paid b{text-decoration:line-through;text-decoration-color:var(--line)}
 .paid-tag{font-style:normal;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--ocean-soft);color:var(--ocean)}
 
+
+.copy{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:12px;font-weight:700;color:var(--ocean);padding:3px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);min-height:28px;vertical-align:1px}
+.copy svg{width:13px;height:13px}
+.copy.done{background:var(--ocean);border-color:var(--ocean);color:var(--surface)}
+.plan li span .copy{padding:3px 10px}
+.copy span,.plan li span .copy span{padding-left:0!important}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -1079,6 +1087,7 @@ a.uber svg{width:14px;height:14px}
     lock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="7" width="9" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg>',
     grip: '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="6" cy="4" r="1.3"/><circle cx="10" cy="4" r="1.3"/><circle cx="6" cy="8" r="1.3"/><circle cx="10" cy="8" r="1.3"/><circle cx="6" cy="12" r="1.3"/><circle cx="10" cy="12" r="1.3"/></svg>',
     trash: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"/></svg>',
+    copy: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V3.5a1 1 0 00-1-1h-6a1 1 0 00-1 1v6a1 1 0 001 1h2"/></svg>',
     wave: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 8c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1M2 13c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/></svg>'
   };
 
@@ -1233,7 +1242,8 @@ a.uber svg{width:14px;height:14px}
         return `<li class="edge carstep" style="--k:${k++}"><i class="row-lock" title="Set time, stays in place" aria-label="Locked: set time">${ICON.lock}</i><time>${clock(x.at)}</time><span><b>${x.text}</b>
           <small>${esc(c.where)}, ${esc(c.addr)}</small>
           <small class="sec">${x.ret ? `${esc(c.retTip)} Due back by ${clock(mins(c.returnAt))}.` : esc(c.pickTip)}</small>
-          ${!x.ret && c.secret ? `<small class="sec">Booking ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
+          ${!x.ret && c.conf ? `<small class="sec">Confirmation ${secretHTML(c.conf, c.confTail)}</small>` : ''}
+          ${!x.ret && c.secret ? `<small class="sec">${c.conf ? 'Expedia itinerary' : 'Booking'} ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
           ${x.warn ? `<em>${esc(x.warn)}</em>` : ''}
           <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a>${x.ret && s.pier.uber ? uberChip('Uber to the pier', s.pier.n.replace(' (ship)', ''), s.pier.ll, s.pier.addr) : ''}</span>${x.ret && s.pier.addr ? `<small>Pier: ${esc(s.pier.addr)}</small>` : ''}${x.logKey ? logHTML(x) : ''}</span></li>`;
       }
@@ -1254,11 +1264,11 @@ a.uber svg{width:14px;height:14px}
   }
 
   /* Locked confirmation numbers: stored encrypted, unlocked with the passcode */
-  const VAULT = {"salt": "jexY+IvFerWicOEo3AHkKQ==", "iv": "WOW5bf/dXmhF/hNR", "ct": "7vAYYYhDqrdceEQl12Nb4jzga8T5fvwtah8WyqqMSPDk5UFmfRI835ob+Ns73IQlpIVvzZZnaKtvhUTKfRJnELs43yGlBhngP+fiF2ROtwgPZ0dGwjjLWb0ATNS4tw/GFgEhVEEWxPrlFPPd+Bl6koV1ErcP6zHwoPP0kHmzgseAkMc=", "iter": 600000};
+  const VAULT = {"salt": "kXTP+jId4lTBog415Ro3BA==", "iv": "MTfzmQv2P1Ff/7hv", "ct": "Esz86BimqpWGVH31SQqZQSvhx+PWVygFbcbxPhfBXzvyqiSGcxZfPDA3dSOC15D8O+V9DwgMsOGXxOz6q+k7qCuFa3TqtUaDapAowCoCiFuWgZnVrQxF78QPhbdBr48Qmk7TYb5j5zYNxrLEajvVtYI/T4ShQ3469SblSlQa8VoqzQ2R7ACT6Z41CUvQBaNnyRIyFrYvQC8NzMXVQiPUW8erTs4ha0KUQa1qtVg8K48Vr2V045A09ns=", "iter": 600000};
   let SECRETS = null;
   const last4 = s => (String(s).match(/\d{4}$/) || [''])[0];
   function secretHTML(key, tail){
-    if (SECRETS && SECRETS[key]) return `<span class="secret on" data-secret="${key}">${esc(SECRETS[key])}</span>`;
+    if (SECRETS && SECRETS[key]) return `<span class="secret on" data-secret="${key}">${esc(SECRETS[key])}</span>${copyBtn(key)}`;
     return `<span class="secret" data-secret="${key}">ending ${esc(tail)}</span> <button class="unlock" data-unlock>Show full number</button>`;
   }
   const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -1268,8 +1278,13 @@ a.uber svg{width:14px;height:14px}
     const pt = await crypto.subtle.decrypt({name: 'AES-GCM', iv: b64(VAULT.iv)}, key, b64(VAULT.ct));
     return JSON.parse(new TextDecoder().decode(pt));
   }
+  const copyBtn = key => `<button class="copy" data-copy="${key}" aria-label="Copy number">${ICON.copy}<span>Copy</span></button>`;
   function revealAll(){
-    document.querySelectorAll('[data-secret]').forEach(el => { const v = SECRETS[el.dataset.secret]; if (v){ el.textContent = v; el.classList.add('on'); } });
+    document.querySelectorAll('[data-secret]').forEach(el => {
+      const v = SECRETS[el.dataset.secret]; if (!v) return;
+      el.textContent = v; el.classList.add('on');
+      if (!(el.nextElementSibling && el.nextElementSibling.matches('[data-copy]'))) el.insertAdjacentHTML('afterend', copyBtn(el.dataset.secret));
+    });
     document.querySelectorAll('[data-unlock]').forEach(b => b.remove());
   }
 
@@ -1314,7 +1329,8 @@ a.uber svg{width:14px;height:14px}
           <div><dt>Pick up</dt><dd>${esc(b.pickup)}</dd></div>
           <div><dt>Return</dt><dd>${esc(b.dropoff)}</dd></div>
           <div><dt>Price</dt><dd>${esc(b.paid)}. Booked through ${esc(b.via)}.</dd></div>
-          <div><dt>Booking</dt><dd>${b.secret ? secretHTML(b.secret, last4(b.ref)) : esc(b.ref)}</dd></div>
+          ${b.conf ? `<div><dt>Confirmation</dt><dd>${secretHTML(b.conf, b.confTail)}</dd></div>` : ''}
+          <div><dt>${b.conf ? 'Expedia itinerary' : 'Booking'}</dt><dd>${b.secret ? secretHTML(b.secret, last4(b.ref)) : esc(b.ref)}</dd></div>
           <div><dt>Cancellation</dt><dd>${esc(b.cancelBy)}</dd></div>
         </dl>
         <h4 class="bk-h">What to do</h4>
@@ -1928,8 +1944,10 @@ a.uber svg{width:14px;height:14px}
       <h3>Confirmation numbers</h3>
       <ul class="box conf">
         <li><span>Maui rental car<small>EconomyBookings</small></span><span>${secretHTML('maui', '4916')}</span></li>
-        <li><span>Oʻahu rental car<small>Expedia, Hertz</small></span><span>${secretHTML('oahu', '3869')}</span></li>
-        <li><span>Hilo rental car<small>Expedia, Dollar</small></span><span>${secretHTML('hilo', '2414')}</span></li>
+        <li><span>Oʻahu rental confirmation<small>Hertz, show at the counter</small></span><span>${secretHTML('oahuConf', 'C275')}</span></li>
+        <li><span>Oʻahu Expedia itinerary<small>Expedia</small></span><span>${secretHTML('oahu', '3869')}</span></li>
+        <li><span>Hilo rental confirmation<small>Dollar, show at the counter</small></span><span>${secretHTML('hiloConf', '82A2')}</span></li>
+        <li><span>Hilo Expedia itinerary<small>Expedia</small></span><span>${secretHTML('hilo', '2414')}</span></li>
         <li><span>ʻĪao Valley<small>Hawaiʻi State Parks</small></span><span>${secretHTML('iao', '7656')}</span></li>
       </ul>
       <h3>Trip totals</h3>
@@ -2131,6 +2149,21 @@ a.uber svg{width:14px;height:14px}
     document.querySelectorAll('[data-ptab]').forEach(b => b.classList.toggle('on', b.dataset.ptab === packTab));
     renderPack();
   });
+
+  /* Copy a number (just the characters, no #) */
+  document.addEventListener('click', async e => {
+    const b = e.target.closest('[data-copy]'); if (!b || !SECRETS) return;
+    e.preventDefault(); e.stopPropagation();
+    const v = String(SECRETS[b.dataset.copy] || '').replace(/^#/, '');
+    let ok = false;
+    try { await navigator.clipboard.writeText(v); ok = true; } catch (err){
+      const ta = document.createElement('textarea'); ta.value = v; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, v.length);
+      try { ok = document.execCommand('copy'); } catch (x){} ta.remove();
+    }
+    const lbl = b.querySelector('span'); lbl.textContent = ok ? 'Copied' : 'Copy failed'; b.classList.toggle('done', ok);
+    setTimeout(() => { lbl.textContent = 'Copy'; b.classList.remove('done'); }, 1600);
+  }, true);
 
   /* Passcode dialog */
   const pinEl = $('#pin'), pinIn = $('#pinInput');
