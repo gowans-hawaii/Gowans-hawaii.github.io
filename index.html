@@ -81,6 +81,7 @@ window.TRIP = {
         booked: {
           company: "", car: "Hyundai Accent or similar compact. 5 seats, 2 bags, automatic, A/C.",
           pickup: "11:30 am at Kahului Airport", dropoff: "7:00 pm at Kahului Airport",
+          addr: "1 Kahului Airport Rd, Kahului, HI 96732", where: "Rental car center at Kahului Airport", pickupAt: "11:30", returnAt: "19:00", secret: "maui",
           paid: "$19.47, paid at the counter (nothing paid yet)", via: "EconomyBookings.com", ref: "4916",
           cancelBy: "Check the confirmation email for the deadline",
           steps: [
@@ -107,7 +108,7 @@ window.TRIP = {
         { n: "Pāʻia Fish Market", c: "eat", order: 8.5, dur: 45, price: [50, 80], mi: 0.1, note: "Fish plate or burger. Popular, so go early.", addr: "100 Baldwin Ave, Paia, HI", ll: [20.9131, -156.3808] },
         { n: "Market Street, Wailuku", c: "see", order: 2, dur: 45, price: [0, 40], mi: 0.7, note: "Murals and independent shops. Easy wander.", addr: "Market St, Wailuku, HI", ll: [20.8873, -156.5040], pick: true },
         { n: "Pāʻia town", c: "see", order: 6, dur: 60, price: [0, 50], mi: 0.7, note: "Galleries and small shops on the north shore.", addr: "Baldwin Ave & Hana Hwy, Paia, HI", ll: [20.9126, -156.3810], pick: true },
-        { n: "ʻĪao Valley", c: "out", order: 3, dur: 60, at: "13:30", by: "14:30", price: [20, 20], mi: 0.6, note: "Booked for 1:30–3:00 pm, parking and entry for 2. Show the QR code at the gate. Paved 0.6 mile walk with steps.", addr: "54 S High St, Wailuku, HI 96793", ll: [20.8810, -156.5450], pick: true, tag: "Booked" },
+        { n: "ʻĪao Valley", c: "out", order: 3, dur: 60, at: "13:30", by: "14:30", price: [20, 20], mi: 0.6, note: "Booked for 1:30–3:00 pm, parking and entry for 2. Show the QR code at the gate. Paved 0.6 mile walk with steps.", addr: "54 S High St, Wailuku, HI 96793", ll: [20.8810, -156.5450], pick: true, tag: "Booked", secret: "iao", ref: "7656" },
         { n: "Haleakalā summit", c: "out", order: 5, dur: 90, extra: 50, hike: true, price: [30, 30], mi: 1.0, note: "Replaces the whole day. 2 hrs each way, bring layers.", addr: "Haleakala Visitor Center, Kula, HI", ll: [20.7148, -156.2502], tag: "Swap option" },
         { n: "Hoʻokipa Lookout", c: "chill", order: 8, dur: 45, price: [0, 0], mi: 0.2, note: "Watch surfers. Turtles are possible late afternoon.", addr: "Hookipa Beach Park, Paia, HI", ll: [20.9334, -156.3567], pick: true },
         { n: "Baldwin Beach Park", c: "chill", order: 7, dur: 60, price: [0, 0], mi: 1.0, note: "Long sandy walk near Pāʻia. Check surf first.", addr: "Baldwin Beach Park, Paia, HI", ll: [20.9118, -156.3940] }
@@ -131,6 +132,7 @@ window.TRIP = {
         booked: {
           company: "Hertz", car: "Chevrolet Trax or similar compact SUV. 5 seats, unlimited miles, automatic.",
           pickup: "10:30 am at the HNL rental car center", dropoff: "8:00 pm at the same place. Plan to return around 7:30.",
+          addr: "300 Rodgers Blvd, Honolulu, HI 96819", where: "Hertz at the Honolulu Airport rental car center", pickupAt: "10:30", returnAt: "20:00", secret: "oahu",
           paid: "$55.77, already paid", via: "Expedia", ref: "itinerary ending 3869",
           cancelBy: "Free until Oct 19 at about 7:20 pm (24 hours after booking). A fee may apply after that.",
           steps: [
@@ -152,8 +154,8 @@ window.TRIP = {
       options: [
         { n: "Skydive Hawaii", c: "out", order: 2, dur: 240, at: "12:30", price: [440, 520], mi: 0.1, note: "Tandem jump over the North Shore. From $198 each plus fees.", addr: "68-760 Farrington Hwy, Waialua, HI", ll: [21.5795, -158.1970], pick: true, tag: "Book ahead" },
         { n: "Haleʻiwa town", c: "see", order: 4, dur: 45, price: [0, 60], mi: 0.8, note: "Old surf town. Galleries, shops, late lunch.", addr: "Haleiwa, HI", ll: [21.5930, -158.1035], pick: true },
-        { n: "Matsumoto Shave Ice", c: "eat", order: 4.1, dur: 20, price: [12, 20], mi: 0.1, note: "The famous one. The line moves fast.", addr: "66-111 Kamehameha Hwy, Haleiwa, HI", ll: [21.5918, -158.1029] },
-        { n: "Giovanni’s Shrimp Truck", c: "eat", order: 4.2, dur: 35, price: [35, 50], mi: 0.1, note: "Garlic shrimp plate from the Haleʻiwa truck lot.", addr: "Giovanni's Shrimp Truck, Haleiwa, HI", ll: [21.5874, -158.1060] },
+        { n: "Surf N Salsa", c: "eat", order: 4.05, dur: 40, price: [30, 45], mi: 0.1, note: "Mexican food truck in Haleʻiwa. Your late lunch after the jump.", addr: "Surf N Salsa, Haleiwa, HI", ll: [21.5905, -158.1040], pick: true, tag: "Confirm hours" },
+        { n: "Matsumoto Shave Ice", c: "eat", order: 4.1, dur: 20, price: [12, 20], mi: 0.1, note: "The famous one. The line moves fast.", addr: "66-111 Kamehameha Hwy, Haleiwa, HI", ll: [21.5918, -158.1029], pick: true },
         { n: "Waialua Farmers Market", c: "eat", order: 1, dur: 45, by: "11:30", price: [20, 40], mi: 0.3, note: "Saturday morning market at the old sugar mill.", addr: "67-106 Kealohanui St, Waialua, HI", ll: [21.5765, -158.1240], tag: "Confirm hours" },
         { n: "Laniākea Beach", c: "chill", order: 3, dur: 30, price: [0, 0], mi: 0.3, note: "Turtles often rest on the sand. Stay 10 feet back.", addr: "Laniakea Beach, Haleiwa, HI", ll: [21.6188, -158.0855] },
         { n: "Highway Inn", c: "eat", order: 6, dur: 60, price: [50, 75], mi: 0.1, note: "Lau lau, kālua pork, poi. If weather cancels the jump.", addr: "680 Ala Moana Blvd, Honolulu, HI", ll: [21.2996, -157.8625], tag: "Plan B" },
@@ -161,7 +163,7 @@ window.TRIP = {
         { n: "Waikīkī Beach", c: "chill", order: 8, dur: 120, price: [0, 0], mi: 1.5, note: "Shoreline walk and sunset around 5:50 pm.", addr: "Waikiki Beach, Honolulu, HI", ll: [21.2766, -157.8278], tag: "Plan B" }
       ],
       leg: { mode: "car", speed: 45, start: 90, end: 40 },
-      presets: [{ name: "Skydive day", use: ["Skydive Hawaii", "Haleʻiwa town"] }, { name: "If it’s cancelled", use: ["Highway Inn", "Leonard’s Bakery", "Waikīkī Beach"] }]
+      presets: [{ name: "Skydive day", use: ["Skydive Hawaii", "Surf N Salsa"] }, { name: "If it’s cancelled", use: ["Highway Inn", "Leonard’s Bakery", "Waikīkī Beach"] }]
     },
     {
       id: "kauai", geo: "kauai", kind: "port", node: "Kauaʻi", place: "Kauaʻi",
@@ -201,6 +203,7 @@ window.TRIP = {
         booked: {
           company: "Dollar", car: "Chevrolet Spark or similar economy. 4 seats, unlimited miles.",
           pickup: "10:00 am at Hilo Airport", dropoff: "3:00 pm at Hilo Airport",
+          addr: "1 General Lyman Field, Ste 13, Hilo, HI 96720", where: "Dollar at Hilo Airport", pickupAt: "10:00", returnAt: "15:00", secret: "hilo",
           paid: "$61.52, already paid", via: "Expedia", ref: "itinerary ending 2414",
           cancelBy: "Check the Expedia itinerary for the rules before relying on a refund.",
           steps: [
@@ -712,6 +715,35 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 .todo-links{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px 48px;margin-top:-4px}
 .todo-links a,.todo-links button{font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--bg);color:var(--ocean);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
 
+
+.carstep::before{background:var(--ink)!important;border-radius:3px!important}
+.car-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.car-links a{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--bg);text-decoration:none;min-height:30px}
+.car-links svg{width:13px;height:13px}
+.sec{color:var(--ink)!important;margin-top:3px}
+.secret{font-weight:700;font-variant-numeric:tabular-nums}
+.plan li span .secret,.plan li span .car-links,.plan li span .unlock{padding-left:0}
+.plan li span .unlock{padding:2px 9px}
+.secret.on{color:var(--ocean);user-select:all;-webkit-user-select:all;word-break:break-all}
+.unlock{font-size:12px;font-weight:600;color:var(--ocean);padding:2px 9px;border-radius:999px;border:1.5px solid var(--line);margin-left:4px;min-height:26px;vertical-align:1px}
+.conf li{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.conf li > span:first-child{font-weight:600;font-size:14.5px}
+.conf small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.passcode{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;padding:20px}
+.passcode[hidden]{display:none}
+.pin-scrim{position:absolute;inset:0;background:rgba(5,20,18,.5);opacity:0;transition:opacity .25s}
+.pin-box{position:relative;width:min(340px,100%);background:var(--surface);border-radius:20px;padding:22px 20px 18px;box-shadow:0 12px 40px rgba(0,0,0,.3);transform:scale(.94);opacity:0;transition:transform .25s var(--ease),opacity .2s}
+.passcode.open .pin-scrim{opacity:1}
+.passcode.open .pin-box{transform:none;opacity:1}
+.pin-box h2{font:400 24px/1.1 var(--serif);margin:0 0 4px}
+.pin-box p{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+#pinInput{width:100%;font:700 28px/1 var(--sans);letter-spacing:.4em;text-align:center;padding:12px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+#pinInput:focus{outline:none;border-color:var(--ocean)}
+.pin-err{color:var(--warn-ink)!important;margin:10px 0 0!important}
+.pin-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.pin-acts button{padding:10px 16px;border-radius:12px;font-weight:600;min-height:44px}
+.pin-go{background:var(--ink);color:var(--bg)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -775,6 +807,17 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
 </div>
 
 <div id="printOut" aria-hidden="true"></div>
+
+<div class="passcode" id="pin" hidden>
+  <div class="pin-scrim" data-pinclose></div>
+  <div class="pin-box" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+    <h2 id="pinTitle">Enter passcode</h2>
+    <p>To show the full confirmation numbers.</p>
+    <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="8" aria-label="Passcode">
+    <p class="pin-err" id="pinErr" hidden>That passcode didn’t work. Try again.</p>
+    <div class="pin-acts"><button data-pinclose>Cancel</button><button class="pin-go" id="pinGo">Unlock</button></div>
+  </div>
+</div>
 
 <div class="sheet" id="sheet" hidden>
   <div class="scrim" data-close></div>
@@ -840,6 +883,8 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     let t = mins(s.ashore), pos = home, prev = null;
     steps.push({kind: 'start', at: t, text: 'Off the ship', sub: s.leg.mode === 'car' ? `About ${hrs(s.leg.start)} to get ashore, ride to the airport, and pick up the car` : `About ${hrs(s.leg.start)} to get ashore`});
     t += s.leg.start;
+    const car = s.leg.mode === 'car' && s.rental && s.rental.booked ? s.rental.booked : null;
+    if (car) steps.push({kind: 'car', at: mins(car.pickupAt), text: 'Pick up the rental car', car});
     const addLeg = l => {
       steps.push({kind: 'leg', l});
       t += l.min;
@@ -858,6 +903,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       pos = o.ll; prev = o;
     });
     addLeg(legBetween(s, pos, home, true, prev && prev.extra || 0));
+    if (car) steps.push({kind: 'car', at: t, text: 'Return the rental car', car, ret: true, warn: t > mins(car.returnAt) ? `Due back by ${clock(mins(car.returnAt))}. You’d return it at ${clock(t)}.` : ''});
     t += s.leg.end + BUF.end;
     steps.push({kind: 'end', at: t, text: 'Back aboard', sub: s.leg.mode === 'car' ? 'Includes gas, returning the car, and the ride to the pier' : 'Includes getting back through the terminal'});
     const spare = mins(s.backBy) - t;
@@ -1029,11 +1075,39 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       }
       if (x.kind === 'stop'){
         const o = x.o;
-        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}</small>${x.warn ? `<em>${esc(x.warn)}</em>` : ''}</span></li>`;
+        return `<li class="stop" style="--k:${k++};--c:var(--c-${o.c})"><time>${clock(x.at)}</time><span><button class="p-name" data-show="${x.i}">${esc(o.n)}</button><small>${hrs(o.dur)}, plus ${BUF.stop} min of breathing room${x.wait >= 10 ? `. ${hrs(x.wait)} of free time before this` : ''}</small>${o.secret ? `<small class="sec">Order ${secretHTML(o.secret, o.ref)}</small>` : ''}${x.warn ? `<em>${esc(x.warn)}</em>` : ''}</span></li>`;
+      }
+      if (x.kind === 'car'){
+        const c = x.car, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
+        return `<li class="edge carstep" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>
+          <small>${esc(c.where)}${x.ret ? `. Due back by ${clock(mins(c.returnAt))}` : ''}</small><small>${esc(c.addr)}</small>
+          ${!x.ret && c.secret ? `<small class="sec">Booking ${secretHTML(c.secret, last4(c.ref))}</small>` : ''}
+          ${x.warn ? `<em>${esc(x.warn)}</em>` : ''}
+          <span class="car-links"><a href="${gUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Google Maps</a><a href="${aUrl(place)}" target="_blank" rel="noopener">${ICON.pin}Apple Maps</a></span></span></li>`;
       }
       return `<li class="edge" style="--k:${k++}"><time>${clock(x.at)}</time><span><b>${x.text}</b>${x.sub ? `<small>${x.sub}</small>` : ''}</span></li>`;
     }).join('');
     return presets + status + stats + rentalHTML(s) + `<ol class="plan">${rows}</ol><p class="walk">Times include breathing room: relaxed walking, padded drives with time to park, and 10 extra minutes at every stop. Tap a stop to see it on the map.</p>`;
+  }
+
+  /* Locked confirmation numbers: stored encrypted, unlocked with the passcode */
+  const VAULT = {"salt": "jexY+IvFerWicOEo3AHkKQ==", "iv": "WOW5bf/dXmhF/hNR", "ct": "7vAYYYhDqrdceEQl12Nb4jzga8T5fvwtah8WyqqMSPDk5UFmfRI835ob+Ns73IQlpIVvzZZnaKtvhUTKfRJnELs43yGlBhngP+fiF2ROtwgPZ0dGwjjLWb0ATNS4tw/GFgEhVEEWxPrlFPPd+Bl6koV1ErcP6zHwoPP0kHmzgseAkMc=", "iter": 600000};
+  let SECRETS = null;
+  const last4 = s => (String(s).match(/\d{4}$/) || [''])[0];
+  function secretHTML(key, tail){
+    if (SECRETS && SECRETS[key]) return `<span class="secret on" data-secret="${key}">${esc(SECRETS[key])}</span>`;
+    return `<span class="secret" data-secret="${key}">ending ${esc(tail)}</span> <button class="unlock" data-unlock>Show full number</button>`;
+  }
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  async function openVault(pin){
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey({name: 'PBKDF2', salt: b64(VAULT.salt), iterations: VAULT.iter, hash: 'SHA-256'}, base, {name: 'AES-GCM', length: 256}, false, ['decrypt']);
+    const pt = await crypto.subtle.decrypt({name: 'AES-GCM', iv: b64(VAULT.iv)}, key, b64(VAULT.ct));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }
+  function revealAll(){
+    document.querySelectorAll('[data-secret]').forEach(el => { const v = SECRETS[el.dataset.secret]; if (v){ el.textContent = v; el.classList.add('on'); } });
+    document.querySelectorAll('[data-unlock]').forEach(b => b.remove());
   }
 
   /* Rental car sites, prefilled with the airport and date where the site allows it */
@@ -1077,7 +1151,7 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
           <div><dt>Pick up</dt><dd>${esc(b.pickup)}</dd></div>
           <div><dt>Return</dt><dd>${esc(b.dropoff)}</dd></div>
           <div><dt>Price</dt><dd>${esc(b.paid)}. Booked through ${esc(b.via)}.</dd></div>
-          <div><dt>Booking</dt><dd>${/^\d+$/.test(b.ref) ? 'Ends in ' + esc(b.ref) : esc(b.ref.charAt(0).toUpperCase() + b.ref.slice(1))}. The full number is in your email.</dd></div>
+          <div><dt>Booking</dt><dd>${b.secret ? secretHTML(b.secret, last4(b.ref)) : esc(b.ref)}</dd></div>
           <div><dt>Cancellation</dt><dd>${esc(b.cancelBy)}</dd></div>
         </dl>
         <h4 class="bk-h">What to do</h4>
@@ -1576,6 +1650,13 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
       <h3>To do</h3>
       <div class="pack-prog" id="todoProg"><span></span><i></i></div>
       <div class="todos">${L2.dates.map(([d, t, links]) => { const k = 'todo:' + t; return `<div class="todo-row"><label class="todo"><input type="checkbox" data-pack="${esc(k)}"${packed.has(k) ? ' checked' : ''}><span><small>${esc(d)}</small>${esc(t)}</span></label>${links ? `<div class="todo-links">${links.map(([l, u]) => u === '#pdf' ? `<button class="todo-pdf">${esc(l)}</button>` : `<a href="${u}" target="_blank" rel="noopener">${esc(l)}</a>`).join('')}</div>` : ''}</div>`; }).join('')}</div>
+      <h3>Confirmation numbers</h3>
+      <ul class="box conf">
+        <li><span>Maui rental car<small>EconomyBookings</small></span><span>${secretHTML('maui', '4916')}</span></li>
+        <li><span>Oʻahu rental car<small>Expedia, Hertz</small></span><span>${secretHTML('oahu', '3869')}</span></li>
+        <li><span>Hilo rental car<small>Expedia, Dollar</small></span><span>${secretHTML('hilo', '2414')}</span></li>
+        <li><span>ʻĪao Valley<small>Hawaiʻi State Parks</small></span><span>${secretHTML('iao', '7656')}</span></li>
+      </ul>
       <h3>Trip totals</h3>
       <div class="totals" id="totals"></div>
       <p class="tot-note">Based on what’s checked on each day. Downtime counts port days only.</p>
@@ -1767,6 +1848,33 @@ details.rent[open] .rent-body{animation:rise .3s var(--ease)}
     document.querySelectorAll('[data-ptab]').forEach(b => b.classList.toggle('on', b.dataset.ptab === packTab));
     renderPack();
   });
+
+  /* Passcode dialog */
+  const pinEl = $('#pin'), pinIn = $('#pinInput');
+  function openPin(){
+    pinEl.hidden = false; $('#pinErr').hidden = true; pinIn.value = '';
+    requestAnimationFrame(() => { pinEl.classList.add('open'); pinIn.focus(); });
+  }
+  function closePin(){ pinEl.classList.remove('open'); setTimeout(() => { pinEl.hidden = true; }, reduce ? 0 : 250); }
+  async function tryPin(){
+    const go = $('#pinGo'); go.disabled = true; go.textContent = 'Unlocking…';
+    try {
+      if (!window.crypto || !crypto.subtle) throw new Error('no crypto');
+      SECRETS = await openVault(pinIn.value.trim());
+      revealAll(); closePin();
+    } catch (e){
+      $('#pinErr').hidden = false; pinIn.value = '';
+      if (!reduce) $('.pin-box').animate([{transform: 'translateX(0)'}, {transform: 'translateX(-8px)'}, {transform: 'translateX(8px)'}, {transform: 'translateX(0)'}], {duration: 260});
+      pinIn.focus();
+    }
+    go.disabled = false; go.textContent = 'Unlock';
+  }
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-unlock]')){ e.preventDefault(); e.stopPropagation(); openPin(); }
+    else if (e.target.closest('[data-pinclose]')) closePin();
+    else if (e.target.closest('#pinGo')) tryPin();
+  }, true);
+  pinIn.addEventListener('keydown', e => { if (e.key === 'Enter') tryPin(); if (e.key === 'Escape') closePin(); });
 
   /* Start */
   hero(); buildStrip(); buildSheet(); renderPack(); startSync();
