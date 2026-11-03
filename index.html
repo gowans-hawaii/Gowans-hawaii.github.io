@@ -42,26 +42,54 @@ window.TRIP = {
   },
   stops: [
     {
+      id: "drive", kind: "sea", node: "Road trip", place: "Drive to Long Beach",
+      date: "2026-11-07",
+      line: "Drive from Utah and car camp near Long Beach.",
+      todos: ["Drive from Utah and car camp near Long Beach.", "Do Hertz online check-in for the Oʻahu car (3:30 pm Pacific). Upload your documents to skip the counter.", "Save the plans as a PDF, in case there’s no service."],
+      ideas: [
+        "Plan a long drive day with room for traffic coming into Los Angeles",
+        "Pick a legal place to sleep. Long Beach restricts sleeping in cars on city streets, so use a campground, RV park, or a lot that allows it",
+        "Pack so your cruise bags are easy to grab at the terminal"
+      ]
+    },
+    {
       id: "long-beach", geo: "lb", kind: "port", node: "Long Beach", place: "Long Beach",
       date: "2026-11-08", tz: "-08:00",
-      line: "Sail day. Get here the night before.",
+      line: "Sail day. Drive to the terminal and park.",
       getting: "Carnival’s terminal is next to the Queen Mary, not San Pedro.",
-      heads: ["Arrive Nov 7 so a flight delay can’t cost you the ship."],
+      heads: ["Park in the cruise terminal garage. Roughly $25 a night, so about $350 for the trip. Check Carnival’s current rate."],
       pier: { n: "Long Beach Cruise Terminal", ll: [33.7525, -118.1890] },
-      transport: [{ n: "Airport to the terminal", lo: 40, hi: 90 }],
+      transport: [{ n: "Cruise terminal parking, Nov 8–22", lo: 330, hi: 380 }],
       options: [
         { n: "Shoreline Village", c: "chill", dur: 60, price: [0, 40], mi: 1.0, note: "Easy waterfront stroll the night before.", addr: "401 Shoreline Village Dr, Long Beach, CA", ll: [33.7609, -118.1905], pick: true },
         { n: "Retro Row", c: "see", dur: 90, price: [0, 50], mi: 0.8, note: "Vintage shops and cafés along 4th Street.", addr: "4th St & Cherry Ave, Long Beach, CA", ll: [33.7724, -118.1610] }
       ]
     },
     {
-      id: "sea-out", kind: "sea", node: "At sea", place: "Four sea days",
-      date: "2026-11-09", end: "2026-11-12",
-      line: "Unpack, explore the ship, and slow down.",
+      id: "sea-9", kind: "sea", node: "At sea", place: "First sea day",
+      date: "2026-11-09",
+      line: "Unpack, explore the ship, and slow down. Dollar check-in opens today.",
+      todos: ["Do Dollar online check-in for the Hilo car (3:00 pm Pacific). You’ll be at sea, so use the ship’s Wi-Fi."],
       ideas: [
-        "Download offline maps for Maui, Oʻahu, Kauaʻi, and Hilo",
         "Download the Carnival HUB app and find all-aboard times",
-        "Book one specialty dinner, not four",
+        "Book one specialty dinner, not four"
+      ]
+    },
+    {
+      id: "sea-10", kind: "sea", node: "At sea", place: "Second sea day",
+      date: "2026-11-10",
+      line: "The Maui rental voucher should arrive today.",
+      todos: ["The Maui rental voucher (Dollar, booking ending 4916) arrives by email, 72 hours before pickup. Check spam, then save it to your phone."],
+      ideas: [
+        "Download offline maps for Maui, Oʻahu, Kauaʻi, and Hilo"
+      ]
+    },
+    {
+      id: "sea-out", kind: "sea", node: "At sea", place: "Two more sea days",
+      date: "2026-11-11", end: "2026-11-12",
+      line: "Rest up before four ports in a row.",
+      ideas: [
+        "Laundry day on Nov 12",
         "Nov 12: recheck closures, weather, and rental pickups"
       ]
     },
@@ -272,10 +300,9 @@ window.TRIP = {
     {
       id: "home", geo: "lb", kind: "port", node: "Home", place: "Long Beach",
       date: "2026-11-22", tz: "-08:00",
-      line: "Back in Long Beach. Fly home in the afternoon.",
-      heads: ["LAX traffic eats time. Don’t book a morning flight."],
+      line: "Back in Long Beach. Get the car and drive home to Utah.",
+      heads: ["Getting off the ship and out of the garage can take a while. Plan a long, unhurried drive day."],
       pier: { n: "Long Beach Cruise Terminal", ll: [33.7525, -118.1890] },
-      transport: [{ n: "Terminal to the airport", lo: 40, hi: 90 }],
       options: []
     }
   ],
@@ -289,7 +316,7 @@ window.TRIP = {
       ["By Oct 19, 7:20 pm", "Decide on the Oʻahu rental. Free cancellation ends then.", [["Expedia trips", "https://www.expedia.com/trips"]]],
       ["Oct 25", "Do Carnival online check-in.", [["Carnival", "https://www.carnival.com/"]]],
       ["Before sailing", "Open this site on both phones with service and add it to your Home Screen."],
-      ["Nov 7", "Fly in and stay near Long Beach."],
+      ["Nov 7", "Drive from Utah and car camp near Long Beach."],
       ["Nov 7", "Save the plans as a PDF, in case there’s no service.", [["Save the PDF", "#pdf"]]],
       ["Nov 7, 1:30 pm HST", "Do Hertz online check-in for the Oʻahu car (3:30 pm Pacific). Upload your documents to skip the counter.", [["Hertz check-in", "https://www.hertz.com/us/en/checkin/?EMLCID=US.TRC.UNKWN.f08ab0899c5a9b2113cf5a0f12fe3e13.EML&EMLDTL=DATE20261018-LANGEN_US.TESTX.VERSX.CAT01G250&cta=paragraphComponent.Car_V1_Online_CheckIn.link"]]],
       ["Nov 9, 1:00 pm HST", "Do Dollar online check-in for the Hilo car (3:00 pm Pacific). You’ll be at sea, so use the ship’s Wi-Fi.", [["Dollar check-in", "https://www.dollar.com/us/en/checkin/?EMLCID=US.TRC.UNKWN.f08ab0899c5a9b2113cf5a0f12fe3e13.EML&EMLDTL=DATE20261018-LANGEN_US.TESTX.VERSX.CAT01G250&cta=paragraphComponent.Car_V1_Online_CheckIn.link"]]],
@@ -311,7 +338,7 @@ window.TRIP = {
       shared: [
         ["Documents and money", ["Carnival boarding pass in the HUB app", "Credit card for rentals and onboard", "Some cash for tips", "Health insurance cards", "Plan PDF saved to Files"]],
         ["Toiletries", ["Mineral (reef-safe) sunscreen", "SPF lip balm", "Toothpaste", "Aloe for sunburn", "Motion sickness medicine for sea days", "Small first aid kit with blister pads"]],
-        ["Gear", ["Daypack", "Dry bag", "Water bottles, 2", "Cruise-safe power strip (no surge protector)", "Power bank and cables", "Magnetic hooks for the cabin walls", "Lanyards for ship cards", "Laundry bag", "A few laundry pods", "Zip bags"]]
+        ["Gear", ["Car camping setup for Nov 7 (pillows, blankets, window shades)", "Daypack", "Dry bag", "Water bottles, 2", "Cruise-safe power strip (no surge protector)", "Power bank and cables", "Magnetic hooks for the cabin walls", "Lanyards for ship cards", "Laundry bag", "A few laundry pods", "Zip bags"]]
       ]
     },
     leave: "Leave at home: irons and steamers (Carnival doesn’t allow them), surge protector power strips, beach towels (the ship lends them), extra shoes.",
@@ -833,6 +860,21 @@ a.uber svg{width:14px;height:14px}
 .plan li span .copy{padding:3px 10px}
 .copy span,.plan li span .copy span{padding-left:0!important}
 
+
+.plan li.locked{background:color-mix(in srgb,var(--ocean) 9%,var(--surface))!important;box-shadow:inset 3px 0 0 var(--ocean)}
+.plan li.locked .row-lock{opacity:1;background:var(--ocean);color:var(--surface);width:28px;height:28px;top:10px;right:10px}
+.day-todo-h{margin:20px 2px 8px;font-size:14px;color:var(--muted);font-weight:700}
+.todo-row.is-done .todo > span{color:var(--muted);text-decoration:line-through}
+.done-box{margin-top:12px}
+.done-box > summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--muted);padding:8px 2px;list-style:none}
+.done-box > summary::-webkit-details-marker{display:none}
+.done-box > summary::before{content:"▸ ";display:inline-block;transition:transform .2s}
+.done-box[open] > summary::before{transform:rotate(90deg)}
+.done-box .todo-row{opacity:.7}
+.all-done{margin:8px 2px 0;font-weight:700;color:var(--ocean)}
+.node.has-todo .n-dot{border-color:var(--c-chill);border-style:solid}
+.node.has-todo .n-date{color:var(--c-chill);font-weight:700}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .line{transform:none}.node{opacity:1;transform:none}.ship{opacity:1}
@@ -1123,7 +1165,7 @@ a.uber svg{width:14px;height:14px}
     const ti = todayIdx();
     S.forEach((s, i) => {
       const b = document.createElement('button');
-      b.className = 'node ' + s.kind + (i === ti ? ' today' : '');
+      b.className = 'node ' + s.kind + (i === ti ? ' today' : '') + (s.todos ? ' has-todo' : '');
       b.setAttribute('role', 'tab');
       b.setAttribute('aria-selected', 'false');
       b.style.setProperty('--d', (250 + i * 55) + 'ms');
@@ -1180,7 +1222,7 @@ a.uber svg{width:14px;height:14px}
   }
 
   function bodyHTML(s){
-    if (s.kind === 'sea') return `<ul class="ideas">${s.ideas.map((x, k) => `<li style="--k:${k}">${ICON.wave}<span>${esc(x)}</span></li>`).join('')}</ul>`;
+    if (s.kind === 'sea') return (s.todos ? `<h4 class="day-todo-h">To do</h4><div class="todos">${s.todos.map(t => todoRowHTML(T.checklist.dates.find(d => d[1] === t) || ['', t])).join('')}</div>` : '') + `<ul class="ideas">${s.ideas.map((x, k) => `<li style="--k:${k}">${ICON.wave}<span>${esc(x)}</span></li>`).join('')}</ul>`;
     const seg = s.leg ? `<div class="seg" id="seg" role="tablist"><span class="seg-pill"></span><button data-v="plan" class="on" role="tab">Our plan</button><button data-v="options" role="tab">Options</button></div>` : '';
     return seg + '<div id="pane"></div>';
   }
@@ -1239,7 +1281,7 @@ a.uber svg{width:14px;height:14px}
       }
       if (x.kind === 'car'){
         const c = x.car, place = {n: c.where, addr: c.addr, ll: s.rental.ll};
-        return `<li class="edge carstep" style="--k:${k++}"><i class="row-lock" title="Set time, stays in place" aria-label="Locked: set time">${ICON.lock}</i><time>${clock(x.at)}</time><span><b>${x.text}</b>
+        return `<li class="edge carstep locked" style="--k:${k++}"><i class="row-lock" title="Set time, stays in place" aria-label="Locked: set time">${ICON.lock}</i><time>${clock(x.at)}</time><span><b>${x.text}</b>
           <small>${esc(c.where)}, ${esc(c.addr)}</small>
           <small class="sec">${x.ret ? `${esc(c.retTip)} Due back by ${clock(mins(c.returnAt))}.` : esc(c.pickTip)}</small>
           ${!x.ret && c.conf ? `<small class="sec">Confirmation ${secretHTML(c.conf, c.confTail)}</small>` : ''}
@@ -1778,6 +1820,7 @@ a.uber svg{width:14px;height:14px}
     $('#tallyBar').setAttribute('aria-expanded', open);
   });
   function tripTotals(quiet){
+    if (!$('#totals')) return;
     let lo = 0, hi = 0, pLo = 0, pHi = 0; const tt = {drive: 0, driveMi: 0, walk: 0, hike: 0, down: 0};
     S.forEach(s => {
       if (s.kind === 'sea') return;
@@ -1935,43 +1978,37 @@ a.uber svg{width:14px;height:14px}
   }
 
   /* Checklist sheet */
+  function todoRowHTML([d, t, links]){
+    const k = 'todo:' + t;
+    return `<div class="todo-row${packed.has(k) ? ' is-done' : ''}"><label class="todo"><input type="checkbox" data-pack="${esc(k)}"${packed.has(k) ? ' checked' : ''}><span><small>${esc(d)}</small>${esc(t)}</span></label>${links ? `<div class="todo-links">${links.map(([l, u]) => u === '#pdf' ? `<button class="todo-pdf">${esc(l)}</button>` : `<a href="${u}" target="_blank" rel="noopener">${esc(l)}</a>`).join('')}</div>` : ''}</div>`;
+  }
+  let doneOpen = false;
+  function renderTodos(){
+    const box = $('#todoList'); if (!box) return;
+    const all = T.checklist.dates, open = all.filter(x => !packed.has('todo:' + x[1])), done = all.filter(x => packed.has('todo:' + x[1]));
+    box.innerHTML = (open.length ? `<div class="todos">${open.map(todoRowHTML).join('')}</div>` : `<p class="all-done">Everything’s done.</p>`)
+      + (done.length ? `<details class="done-box"${doneOpen ? ' open' : ''}><summary>Done (${done.length})</summary><div class="todos">${done.map(todoRowHTML).join('')}</div></details>` : '');
+    todoProgress();
+  }
   function buildSheet(){
     const L2 = T.checklist;
     $('#sheetBody').innerHTML = `
       <h3>To do</h3>
       <div class="pack-prog" id="todoProg"><span></span><i></i></div>
-      <div class="todos">${L2.dates.map(([d, t, links]) => { const k = 'todo:' + t; return `<div class="todo-row"><label class="todo"><input type="checkbox" data-pack="${esc(k)}"${packed.has(k) ? ' checked' : ''}><span><small>${esc(d)}</small>${esc(t)}</span></label>${links ? `<div class="todo-links">${links.map(([l, u]) => u === '#pdf' ? `<button class="todo-pdf">${esc(l)}</button>` : `<a href="${u}" target="_blank" rel="noopener">${esc(l)}</a>`).join('')}</div>` : ''}</div>`; }).join('')}</div>
-      <h3>Confirmation numbers</h3>
-      <ul class="box conf">
-        <li><span>Maui rental car<small>EconomyBookings</small></span><span>${secretHTML('maui', '4916')}</span></li>
-        <li><span>Oʻahu rental confirmation<small>Hertz, show at the counter</small></span><span>${secretHTML('oahuConf', 'C275')}</span></li>
-        <li><span>Oʻahu Expedia itinerary<small>Expedia</small></span><span>${secretHTML('oahu', '3869')}</span></li>
-        <li><span>Hilo rental confirmation<small>Dollar, show at the counter</small></span><span>${secretHTML('hiloConf', '82A2')}</span></li>
-        <li><span>Hilo Expedia itinerary<small>Expedia</small></span><span>${secretHTML('hilo', '2414')}</span></li>
-        <li><span>ʻĪao Valley<small>Hawaiʻi State Parks</small></span><span>${secretHTML('iao', '7656')}</span></li>
-        <li><span>Skydive Hawaii<small>Order number</small></span><span>${secretHTML('skydive', '9536')}</span></li>
-        <li><span>Kauaʻi surf lesson<small>Kauaʻi Beach Boys code</small></span><span>${secretHTML('surf', 'WUCA')}</span></li>
-      </ul>
-      <h3>Trip totals</h3>
-      <div class="totals" id="totals"></div>
-      <p class="tot-note">Based on what’s checked on each day. Downtime counts port days only.</p>
+      <div id="todoList"></div>
       <h3>No service?</h3>
       <p class="box-p">This page keeps working offline once you’ve opened it with service. For an extra backup, save every day’s plan as a PDF.</p>
       <button class="pdf-btn" id="pdfBtn">Save our plans as a PDF</button>
-      <h3>Rental cars</h3>
-      <div class="rent-days">${S.filter(s => s.rental).map(s => rentalHTML(s)).join('')}</div>
       <h3>Packing</h3>
       <p class="box-p">${esc(L2.packNote)}</p>
       <div class="ptabs pack-tabs" role="tablist">${PACK_TABS.map(([k, l]) => `<button data-ptab="${k}" class="${k === packTab ? 'on' : ''}">${l}</button>`).join('')}</div>
-      <div id="packList"></div>
-      <h3>Good to know</h3>
-      <ul class="box">${L2.know.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+      <div id="packList"></div>`;
   }
   const sheet = $('#sheet');
   let lastFocus = null;
   function openSheet(){
     lastFocus = document.activeElement;
-    tripTotals();
+    renderTodos();
     sheet.hidden = false; document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open')));
     sheet.querySelector('.close').focus();
@@ -2012,7 +2049,7 @@ a.uber svg{width:14px;height:14px}
     return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bailey + Luke Hawaii plans</title><style>${css}</style></head><body>
       <p class="pr-tip">To save this as a PDF: tap the <b>Share</b> button, then <b>Print</b>, then <b>Share</b> again and <b>Save to Files</b>.</p>${printHTML()}</body></html>`;
   }
-  $('#sheetBody').addEventListener('click', e => {
+  function onPdfClick(e){
     if (!e.target.closest('#pdfBtn, .todo-pdf')) return;
     const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
     if (standalone || typeof window.print !== 'function'){
@@ -2023,7 +2060,9 @@ a.uber svg{width:14px;height:14px}
     }
     $('#printOut').innerHTML = printHTML();
     window.print();
-  });
+  }
+  $('#sheetBody').addEventListener('click', onPdfClick);
+  $('#dayBody').addEventListener('click', onPdfClick);
   sheet.addEventListener('click', e => { if (e.target.closest('[data-close]')) closeSheet(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !sheet.hidden) closeSheet();
@@ -2117,7 +2156,7 @@ a.uber svg{width:14px;height:14px}
     }
     document.querySelectorAll('[data-pack]').forEach(b => b.checked = packed.has(b.dataset.pack));
     packProgress();
-    if (!sheet.hidden) tripTotals(true);
+    if (!sheet.hidden) renderTodos();
   }
   async function pull(){
     const r = await fetch(tripUrl());
@@ -2160,12 +2199,19 @@ a.uber svg{width:14px;height:14px}
     es.addEventListener('open', () => setStatus('ok'));
     es.addEventListener('error', () => setStatus('error'));
   }
-  $('#sheetBody').addEventListener('change', e => {
+  function packChanged(e){
     const b = e.target.closest('[data-pack]'); if (!b) return;
     b.checked ? packed.add(b.dataset.pack) : packed.delete(b.dataset.pack);
     packProgress();
     queue('pack', '|' + [...packed].join('|'));
-  });
+    if (b.dataset.pack.startsWith('todo:')){
+      const row = b.closest('.todo-row'); row && row.classList.toggle('is-done', b.checked);
+      if (row && row.closest('#todoList')) setTimeout(renderTodos, reduce ? 0 : 450);
+    }
+  }
+  $('#sheetBody').addEventListener('change', packChanged);
+  $('#dayBody').addEventListener('change', packChanged);
+  document.addEventListener('toggle', e => { if (e.target.matches && e.target.matches('.done-box')) doneOpen = e.target.open; }, true);
   $('#sheetBody').addEventListener('click', e => {
     const t = e.target.closest('[data-ptab]'); if (!t || t.dataset.ptab === packTab) return;
     packTab = t.dataset.ptab;
@@ -2308,7 +2354,7 @@ a.uber svg{width:14px;height:14px}
   $('#dayBody').addEventListener('pointercancel', endDrag);
 
   /* Start */
-  hero(); buildStrip(); buildSheet(); renderPack(); startSync();
+  hero(); buildStrip(); buildSheet(); renderTodos(); renderPack(); startSync();
   window.addEventListener('online', () => { if (syncOn && Object.keys(pending).length) flush(); });
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   let start = S.findIndex(s => s.id === location.hash.slice(1));
