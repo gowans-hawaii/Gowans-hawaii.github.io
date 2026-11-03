@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0D5862">
+<meta name="theme-color" content="#0D5862" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0C3A42" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Hawaiʻi">
 <title>Bailey + Luke in Hawaiʻi</title>
@@ -359,6 +360,9 @@ window.TRIP = {
   --hero:#0D5862; --hero-ink:#F4FAF8; --ocean:#0D6672; --ocean-soft:#D4EAEA;
   --c-eat:#C42F49; --c-see:#0D6672; --c-out:#3B7838; --c-chill:#A97A06; --c-all:#12302B;
   --warn-bg:#FBF0DA; --warn-ink:#6F4800;
+  --map-sea:#CFE6EA; --map-land:#FFFFFF; --map-coast:#8DB8BA;
+  --lock-bg:#E3F2F2; --lock-accent:#0D6672; --lock-ink:#FFFFFF;
+  --bar-bg:#12302B; --bar-ink:#ECF2F0;
   --serif:"Young Serif", Georgia, serif;
   --sans:"Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --ease:cubic-bezier(.2,.75,.2,1);
@@ -366,10 +370,13 @@ window.TRIP = {
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#0B1918; --surface:#122725; --ink:#E3EEEB; --muted:#93ABA5; --line:#244340;
-    --hero:#0A3C42; --hero-ink:#E8F5F2; --ocean:#52B7C0; --ocean-soft:#16393B;
-    --c-eat:#F06C82; --c-see:#52B7C0; --c-out:#82C177; --c-chill:#E5BD4A; --c-all:#E3EEEB;
-    --warn-bg:#2C2312; --warn-ink:#F0CC85;
+    --bg:#0A1416; --surface:#17282C; --ink:#EAF2F0; --muted:#A3B8B5; --line:#2E454A;
+    --hero:#0C3A42; --hero-ink:#EAF6F4; --ocean:#56C8D2; --ocean-soft:#16383E;
+    --c-eat:#FF7A8F; --c-see:#56C8D2; --c-out:#8FD483; --c-chill:#F2C94C; --c-all:#EAF2F0;
+    --warn-bg:#3A2C10; --warn-ink:#FFD88A;
+    --map-sea:#0B2740; --map-land:#3A4A3F; --map-coast:#7FA79E;
+    --lock-bg:#123F49; --lock-accent:#6FE0EA; --lock-ink:#082125;
+    --bar-bg:#1F525B; --bar-ink:#F2FAF9;
     color-scheme:dark;
   }
 }
@@ -437,10 +444,10 @@ main{padding:22px 20px 40px}
 
 /* Map */
 .mapwrap{position:relative;margin:20px -20px 0;padding:0 20px}
-#map{position:relative;height:270px;border-radius:16px;overflow:hidden;background:var(--ocean-soft);transition:height .35s var(--ease)}
+#map{position:relative;height:270px;border-radius:16px;overflow:hidden;background:var(--map-sea);transition:height .35s var(--ease)}
 #mapSvg{display:block;width:100%;height:100%;transform-origin:0 0;will-change:transform;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.m-sea{fill:var(--ocean-soft)}
-.m-land{fill:var(--surface);stroke:color-mix(in srgb,var(--ocean) 40%,transparent);stroke-linejoin:round}
+.m-sea{fill:var(--map-sea)}
+.m-land{fill:var(--map-land);stroke:var(--map-coast);stroke-linejoin:round}
 .m-casing{fill:none;stroke:var(--surface);stroke-linecap:round;stroke-linejoin:round}
 .m-route{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
 .m-dot,.m-pier{cursor:pointer}
@@ -589,17 +596,17 @@ main{padding:22px 20px 40px}
 .tally{position:fixed;left:0;right:0;bottom:0;z-index:900;padding:0 12px calc(12px + env(safe-area-inset-bottom));pointer-events:none}
 .tally-dock{position:relative;max-width:536px;margin:0 auto;transition:transform .38s var(--ease),opacity .3s}
 .tally-bar,.tally-panel,.tally-tuck,.tally-mini{pointer-events:auto}
-.tally-tuck{position:absolute;right:22px;top:-26px;width:52px;height:28px;border-radius:14px 14px 0 0;background:var(--ink);color:var(--bg);display:grid;place-items:center;z-index:1}
+.tally-tuck{position:absolute;right:22px;top:-26px;width:52px;height:28px;border-radius:14px 14px 0 0;background:var(--bar-bg);color:var(--bar-ink);display:grid;place-items:center;z-index:1}
 .tally.open .tally-tuck{top:auto;bottom:62px;opacity:0;pointer-events:none}
 .tally-tuck svg{width:18px;height:18px}
-.tally-mini{position:absolute;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;min-height:44px;padding:8px 12px 8px 16px;border-radius:999px;background:var(--ink);color:var(--bg);box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .25s,transform .35s var(--ease)}
+.tally-mini{position:absolute;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:6px;min-height:44px;padding:8px 12px 8px 16px;border-radius:999px;background:var(--bar-bg);color:var(--bar-ink);box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .25s,transform .35s var(--ease)}
 .tally-mini b{font-size:15px;font-variant-numeric:tabular-nums}
 .tally-mini svg{width:18px;height:18px}
 .tally.tucked .tally-dock{transform:translateY(calc(100% + 40px));opacity:0;pointer-events:none}
 .tally.tucked .tally-dock *{pointer-events:none}
 .tally.tucked .tally-mini{opacity:1;transform:none;pointer-events:auto}
 body.has-tally.tally-tucked main{padding-bottom:80px}
-.tally-bar{display:flex;align-items:center;gap:12px;width:100%;background:var(--ink);color:var(--bg);border-radius:18px;padding:12px 16px;box-shadow:0 6px 24px rgba(0,0,0,.22);text-align:left;min-height:62px}
+.tally-bar{display:flex;align-items:center;gap:12px;width:100%;background:var(--bar-bg);color:var(--bar-ink);border-radius:18px;padding:12px 16px;box-shadow:0 6px 24px rgba(0,0,0,.22);text-align:left;min-height:62px}
 .t-label{flex:1;font-weight:600;font-size:15px;line-height:1.25}
 .t-label small{display:block;font-weight:500;font-size:12.5px;opacity:.7}
 .t-nums{display:flex;flex-direction:column;align-items:flex-end}
@@ -861,8 +868,9 @@ a.uber svg{width:14px;height:14px}
 .copy span,.plan li span .copy span{padding-left:0!important}
 
 
-.plan li.locked{background:color-mix(in srgb,var(--ocean) 9%,var(--surface))!important;box-shadow:inset 3px 0 0 var(--ocean)}
-.plan li.locked .row-lock{opacity:1;background:var(--ocean);color:var(--surface);width:28px;height:28px;top:10px;right:10px}
+.plan li.locked{background:var(--lock-bg)!important;box-shadow:inset 4px 0 0 var(--lock-accent)}
+.plan li.locked::before{background:var(--lock-accent)!important}
+.plan li.locked .row-lock{opacity:1;background:var(--lock-accent);color:var(--lock-ink);width:28px;height:28px;top:10px;right:10px}
 .day-todo-h{margin:20px 2px 8px;font-size:14px;color:var(--muted);font-weight:700}
 .todo-row.is-done .todo > span{color:var(--muted);text-decoration:line-through}
 .done-box{margin-top:12px}
